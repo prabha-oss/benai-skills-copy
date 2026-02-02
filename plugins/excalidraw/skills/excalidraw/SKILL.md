@@ -24,11 +24,22 @@ Before touching any JSON, think through the presentation as a storytelling probl
 
 Present the outline to the user for confirmation before building.
 
-### Phase 2: Choose Output Mode
-
-**Mode A: File Output** — Generate `.excalidraw` JSON file or HTML artifact with embedded Excalidraw. Best for sharing, version control, offline use.
-
-**Mode B: Chrome Automation** — Inject slides directly into excalidraw.com via browser. Best for live editing, collaborative sessions, immediate visual feedback. Read `references/chrome-automation.md` for the full step-by-step workflow.
+### Phase 2: Verify Chrome Extension
+ 
+This skill requires the **Claude in Chrome** extension to inject slides directly into excalidraw.com.
+ 
+**Step 1:** Check if extension is available using `tabs_context_mcp`
+ 
+**Step 2:** If extension is NOT available or returns an error, tell the user:
+ 
+> To use this skill, please install the Claude in Chrome extension:
+> https://chromewebstore.google.com/detail/claude-in-chrome/anthropic
+> 
+> Once installed, restart Chrome and try again.
+ 
+**Step 3:** If extension IS available, proceed to Phase 3.
+ 
+Read `references/chrome-automation.md` for the full injection workflow.
 
 ### Phase 3: Build Slides
 
@@ -72,19 +83,6 @@ After injecting/creating each slide:
 - Adjust spacing and alignment as needed
 
 ## Quick Reference
-
-### File Output Wrapper
-
-```json
-{
-  "type": "excalidraw",
-  "version": 2,
-  "source": "claude-presentation-skill",
-  "elements": [],
-  "appState": { "viewBackgroundColor": "#ffffff", "gridSize": null },
-  "files": {}
-}
-```
 
 ### Chrome Clipboard Injection Pattern
 
