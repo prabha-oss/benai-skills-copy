@@ -4,6 +4,22 @@ Complete JSON specs for all element types used in presentations.
 
 ## Required Properties (All Elements)
 
+## Grouping (CRITICAL)
+
+All elements within a single slide MUST share the same `groupIds` value.
+
+### GroupId Format
+```
+slide{N}-group-{randomSuffix}
+```
+
+Example: `"groupIds": ["slide1-group-x7k2m"]`
+
+### Generate in JavaScript
+```javascript
+const slideGroupId = `slide1-group-${Math.random().toString(36).substr(2, 6)}`;
+```
+
 Every element MUST include:
 
 ```json
@@ -13,7 +29,7 @@ Every element MUST include:
   "version": 1,
   "versionNonce": 1,
   "isDeleted": false,
-  "groupIds": [],
+  "groupIds": ["slide1-group-abc123"],
   "boundElements": null,
   "link": null,
   "locked": false,

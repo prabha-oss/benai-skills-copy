@@ -35,6 +35,13 @@ Present the outline to the user for confirmation before building.
 Read `references/element-reference.md` for element specs and JSON structure.
 Read `references/design-principles.md` for layout patterns, color systems, and design principles.
 
+#### CRITICAL: Generate GroupIds First
+
+Before building any slide, generate a unique groupId. All elements within a slide MUST share the same groupId.
+```javascript
+const slide1GroupId = `slide1-group-${Math.random().toString(36).substr(2, 6)}`;
+```
+
 #### Slide Construction Order
 
 For each slide:
