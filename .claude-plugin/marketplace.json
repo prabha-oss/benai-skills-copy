@@ -16,7 +16,12 @@
       "author": {
         "name": "BenAI"
       },
-      "keywords": ["n8n", "workflow", "automation", "api"]
+      "keywords": [
+        "n8n",
+        "workflow",
+        "automation",
+        "api"
+      ]
     },
     {
       "name": "video",
@@ -26,7 +31,29 @@
       "author": {
         "name": "BenAI"
       },
-      "keywords": ["video", "ffmpeg", "remotion", "editing", "captions"]
+      "keywords": [
+        "video",
+        "ffmpeg",
+        "remotion",
+        "editing",
+        "captions"
+      ]
+    },
+    {
+      "name": "excalidraw",
+      "source": "./plugins/excalidraw",
+      "description": "Create visual presentations, slide decks, and diagrams in Excalidraw with file output or Chrome browser injection",
+      "version": "1.0.0",
+      "author": {
+        "name": "Agniva"
+      },
+      "keywords": [
+        "excalidraw",
+        "presentation",
+        "diagrams",
+        "slides",
+        "visual"
+      ]
     }
   ]
 }

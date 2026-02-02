@@ -1,0 +1,8 @@
+{
+    "name": "excalidraw",
+    "description": "Create visual presentations, slide decks, and explanatory diagrams in Excalidraw. Supports file output or direct Chrome browser injection.",
+    "version": "1.0.0",
+    "author": {
+        "name": "Agniva"
+    }
+}
