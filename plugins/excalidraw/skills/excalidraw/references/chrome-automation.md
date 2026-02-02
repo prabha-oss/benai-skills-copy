@@ -4,8 +4,26 @@ Step-by-step procedure for injecting Excalidraw slides directly into excalidraw.
 
 ## Prerequisites
 
-- Claude in Chrome extension connected and active
-- Browser window available
+- **Claude in Chrome extension** installed and active
+  - If not installed: https://chromewebstore.google.com/detail/claude-in-chrome/anthropic
+  - Browser window available
+
+### Checking Extension Availability
+
+Before starting, call `tabs_context_mcp`. If it errors or returns no context, the extension is not available.
+ 
+**If extension unavailable, respond to user:**
+```
+To create Excalidraw presentations, please install the Claude in Chrome extension:
+https://chromewebstore.google.com/detail/claude-in-chrome/anthropic
+ 
+Once installed:
+1. Restart Chrome
+2. Click the extension icon and connect
+3. Try your request again
+```
+ 
+Do NOT fall back to creating .excalidraw files. The Chrome injection workflow is required.
 
 ## Workflow
 
