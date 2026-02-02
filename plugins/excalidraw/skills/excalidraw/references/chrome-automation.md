@@ -41,6 +41,11 @@ Click an empty area of the canvas, not on any toolbar or UI element.
 
 ### Step 4: Inject Slide via Clipboard
 
+### Elements Pasting on Top of Each Other / Can't Move Together
+
+**Cause:** Missing or empty `groupIds`.
+**Fix:** Ensure ALL elements share the same `groupIds` array value.
+
 Use `javascript_tool` to write Excalidraw clipboard JSON:
 
 ```javascript
