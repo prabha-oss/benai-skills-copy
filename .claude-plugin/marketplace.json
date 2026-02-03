@@ -72,6 +72,38 @@
         "nurture",
         "lifecycle"
       ]
+    },
+    {
+      "name": "programmatic-seo",
+      "source": "./plugins/seo/programmatic-seo",
+      "description": "Generate high-quality, SEO-optimized content at scale using data sources and templates.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "seo",
+        "programmatic",
+        "content-generation",
+        "bulk",
+        "marketing"
+      ]
+    },
+    {
+      "name": "seo-optimizing",
+      "source": "./plugins/seo/seo-optimizing",
+      "description": "Analyze and optimize web content for search engines, improving rankings and readability.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "seo",
+        "optimization",
+        "analysis",
+        "ranking",
+        "readability"
+      ]
     }
   ]
 }
