@@ -10,6 +10,10 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 |--------|---------|---------|
 | n8n | `/n8n` | Complete n8n workflow automation via REST API |
 | video | `/video` | Video editing with FFmpeg and Remotion |
+| excalidraw | `/excalidraw` | Visual presentations, slide decks, and diagrams in Excalidraw |
+| email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
+| programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale using templates and data |
+| seo-optimizing | `/seo-optimizing` | Analyze and optimize content for search engines |
 
 ## n8n Skill
 
