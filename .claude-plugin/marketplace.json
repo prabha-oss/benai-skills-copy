@@ -54,6 +54,24 @@
         "slides",
         "visual"
       ]
+    },
+    {
+      "name": "email-sequence",
+      "source": "./plugins/email-sequence",
+      "description": "Expert email marketing and automation skill for creating email sequences, drip campaigns, nurture sequences, onboarding flows, and lifecycle email programs",
+      "version": "1.0.0",
+      "author": {
+        "name": "Agniva"
+      },
+      "keywords": [
+        "email",
+        "marketing",
+        "automation",
+        "drip-campaign",
+        "onboarding",
+        "nurture",
+        "lifecycle"
+      ]
     }
   ]
 }
