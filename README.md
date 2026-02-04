@@ -14,7 +14,9 @@ Expert automation skills for Claude Code.
 /plugin install excalidraw@benai-skills
 /plugin install email-sequence@benai-skills
 /plugin install programmatic-seo@benai-skills
+/plugin install seo-audit@benai-skills
 /plugin install seo-optimizing@benai-skills
+/plugin install infographic@benai-skills
 ```
 
 ## Available Plugins
@@ -23,10 +25,14 @@ Expert automation skills for Claude Code.
 |--------|---------|---------|
 | n8n | `/n8n` | Complete n8n workflow automation via REST API |
 | video | `/video` | Video editing with FFmpeg and Remotion |
-| excalidraw | `/excalidraw` | Visual presentations, slide decks, and diagrams in Excalidraw |
+| excalidraw | `/excalidraw` | Visual presentations, slides, and diagrams in Excalidraw |
 | email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
 | programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale using templates and data |
-| seo-optimizing | `/seo-optimizing` | Analyze and optimize content for search engines |
+| seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
+| seo-optimizing | `/seo-optimizing` | Data-driven SEO optimization using Google Search Console |
+| infographic | `/infographic` | Professional infographics via Gemini AI image generation |
+
+---
 
 ### n8n Automation
 
@@ -51,13 +57,28 @@ Create visual presentations, slide decks, and diagrams in Excalidraw. Supports g
 
 Design email sequences including welcome/onboarding, lead nurture, re-engagement, post-purchase, and sales sequences. Includes copy guidelines and sequence templates.
 
-### Programmatic SEO
+### SEO Suite
 
-Build SEO-optimized pages at scale using templates and data sources. Covers directory pages, location pages, comparison pages, and integration pages with Webflow CMS support.
+Three complementary SEO plugins:
 
-### SEO Optimizing
+| Plugin | Role | Data Source |
+|--------|------|-------------|
+| **seo-audit** | Technical diagnosis — what's broken | seomator CLI |
+| **seo-optimizing** | Data-driven strategy — what to DO | Google Search Console API |
+| **programmatic-seo** | Scale content creation | Templates + data sources |
 
-Analyze and optimize content for search engines. Includes content analysis, on-page SEO checks, competitor comparison, and optimization suggestions.
+**seo-audit** runs comprehensive technical SEO audits covering 16 categories and 148 rules using seomator CLI. Requires `@seomator/seo-audit` (installed automatically on first use).
+
+**seo-optimizing** uses real Google Search Console data to find striking-distance keywords, fix low-CTR pages, detect keyword cannibalization, and execute content optimizations. Three data paths:
+- **API path:** Service account + GSC API (up to 25,000 rows)
+- **Browser path:** Claude Code browser extension navigates GSC directly (zero setup)
+- **CSV path:** Manual export from GSC web UI
+
+**programmatic-seo** generates SEO-optimized pages at scale using templates and data sources with Webflow CMS integration.
+
+### Infographic
+
+Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.
 
 ## Project Structure
 
@@ -70,24 +91,28 @@ benai-skills/
 │   ├── video/
 │   ├── excalidraw/
 │   ├── email-sequence/
+│   ├── infographic/
 │   └── seo/
 │       ├── programmatic-seo/
+│       ├── seo-audit/
 │       └── seo-optimizing/
 ├── CLAUDE.md
 └── README.md
 ```
 
+Each plugin follows the same structure:
+```
+plugins/<name>/
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/<name>/
+    ├── SKILL.md
+    └── references/
+```
+
 ## Adding New Plugins
 
-1. Create plugin directory structure:
-   ```
-   plugins/<name>/
-   ├── .claude-plugin/
-   │   └── plugin.json
-   └── skills/<name>/
-       ├── SKILL.md
-       └── references/
-   ```
+1. Create the plugin directory structure (see above)
 
 2. Create `plugins/<name>/.claude-plugin/plugin.json`:
    ```json
@@ -98,15 +123,12 @@ benai-skills/
    }
    ```
 
-3. Add plugin entry to `.claude-plugin/marketplace.json`:
-   ```json
-   {
-     "name": "<name>",
-     "source": "./plugins/<name>",
-     "description": "..."
-   }
-   ```
+3. Write `SKILL.md` with frontmatter including trigger keywords in the description
+
+4. Add reference files in `references/` for detailed documentation
+
+5. Register in `.claude-plugin/marketplace.json`
 
 ## License
 
-MIT License
+BenAI
