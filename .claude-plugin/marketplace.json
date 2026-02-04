@@ -144,6 +144,23 @@
         "gemini",
         "design"
       ]
+    },
+    {
+      "name": "n8n-prd-generator",
+      "source": "./plugins/n8n-prd-generator",
+      "description": "Convert discovery call transcripts into concise n8n Automation Blueprints with interactive question flow",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "n8n",
+        "blueprint",
+        "prd",
+        "discovery",
+        "automation",
+        "scoping"
+      ]
     }
   ]
 }
