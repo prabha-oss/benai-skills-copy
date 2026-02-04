@@ -92,7 +92,7 @@
     {
       "name": "seo-optimizing",
       "source": "./plugins/seo/seo-optimizing",
-      "description": "Analyze and optimize web content for search engines, improving rankings and readability.",
+      "description": "Data-driven SEO optimization using Google Search Console — find striking-distance keywords, fix low-CTR pages, detect cannibalization, and execute content optimizations backed by real search data.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -100,9 +100,49 @@
       "keywords": [
         "seo",
         "optimization",
-        "analysis",
-        "ranking",
-        "readability"
+        "google-search-console",
+        "gsc",
+        "ctr",
+        "keywords",
+        "cannibalization",
+        "striking-distance",
+        "search-performance",
+        "content-optimization"
+      ]
+    },
+    {
+      "name": "seo-audit",
+      "source": "./plugins/seo/seo-audit",
+      "description": "Run comprehensive SEO audits on websites using seomator CLI - 16 categories, 148 rules.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "seo",
+        "audit",
+        "technical-seo",
+        "performance",
+        "accessibility",
+        "core-web-vitals",
+        "crawl"
+      ]
+    },
+    {
+      "name": "infographic",
+      "source": "./plugins/infographic",
+      "description": "Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "infographic",
+        "visual",
+        "linkedin",
+        "image-generation",
+        "gemini",
+        "design"
       ]
     }
   ]
