@@ -14,6 +14,9 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 | email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
 | programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale using templates and data |
 | seo-optimizing | `/seo-optimizing` | Analyze and optimize content for search engines |
+| seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
+| infographic | `/infographic` | Professional infographics via Gemini AI image generation |
+| n8n-prd-generator | `/n8n-prd-generator` | Convert discovery call transcripts into n8n automation blueprints |
 
 ## n8n Skill
 
@@ -139,3 +142,7 @@ If the n8n MCP server is available, prefer using MCP tools for:
 - Templates: `search_templates`, `get_template`
 
 Fall back to REST API skills when MCP is unavailable.
+
+## Building Distributable Zips
+
+Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates one zip per plugin plus a full marketplace zip. Run it after adding or updating any plugin.

@@ -17,6 +17,7 @@ Expert automation skills for Claude Code.
 /plugin install seo-audit@benai-skills
 /plugin install seo-optimizing@benai-skills
 /plugin install infographic@benai-skills
+/plugin install n8n-prd-generator@benai-skills
 ```
 
 ## Available Plugins
@@ -31,6 +32,7 @@ Expert automation skills for Claude Code.
 | seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
 | seo-optimizing | `/seo-optimizing` | Data-driven SEO optimization using Google Search Console |
 | infographic | `/infographic` | Professional infographics via Gemini AI image generation |
+| n8n-prd-generator | `/n8n-prd-generator` | Convert discovery call transcripts into n8n automation blueprints |
 
 ---
 
@@ -80,6 +82,10 @@ Three complementary SEO plugins:
 
 Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.
 
+### n8n Blueprint Generator
+
+Convert discovery call transcripts and client documentation into one-page n8n Automation Blueprints. Extracts facts, asks clarifying questions interactively, and outputs a structured spec covering trigger, inputs, workflow steps, outputs, edge cases, and error handling.
+
 ## Project Structure
 
 ```
@@ -92,6 +98,7 @@ benai-skills/
 │   ├── excalidraw/
 │   ├── email-sequence/
 │   ├── infographic/
+│   ├── n8n-prd-generator/
 │   └── seo/
 │       ├── programmatic-seo/
 │       ├── seo-audit/
@@ -128,6 +135,14 @@ plugins/<name>/
 4. Add reference files in `references/` for detailed documentation
 
 5. Register in `.claude-plugin/marketplace.json`
+
+## Building Distributable Zips
+
+Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates:
+- One zip per plugin (standalone, installable individually)
+- `benai-skills-marketplace.zip` (all plugins in one package)
+
+Run it after adding or updating any plugin.
 
 ## License
 
