@@ -22,19 +22,17 @@ echo "${GEMINI_API_KEY:+API key is set}"
 
 ## Model Selection
 
-| Model | Codename | Best For | Speed | Quality | Text Rendering |
-|-------|----------|----------|-------|---------|----------------|
-| `gemini-2.0-flash-exp` | Nano Banana | General infographics, fast iteration | Fast | Good | Good |
-| `gemini-3.0-flash-thinking-exp-01-21` | Nano Banana Pro | High-quality infographics with perfect text | Medium | Excellent | Excellent |
+| Model | Best For | Speed | Quality | Text Rendering |
+|-------|----------|-------|---------|----------------|
+| `gemini-2.5-flash-image` | Image generation with Gemini API | Fast | Excellent | Excellent |
 
-**What is Nano Banana?**
-- **Nano Banana** = Google's codename for Gemini 2.5 Flash Image, the model behind `gemini-2.0-flash-exp`
-- **Nano Banana Pro** = Gemini 3 Pro Image, the state-of-the-art model for text rendering in images
-- Nano Banana Pro excels at creating images with correctly rendered, legible text—ideal for infographics, posters, UI mockups, and diagrams
+**What is gemini-2.5-flash-image?**
+- This is the correct model name for Gemini's image generation API
+- Supports native image generation through the generateContent endpoint
+- Excels at creating images with correctly rendered, legible text—ideal for infographics, posters, UI mockups, and diagrams
 
 **Default recommendation:**
-- Use `gemini-2.0-flash-exp` (Nano Banana) for drafts and fast iteration
-- Use `gemini-3.0-flash-thinking-exp-01-21` (Nano Banana Pro) when text clarity is critical or for final renders
+- Use `gemini-2.5-flash-image` for all image generation tasks
 
 ---
 
@@ -44,21 +42,16 @@ echo "${GEMINI_API_KEY:+API key is set}"
 
 ```bash
 # Generate an infographic image
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
-    "contents": [
-      {
-        "parts": [
-          {
-            "text": "Generate a professional infographic about the 5 stages of product development. Use a clean timeline layout with numbered circles connected by a blue line. Each stage has a short title and one-line description. White background, blue (#2563EB) and amber (#F59E0B) accent colors. Professional flat design style. 4:5 aspect ratio for LinkedIn."
-          }
-        ]
-      }
-    ],
-    "generationConfig": {
-      "responseModalities": ["TEXT", "IMAGE"]
-    }
+    "contents": [{
+      "parts": [
+        {"text": "Generate a professional infographic about the 5 stages of product development. Use a clean timeline layout with numbered circles connected by a blue line. Each stage has a short title and one-line description. White background, blue (#2563EB) and amber (#F59E0B) accent colors. Professional flat design style. 4:5 aspect ratio for LinkedIn."}
+      ]
+    }]
   }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > infographic-output.png
 ```
 
@@ -72,11 +65,8 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 async function generateInfographic(prompt, outputPath) {
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash-exp",
+    model: "gemini-2.5-flash-image",
     contents: [{ parts: [{ text: prompt }] }],
-    config: {
-      responseModalities: ["TEXT", "IMAGE"],
-    },
   });
 
   // Extract and save the image
@@ -108,19 +98,16 @@ Use multi-turn conversations to iteratively refine an image without losing conte
 
 ```bash
 # Step 1: Generate initial image (same as above, save the full response)
-RESPONSE=$(curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+RESPONSE=$(curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
-    "contents": [
-      {
-        "parts": [
-          {"text": "Generate a professional infographic about remote work benefits. Iceberg style. Blue color scheme."}
-        ]
-      }
-    ],
-    "generationConfig": {
-      "responseModalities": ["TEXT", "IMAGE"]
-    }
+    "contents": [{
+      "parts": [
+        {"text": "Generate a professional infographic about remote work benefits. Iceberg style. Blue color scheme."}
+      ]
+    }]
   }')
 
 # Save the image
@@ -129,20 +116,17 @@ echo "$RESPONSE" | jq -r '.candidates[0].content.parts[] | select(.inlineData) |
 # Step 2: Edit the image by sending it back with modification instructions
 IMAGE_B64=$(base64 -i infographic-v1.png)
 
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
   -d "{
-    \"contents\": [
-      {
-        \"parts\": [
-          {\"inlineData\": {\"mimeType\": \"image/png\", \"data\": \"${IMAGE_B64}\"}},
-          {\"text\": \"Edit this infographic: change the title to 'Why Remote Works' and make the colors warmer (use orange and coral tones instead of blue)\"}
-        ]
-      }
-    ],
-    \"generationConfig\": {
-      \"responseModalities\": [\"TEXT\", \"IMAGE\"]
-    }
+    \"contents\": [{
+      \"parts\": [
+        {\"inlineData\": {\"mimeType\": \"image/png\", \"data\": \"${IMAGE_B64}\"}},
+        {\"text\": \"Edit this infographic: change the title to 'Why Remote Works' and make the colors warmer (use orange and coral tones instead of blue)\"}
+      ]
+    }]
   }" | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > infographic-v2.png
 ```
 
@@ -154,7 +138,7 @@ async function editInfographic(imagePath, editPrompt, outputPath) {
   const base64Image = imageData.toString("base64");
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash-exp",
+    model: "gemini-2.5-flash-image",
     contents: [
       {
         parts: [
@@ -168,9 +152,6 @@ async function editInfographic(imagePath, editPrompt, outputPath) {
         ],
       },
     ],
-    config: {
-      responseModalities: ["TEXT", "IMAGE"],
-    },
   });
 
   for (const part of response.candidates[0].content.parts) {
@@ -226,11 +207,12 @@ generate_with_retry() {
   local retry=0
 
   while [ $retry -lt $max_retries ]; do
-    RESULT=$(curl -s -w "\n%{http_code}" "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+    RESULT=$(curl -s -w "\n%{http_code}" -X POST \
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+      -H "x-goog-api-key: ${GEMINI_API_KEY}" \
       -H "Content-Type: application/json" \
       -d "{
-        \"contents\": [{\"parts\": [{\"text\": \"${prompt}\"}]}],
-        \"generationConfig\": {\"responseModalities\": [\"TEXT\", \"IMAGE\"]}
+        \"contents\": [{\"parts\": [{\"text\": \"${prompt}\"}]}]
       }")
 
     HTTP_CODE=$(echo "$RESULT" | tail -1)
@@ -294,11 +276,12 @@ export GEMINI_API_KEY=your-key
 PROMPT="Generate a professional infographic..."
 
 # 3. Generate
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
   -d "{
-    \"contents\": [{\"parts\": [{\"text\": \"${PROMPT}\"}]}],
-    \"generationConfig\": {\"responseModalities\": [\"TEXT\", \"IMAGE\"]}
+    \"contents\": [{\"parts\": [{\"text\": \"${PROMPT}\"}]}]
   }" | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
 
 # 4. Verify file was created
