@@ -272,9 +272,9 @@ Which approach(es) resonate with you? You can pick 1-3, or suggest your own idea
 
 ---
 
-### Phase 5: User Selection
+### Phase 5: User Selection & Detailed Specification
 
-**Goal:** Lock in the visual direction.
+**Goal:** Lock in the visual direction and gather all details needed for perfect generation.
 
 1. User picks **1-3 preferred** visualization approaches
 2. For each selected approach, create a detailed content map:
@@ -283,45 +283,165 @@ Which approach(es) resonate with you? You can pick 1-3, or suggest your own idea
    - Color assignments for different sections
    - Title and subtitle text
 3. Present the refined approach(es) for final confirmation
-4. **Do NOT generate images until the user confirms the direction.**
+4. **Do NOT proceed to Phase 5.5 until the user confirms the direction.**
 
 **Output:** Confirmed visual direction with detailed content mapping.
 
 ---
 
-### Phase 6: Generate with Nano Banana (Gemini Image Generation)
+### Phase 5.5: Pre-Generation Questionnaire (MANDATORY)
 
-**Goal:** Create the infographic image(s) using Gemini's image generation.
+**Goal:** Gather all specific details to craft the perfect prompt and ensure style consistency.
+
+**IMPORTANT:** You MUST ask these questions before generating ANY image. Do NOT skip this phase.
+
+Ask the user these specific questions (present them all at once for efficiency):
+
+```
+Before I generate your infographic, I need a few specific details to ensure it's perfect:
+
+📐 LAYOUT & COMPOSITION:
+1. Layout style: Vertical split, horizontal split, centered, grid, or custom?
+2. Text placement: Top-heavy (title at top), bottom-heavy, or balanced throughout?
+3. Visual hierarchy: Should one element dominate, or equal weight distribution?
+
+🎨 VISUAL STYLE:
+4. Illustration style: Flat design, hand-drawn/sketchy, geometric/minimal, or gradient/modern?
+5. Icon style: Simple line icons, filled icons, illustrated icons, or no icons?
+6. Border/frame: Clean border, no border, decorative frame, or rounded corners?
+
+✍️ TYPOGRAPHY:
+7. Title treatment: Bold & large, elegant & thin, handwritten style, or all caps?
+8. Body text size: Minimal text (large & readable), moderate text, or detailed text?
+9. Text effects: Drop shadow, outline, solid background boxes, or clean/no effects?
+
+🎯 SPECIFIC ELEMENTS:
+10. Exact title text: [What should the main title say?]
+11. Exact subtitle text (if any): [What should the subtitle say?]
+12. Bullet points/labels: [List exact text for each point]
+13. Any specific imagery: Icons, illustrations, or visual elements you want included?
+
+📱 TECHNICAL:
+14. Aspect ratio confirmed: [4:5 for LinkedIn / 1:1 square / 16:9 landscape / other?]
+15. Background treatment: Solid color, subtle gradient, texture, or pattern?
+
+Please answer as many as you can. For any you're unsure about, I'll use smart defaults based on your brand guidelines.
+```
+
+**After receiving answers:**
+- Confirm all details with the user
+- Fill in any missing details with smart defaults based on brand guidelines
+- Show a summary of the complete specification before proceeding to Phase 6
+
+**Output:** Complete specification document with all visual and content details confirmed.
+
+---
+
+### Phase 6: Generate with Gemini Image Generation
+
+**Goal:** Create the infographic image(s) using Gemini's image generation with a highly detailed, style-specific prompt.
 
 1. **Read reference files** for prompt crafting:
    - `references/prompt-engineering.md` for prompt structure
    - `references/gemini-image-api.md` for API details and model selection
 
 2. **Select the right model:**
-   - `gemini-3.0-flash-thinking-exp-01-21` (Nano Banana Pro) — Best for crisp text rendering, high-quality output ✨ **Recommended**
-   - `gemini-2.0-flash-exp` (Nano Banana) — Fast iteration, good quality
+   - `gemini-2.5-flash-image` — The correct model for image generation with Gemini API ✨ **Recommended**
 
-   **Default:** Use **Nano Banana Pro** (`gemini-3.0-flash-thinking-exp-01-21`) as the primary model. It produces excellent text rendering which is critical for infographics. Use Nano Banana (`gemini-2.0-flash-exp`) only if speed is more important than text quality.
+   **Default:** Use **`gemini-2.5-flash-image`** as the primary model. This is the correct model name for the Gemini image generation API.
 
-3. **Craft the generation prompt** incorporating:
-   - Brand guidelines from Phase 3 (colors, font style, tone)
-   - Chosen visual metaphor from Phase 5 (layout, structure)
-   - Specific content (exact text labels, data points, title)
-   - Platform-appropriate aspect ratio
+3. **Craft the ultra-detailed generation prompt** using this structure:
 
-4. **Determine the aspect ratio:**
-   - LinkedIn feed: **4:5** (portrait) or **1:1** (square)
-   - LinkedIn carousel: **4:5**
-   - Instagram: **1:1** or **4:5**
-   - Twitter: **16:9**
-   - Stories: **9:16**
-   - Presentation: **16:9**
+   ```
+   [PROMPT STRUCTURE - Use ALL sections]
+   
+   Generate a professional infographic with these EXACT specifications:
+   
+   CONTENT:
+   - Title: "[exact title from Phase 5.5]"
+   - Subtitle: "[exact subtitle from Phase 5.5]"
+   - Main points: [list each bullet/label with exact text]
+   
+   LAYOUT & COMPOSITION:
+   - Layout style: [from Phase 5.5 answer #1]
+   - Visual metaphor: [from Phase 5 selection]
+   - Text placement: [from Phase 5.5 answer #2]
+   - Visual hierarchy: [from Phase 5.5 answer #3]
+   - Aspect ratio: [from Phase 5.5 answer #14] portrait/square/landscape
+   
+   VISUAL STYLE:
+   - Illustration style: [from Phase 5.5 answer #4]
+   - Icon style: [from Phase 5.5 answer #5]
+   - Border treatment: [from Phase 5.5 answer #6]
+   
+   TYPOGRAPHY:
+   - Title treatment: [from Phase 5.5 answer #7]
+   - Font style: [from brand guidelines - clean sans-serif/serif/handwritten/bold]
+   - Body text size: [from Phase 5.5 answer #8]
+   - Text effects: [from Phase 5.5 answer #9]
+   
+   COLOR PALETTE:
+   - Primary color: [hex code from brand guidelines]
+   - Accent color: [hex code from brand guidelines]
+   - Background: [from Phase 5.5 answer #15 + brand guidelines]
+   - Text color: [high contrast based on background]
+   
+   SPECIFIC ELEMENTS:
+   - [List any specific icons, illustrations, or visual elements from Phase 5.5 answer #13]
+   
+   STYLE REQUIREMENTS:
+   - Professional flat illustration style
+   - Modern sans-serif typography
+   - Clean, minimal design with 40%+ white space
+   - High contrast for mobile readability
+   - No photorealistic textures or 3D effects
+   - [Add any specific style notes from brand tone]
+   
+   TEXT PLACEMENT RULES (CRITICAL - FOLLOW EXACTLY):
+   - Each text element should appear ONLY ONCE in the infographic
+   - Place text in logical, readable positions that match the visual metaphor
+   - Title should be in the most prominent position (typically top or center)
+   - Subtitle should be directly below or near the title
+   - Body text/labels should be placed next to or inside their corresponding visual elements
+   - Maintain clear visual hierarchy: Title (largest) → Subtitle (medium) → Body text (smallest)
+   - Ensure no text overlaps or repeats
+   - Leave adequate white space around all text for readability
+   - Text should flow naturally with the visual layout (left-to-right, top-to-bottom for most layouts)
+   - For split layouts: text on each side should be distinct and non-repeating
+   - For timeline/process layouts: text should follow the sequential flow
+   - For comparison layouts: ensure labels clearly indicate which side they belong to
+   - Do NOT place the same text in multiple locations
+   - Do NOT add decorative text repetition
+   - Ensure all text is purposeful and placed exactly where it makes sense contextually
+   
+   TECHNICAL:
+   - [Aspect ratio instruction: "4:5 portrait aspect ratio" / "1:1 square" / "16:9 landscape"]
+   - High resolution, suitable for social media
+   - Optimized for [platform from Phase 1]
+   ```
 
-5. **Call Gemini API** with the crafted prompt:
+4. **Show the complete prompt to the user** before generating:
+   ```
+   Here's the detailed prompt I'll use to generate your infographic:
+   
+   [Show the full prompt]
+   
+   Does this capture everything correctly? Any adjustments needed?
+   ```
+
+5. **After user approval, call Gemini API** with the crafted prompt:
    ```bash
-   curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+   curl -s -X POST \
+     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+     -H "x-goog-api-key: ${GEMINI_API_KEY}" \
      -H "Content-Type: application/json" \
-     -d '{...}' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
+     -d '{
+       "contents": [{
+         "parts": [
+           {"text": "Your detailed prompt here"}
+         ]
+       }]
+     }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
    ```
 
 6. **Save the generated image** with descriptive naming:
@@ -335,7 +455,7 @@ Which approach(es) resonate with you? You can pick 1-3, or suggest your own idea
 
 8. **Show to user** — Use Read tool to display the image for review
 
-**Output:** Generated image(s) saved to disk and displayed for user feedback.
+**Output:** Generated image(s) saved to disk and displayed for user feedback, with the exact prompt used saved for reference.
 
 ---
 
@@ -371,22 +491,19 @@ Which approach(es) resonate with you? You can pick 1-3, or suggest your own idea
 export GEMINI_API_KEY=your-key-here
 ```
 
-### Generate with Nano Banana (Quick)
+### Generate with Gemini Image API (Quick)
 ```bash
-# Using Nano Banana (gemini-2.0-flash-exp) - Fast iteration
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_API_KEY}" \
+# Using gemini-2.5-flash-image - Correct model for image generation
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
   -d '{
-    "contents": [{"parts": [{"text": "Generate a professional infographic..."}]}],
-    "generationConfig": {"responseModalities": ["TEXT", "IMAGE"]}
-  }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
-
-# Using Nano Banana Pro (gemini-3.0-flash-thinking-exp-01-21) - Best text rendering
-curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-flash-thinking-exp-01-21:generateContent?key=${GEMINI_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "contents": [{"parts": [{"text": "Generate a professional infographic..."}]}],
-    "generationConfig": {"responseModalities": ["TEXT", "IMAGE"]}
+    "contents": [{
+      "parts": [
+        {"text": "Generate a professional infographic..."}
+      ]
+    }]
   }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
 ```
 
@@ -418,13 +535,16 @@ curl -s "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-flas
 
 ## Important Rules
 
-1. **Never generate without user approval** — Always confirm the visual direction in Phase 5
-2. **One metaphor per infographic** — Don't mix metaphors in a single image. If you need multiple metaphors, create a series
-3. **Iterate, don't restart** — Use multi-turn Gemini chat for edits. Send the previous image back with modification instructions
-4. **Save every generation** — Always save to disk with descriptive filenames before showing to user
-5. **Brand consistency** — Apply the same brand profile (from `.infographic-brand.json`) across all images in a session
-6. **Simplify ruthlessly** — If text won't be readable on mobile, cut it. Less is more. Maximum 6-8 text labels per infographic
-7. **Ask before assuming** — When in doubt about style or content, ask the user
-8. **Use Nano Banana models only** — Always use `gemini-2.0-flash-exp` or `gemini-3.0-flash-thinking-exp-01-21`. Do NOT use Imagen models.
-9. **Series numbering** — For multi-post series, always include "Part X of Y" on each image
-10. **White space is essential** — Target 40%+ empty canvas. Breathing room makes it professional
+1. **MANDATORY Pre-Generation Questions** — ALWAYS complete Phase 5.5 questionnaire before generating. Never skip this step.
+2. **Never generate without user approval** — Always confirm the visual direction in Phase 5 AND show the complete prompt in Phase 6 before generating
+3. **Style-specific prompts** — Use ultra-detailed prompts with exact specifications from Phase 5.5 answers
+4. **One metaphor per infographic** — Don't mix metaphors in a single image. If you need multiple metaphors, create a series
+5. **Iterate, don't restart** — Use multi-turn Gemini chat for edits. Send the previous image back with modification instructions
+6. **Save every generation** — Always save to disk with descriptive filenames before showing to user
+7. **Brand consistency** — Apply the same brand profile (from `.infographic-brand.json`) across all images in a session
+8. **Simplify ruthlessly** — If text won't be readable on mobile, cut it. Less is more. Maximum 6-8 text labels per infographic
+9. **Ask before assuming** — When in doubt about style or content, ask the user
+10. **Use correct Gemini model** — Always use `gemini-2.5-flash-image` for image generation. This is the correct model name for the Gemini image generation API.
+11. **Series numbering** — For multi-post series, always include "Part X of Y" on each image
+12. **White space is essential** — Target 40%+ empty canvas. Breathing room makes it professional
+13. **Show prompt before generating** — Always display the complete prompt to the user for approval before calling the API
