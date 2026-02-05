@@ -8,7 +8,7 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 
 | Plugin | Command | Purpose |
 |--------|---------|---------|
-| n8n | `/n8n` | Complete n8n workflow automation via REST API |
+| n8n | `/n8n`, `/n8n-prd-generator` | n8n workflow automation + blueprint generator |
 | video | `/video` | Video editing with FFmpeg and Remotion |
 | excalidraw | `/excalidraw` | Visual presentations, slide decks, and diagrams in Excalidraw |
 | email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
@@ -16,7 +16,7 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 | seo-optimizing | `/seo-optimizing` | Analyze and optimize content for search engines |
 | seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
 | infographic | `/infographic` | Professional infographics via Gemini AI image generation |
-| n8n-prd-generator | `/n8n-prd-generator` | Convert discovery call transcripts into n8n automation blueprints |
+| case-study | `/case-study` | Detailed, data-driven case studies from interviews |
 
 ## n8n Skill
 
@@ -145,4 +145,4 @@ Fall back to REST API skills when MCP is unavailable.
 
 ## Building Distributable Zips
 
-Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates one zip per plugin plus a full marketplace zip. Run it after adding or updating any plugin.
+Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates one zip per plugin plus a full marketplace zip. The `n8n-prd-generator` plugin is bundled into the `n8n.zip`. Run it after adding or updating any plugin.

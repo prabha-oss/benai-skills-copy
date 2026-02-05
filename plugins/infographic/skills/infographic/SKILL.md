@@ -1,6 +1,5 @@
 ---
 name: infographic
-version: 1.1.0
 description: |
   Generate professional LinkedIn-style infographics using Nano Banana (Gemini AI image generation).
   Creates clean, memorable visuals with ONE visual metaphor, flat colors, hand-drawn touches, and

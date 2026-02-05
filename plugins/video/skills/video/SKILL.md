@@ -1,28 +1,19 @@
 ---
 name: video
 description: |
-  Edits, processes, and renders videos using FFmpeg and Remotion. Handles video stitching, transitions, captions, teasers, and transcription.
+  Edit, process, and render videos using FFmpeg and Remotion. Handles stitching, transitions, captions, teasers, and transcription.
 
   USE THIS SKILL WHEN:
   - User mentions video, clip, footage, mp4, mov, avi, mkv, or any video format
-  - User wants to combine, stitch, concatenate, merge, or join video files
+  - User wants to combine, stitch, merge, or join video files
   - User asks about transitions, fades, crossfades, or effects between clips
-  - User needs captions, subtitles, TikTok-style captions, or word highlighting
-  - User wants a teaser, trailer, highlight reel, or short preview from longer video
-  - User mentions FFmpeg, ffprobe, or any ffmpeg command or error
-  - User mentions Remotion, OffthreadVideo, TransitionSeries, or any Remotion error
-  - User asks about video transcription, whisper, speech-to-text for video
-  - User encounters "inputRange must be strictly monotonically increasing" error
-  - User encounters "delayRender was called but not continued" error
-  - User sees any video encoding, codec, or rendering error
-  - User asks about video duration, resolution, fps, frame rate, or video analysis
-  - User asks how to trim, cut, or extract portions of video
+  - User needs captions, subtitles, or TikTok-style word highlighting
+  - User wants a teaser, trailer, or highlight reel from longer video
+  - User mentions FFmpeg, ffprobe, Remotion, or related errors
+  - User asks about video transcription or whisper speech-to-text
+  - User asks about video duration, resolution, fps, or trimming
   - User has .mp4, .mov, .captions.json files or video folders
-  - User is confused about video processing implementation
-  - Any error occurs in a video-editor project directory
-  - User asks about thumbnails, graphics, overlays, or visual assets for video
-  - User needs to generate images or graphics for video content
-  - User mentions title cards, lower thirds, end screens, or chapter graphics
+  - User asks about thumbnails, overlays, title cards, or graphics for video
 ---
 
 # Video Editing Skill

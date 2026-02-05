@@ -17,7 +17,6 @@ Expert automation skills for Claude Code.
 /plugin install seo-audit@benai-skills
 /plugin install seo-optimizing@benai-skills
 /plugin install infographic@benai-skills
-/plugin install n8n-prd-generator@benai-skills
 /plugin install case-study@benai-skills
 ```
 
@@ -25,7 +24,7 @@ Expert automation skills for Claude Code.
 
 | Plugin | Command | Purpose |
 |--------|---------|---------|
-| n8n | `/n8n` | Complete n8n workflow automation via REST API |
+| n8n | `/n8n`, `/n8n-prd-generator` | n8n workflow automation + blueprint generator |
 | video | `/video` | Video editing with FFmpeg and Remotion |
 | excalidraw | `/excalidraw` | Visual presentations, slides, and diagrams in Excalidraw |
 | email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
@@ -33,14 +32,13 @@ Expert automation skills for Claude Code.
 | seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
 | seo-optimizing | `/seo-optimizing` | Data-driven SEO optimization using Google Search Console |
 | infographic | `/infographic` | Professional infographics via Gemini AI image generation |
-| n8n-prd-generator | `/n8n-prd-generator` | Convert discovery call transcripts into n8n automation blueprints |
 | case-study | `/case-study` | Detailed, data-driven case studies from interviews |
 
 ---
 
 ### n8n Automation
 
-Build, test, and deploy n8n workflows via REST API with incremental testing. Includes node references for 40+ common nodes, JavaScript/Python Code node patterns, expression syntax, and credential management.
+Build, test, and deploy n8n workflows via REST API with incremental testing. Includes node references for 40+ common nodes, JavaScript/Python Code node patterns, expression syntax, and credential management. Also includes the **n8n Blueprint Generator** (`/n8n-prd-generator`) for converting discovery call transcripts into n8n automation blueprints.
 
 **Setup:** Create `.env` in your working directory:
 ```bash
@@ -84,10 +82,6 @@ Three complementary SEO plugins:
 
 Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.
 
-### n8n Blueprint Generator
-
-Convert discovery call transcripts and client documentation into one-page n8n Automation Blueprints. Extracts facts, asks clarifying questions interactively, and outputs a structured spec covering trigger, inputs, workflow steps, outputs, edge cases, and error handling.
-
 ## Project Structure
 
 ```
@@ -101,6 +95,7 @@ benai-skills/
 │   ├── email-sequence/
 │   ├── infographic/
 │   ├── n8n-prd-generator/
+│   ├── case-study-plugin/
 │   └── seo/
 │       ├── programmatic-seo/
 │       ├── seo-audit/
@@ -143,6 +138,8 @@ plugins/<name>/
 Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates:
 - One zip per plugin (standalone, installable individually)
 - `benai-skills-marketplace.zip` (all plugins in one package)
+
+The `n8n-prd-generator` plugin is bundled into the `n8n.zip` rather than having its own standalone zip.
 
 Run it after adding or updating any plugin.
 
