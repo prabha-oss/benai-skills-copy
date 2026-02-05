@@ -111,6 +111,39 @@
       ]
     },
     {
+      "name": "n8n-prd-generator",
+      "source": "./plugins/n8n-prd-generator",
+      "description": "Convert discovery call transcripts into concise n8n Automation Blueprints with interactive question flow",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "n8n",
+        "blueprint",
+        "prd",
+        "discovery",
+        "automation",
+        "scoping"
+      ]
+    },
+    {
+      "name": "case-study",
+      "source": "./plugins/case-study-plugin",
+      "description": "Create detailed, data-driven case studies from user interviews and raw data.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "case-study",
+        "writing",
+        "marketing",
+        "interview",
+        "customer-success"
+      ]
+    },
+    {
       "name": "seo-audit",
       "source": "./plugins/seo/seo-audit",
       "description": "Run comprehensive SEO audits on websites using seomator CLI - 16 categories, 148 rules.",
@@ -143,23 +176,6 @@
         "image-generation",
         "gemini",
         "design"
-      ]
-    },
-    {
-      "name": "n8n-prd-generator",
-      "source": "./plugins/n8n-prd-generator",
-      "description": "Convert discovery call transcripts into concise n8n Automation Blueprints with interactive question flow",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "n8n",
-        "blueprint",
-        "prd",
-        "discovery",
-        "automation",
-        "scoping"
       ]
     }
   ]

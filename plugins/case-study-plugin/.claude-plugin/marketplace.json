@@ -1,0 +1,18 @@
+{
+    "name": "case-study-ppt-marketplace",
+    "owner": {
+        "name": "BenAI",
+        "email": "ben@example.com"
+    },
+    "plugins": [
+        {
+            "name": "case-study-ppt",
+            "source": "..",
+            "description": "Collaborative case study presentation creator. Guides you through extracting narrative from raw data, co-creates the story, and generates polished PPTX slides using PptxGenJS.",
+            "version": "1.0.0",
+            "author": {
+                "name": "BenAI"
+            }
+        }
+    ]
+}

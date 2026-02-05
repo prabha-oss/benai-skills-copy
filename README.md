@@ -18,6 +18,7 @@ Expert automation skills for Claude Code.
 /plugin install seo-optimizing@benai-skills
 /plugin install infographic@benai-skills
 /plugin install n8n-prd-generator@benai-skills
+/plugin install case-study@benai-skills
 ```
 
 ## Available Plugins
@@ -33,6 +34,7 @@ Expert automation skills for Claude Code.
 | seo-optimizing | `/seo-optimizing` | Data-driven SEO optimization using Google Search Console |
 | infographic | `/infographic` | Professional infographics via Gemini AI image generation |
 | n8n-prd-generator | `/n8n-prd-generator` | Convert discovery call transcripts into n8n automation blueprints |
+| case-study | `/case-study` | Detailed, data-driven case studies from interviews |
 
 ---
 
