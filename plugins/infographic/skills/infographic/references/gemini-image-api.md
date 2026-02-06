@@ -218,24 +218,46 @@ edit_infographic "infographic-v1.png" "Make the colors warmer and increase the t
 
 ---
 
-## Saving and Displaying Images
+## Directory Structure
 
-### CRITICAL: Always Save to Working Directory
+All infographic files are stored in a dedicated `.infographic/` directory:
 
-Images MUST be saved to the current working directory with descriptive names:
+```
+.infographic/
+├── brand.md           # Brand config (Markdown, human-readable)
+├── images/            # All generated infographics
+│   ├── topic-v1.png
+│   ├── topic-v2.png
+│   └── topic-final.png
+└── prompts/           # Saved prompts for reuse
+    └── topic-prompt.md
+```
+
+### Setup Directory
 
 ```bash
-# Single infographic
-infographic-[topic-slug].png
+# Create directory structure on first run
+mkdir -p .infographic/images
+mkdir -p .infographic/prompts
+```
+
+---
+
+## Saving and Displaying Images
+
+### CRITICAL: Always Save to .infographic/images/
+
+Images MUST be saved to the `.infographic/images/` directory with descriptive names:
+
+```bash
+# Single infographic (versions during editing)
+.infographic/images/[topic-slug]-v1.png
+.infographic/images/[topic-slug]-v2.png
+.infographic/images/[topic-slug]-final.png
 
 # Series
-infographic-[topic-slug]-01.png
-infographic-[topic-slug]-02.png
-
-# Versions during editing
-infographic-[topic-slug]-v1.png
-infographic-[topic-slug]-v2.png
-infographic-[topic-slug]-final.png
+.infographic/images/[topic-slug]-01-v1.png
+.infographic/images/[topic-slug]-02-v1.png
 ```
 
 ### CRITICAL: Always Display to User
@@ -245,7 +267,7 @@ After saving, **immediately use the Read tool** to show the image:
 ```
 After saving the image, USE THE READ TOOL to display it:
 
-Read the file: ./infographic-output.png
+Read the file: .infographic/images/topic-v1.png
 
 This allows the user to SEE the image and provide feedback for edits.
 ```
@@ -253,20 +275,41 @@ This allows the user to SEE the image and provide feedback for edits.
 ### Complete Save & Display Workflow
 
 ```bash
+# 0. Ensure directory exists
+mkdir -p .infographic/images
+
 # 1. Generate the image
-generate_infographic "$PROMPT" "infographic-myproject.png"
+generate_infographic "$PROMPT" ".infographic/images/myproject-v1.png"
 
 # 2. Verify it exists
-if [ -f "infographic-myproject.png" ]; then
+if [ -f ".infographic/images/myproject-v1.png" ]; then
   echo "Image saved successfully"
-  ls -la infographic-myproject.png
+  ls -la .infographic/images/myproject-v1.png
 else
   echo "Error: Image not saved"
   exit 1
 fi
 
 # 3. THEN use Read tool to display (Claude will do this)
-# Read the file: ./infographic-myproject.png
+# Read the file: .infographic/images/myproject-v1.png
+```
+
+---
+
+## Resolution Options
+
+Include resolution in your prompt to control image quality:
+
+| Quality | Width | Best For | Add to Prompt |
+|---------|-------|----------|---------------|
+| Standard | 1080px | Quick social posts, mobile-first | "1080 pixels wide" |
+| 2K | 2048px | Professional social, presentations | "2048 pixels wide, high resolution" |
+| 4K | 4096px | Print, large displays | "4096 pixels wide, ultra high resolution" |
+
+**Example prompt with resolution:**
+```
+Generate a professional infographic...
+2048 pixels wide, high resolution, 4:5 portrait aspect ratio for LinkedIn.
 ```
 
 ---
@@ -275,13 +318,19 @@ fi
 
 Include the aspect ratio in your prompt text:
 
-| Platform | Ratio | Add to Prompt |
-|----------|-------|---------------|
-| LinkedIn | 4:5 | "4:5 portrait aspect ratio" |
-| LinkedIn/Instagram | 1:1 | "square 1:1 aspect ratio" |
-| Twitter | 16:9 | "16:9 landscape aspect ratio" |
-| Presentation | 16:9 | "16:9 landscape aspect ratio" |
-| Stories | 9:16 | "9:16 vertical aspect ratio" |
+| Platform | Ratio | Standard (1080px) | 2K (2048px) | 4K (4096px) |
+|----------|-------|-------------------|-------------|-------------|
+| LinkedIn | 4:5 | 1080×1350 | 2048×2560 | 4096×5120 |
+| Square | 1:1 | 1080×1080 | 2048×2048 | 4096×4096 |
+| Twitter | 16:9 | 1200×675 | 2048×1152 | 4096×2304 |
+| Presentation | 16:9 | 1920×1080 | 2560×1440 | 3840×2160 |
+| Stories | 9:16 | 1080×1920 | 1152×2048 | 2304×4096 |
+
+**Add to prompt:**
+- LinkedIn: "4:5 portrait aspect ratio"
+- Square: "square 1:1 aspect ratio"
+- Twitter: "16:9 landscape aspect ratio"
+- Stories: "9:16 vertical aspect ratio"
 
 ---
 
@@ -320,24 +369,50 @@ fi
 When no API key is available, save the prompt for manual use:
 
 ```bash
-# Save prompt to file
-cat > infographic-prompt.txt << 'EOF'
+# Ensure directory exists
+mkdir -p .infographic/prompts
+
+# Save prompt to Markdown file
+cat > .infographic/prompts/[topic-slug]-prompt.md << 'EOF'
+# Infographic Prompt: [Topic Name]
+
+## Specifications
+- Platform: LinkedIn
+- Aspect Ratio: 4:5
+- Resolution: 2K (2048px)
+- Style: Professional Blue
+
+## Prompt
+```
 [Complete detailed prompt here]
+```
+
+## Usage Instructions
+1. Go to https://aistudio.google.com
+2. Sign in with Google
+3. Select "Gemini 3 Pro" model
+4. Paste the prompt above
+5. Click Generate
+6. Download to .infographic/images/
+
+---
+*Generated: [timestamp]*
 EOF
 
-echo "Prompt saved to infographic-prompt.txt"
+echo "Prompt saved to .infographic/prompts/"
 ```
 
 **Instructions for user:**
 ```
-Your infographic prompt is ready! To generate:
+Your infographic prompt is ready in .infographic/prompts/[topic]-prompt.md
 
+To generate:
 1. Go to https://aistudio.google.com
 2. Sign in with Google
 3. Select "Gemini 3 Pro" model
-4. Paste the prompt from infographic-prompt.txt
+4. Paste the prompt from the file
 5. Click Generate
-6. Download the image
+6. Download the image to .infographic/images/
 ```
 
 ---
@@ -346,11 +421,12 @@ Your infographic prompt is ready! To generate:
 
 ### Generate Image
 ```bash
+mkdir -p .infographic/images
 curl -s -X POST \
   -H "Content-Type: application/json" \
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:streamGenerateContent?key=${GEMINI_API_KEY}" \
   -d '{"contents":[{"role":"user","parts":[{"text":"YOUR PROMPT"}]}],"generationConfig":{"responseModalities":["IMAGE","TEXT"]}}' | \
-  jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > output.png
+  jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > .infographic/images/output-v1.png
 ```
 
 ### Verify API Key
@@ -358,10 +434,28 @@ curl -s -X POST \
 curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}" | head -c 200
 ```
 
+### Directory Structure
+```
+.infographic/
+├── brand.md              # Brand config (Markdown)
+├── images/               # All generated infographics
+│   └── [topic]-v1.png
+└── prompts/              # Saved prompts
+    └── [topic]-prompt.md
+```
+
 ### File Naming
-| Type | Pattern |
-|------|---------|
-| Single | `infographic-[topic].png` |
-| Series | `infographic-[topic]-01.png` |
-| Versions | `infographic-[topic]-v1.png` |
-| Final | `infographic-[topic]-final.png` |
+| Type | Pattern | Location |
+|------|---------|----------|
+| First version | `[topic]-v1.png` | `.infographic/images/` |
+| Edits | `[topic]-v2.png` | `.infographic/images/` |
+| Final | `[topic]-final.png` | `.infographic/images/` |
+| Series | `[topic]-01-v1.png` | `.infographic/images/` |
+| Prompts | `[topic]-prompt.md` | `.infographic/prompts/` |
+
+### Resolution Quick Reference
+| Quality | Width | Example for 4:5 |
+|---------|-------|-----------------|
+| Standard | 1080px | 1080×1350 |
+| 2K | 2048px | 2048×2560 |
+| 4K | 4096px | 4096×5120 |
