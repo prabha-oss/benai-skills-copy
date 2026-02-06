@@ -60,9 +60,27 @@ After Phase 0 completes, start the guided conversation with Phase 1.
 
 **Goal:** Check for existing configurations and external context. Load silently. Do NOT ask questions yet.
 
-Run these checks in order:
+#### 0.1: Ensure Directory Structure Exists
 
-#### 0.1: Check for External Context (Product/Marketing)
+```bash
+# Create the infographic workspace if it doesn't exist
+mkdir -p .infographic/images
+mkdir -p .infographic/prompts
+```
+
+**Directory structure:**
+```
+.infographic/
+├── brand.md           # Brand config (Markdown, human-readable)
+├── images/            # All generated infographics
+│   ├── topic-name-v1.png
+│   ├── topic-name-v2.png
+│   └── topic-name-final.png
+└── prompts/           # Saved prompts (for no-key fallback or reuse)
+    └── topic-name-prompt.md
+```
+
+#### 0.2: Check for External Context (Product/Marketing)
 
 ```bash
 # Check for existing product/marketing context that might have brand info
@@ -79,7 +97,7 @@ If this file exists, extract:
 
 This context can pre-fill answers and skip redundant questions.
 
-#### 0.2: Check for API Key
+#### 0.3: Check for API Key
 
 ```bash
 # Check for .env with API key
@@ -91,22 +109,50 @@ fi
 echo "${GEMINI_API_KEY:+API key is set}"
 ```
 
-#### 0.3: Check for Brand Config
+#### 0.4: Check for Brand Config (Markdown)
 
 ```bash
 # Check for saved brand config
-if [ -f .infographic-brand.json ]; then
-  cat .infographic-brand.json
+if [ -f .infographic/brand.md ]; then
+  cat .infographic/brand.md
 fi
 ```
 
-#### 0.4: Check for Pattern Bank
+The brand config is a **Markdown file** (not JSON) that contains everything needed for decisions:
 
-```bash
-# Check for learned preferences
-if [ -f .infographic-patterns.json ]; then
-  cat .infographic-patterns.json
-fi
+```markdown
+# Brand Configuration
+
+## Identity
+- **Company**: Acme Corp
+- **Industry**: B2B SaaS
+- **Target Audience**: Marketing managers, 30-50, enterprise
+
+## Visual Aesthetics
+- **Primary Color**: #2563EB (Professional Blue)
+- **Accent Color**: #F59E0B (Amber)
+- **Background**: Light (#FAFAFA)
+- **Font Style**: Clean sans-serif
+- **Visual Tone**: Professional & clean
+
+## Quality Preferences
+- **Default Resolution**: 2K (2048px width)
+- **Preferred Platform**: LinkedIn (4:5)
+
+## Learned Patterns
+- **Title Style**: Bold & large
+- **Text Density**: Minimal (3-5 labels)
+- **Icon Usage**: Yes, simple line icons
+- **Whitespace**: Generous (40%+)
+- **Common Metaphors**: Iceberg, Timeline, Pyramid
+
+## Session History
+- 2024-01-15: Created iceberg infographic, liked bold title, made colors warmer
+- 2024-01-20: Created timeline, preferred minimal text
+
+---
+*Last updated: 2024-01-20*
+*Source: Website extraction from acme.com*
 ```
 
 **Based on what you find:**
@@ -121,12 +167,13 @@ I found your product context file. I'll use this to:
 You can override any of this as we go.
 ```
 
-**If configs exist, acknowledge them briefly:**
+**If brand.md exists, acknowledge briefly:**
 ```
-I found your saved settings:
-- API key: [✓ configured / ✗ not set]
-- Brand: [Company palette: primary/accent colors] OR [not set]
-- Learned preferences: [list 2-3 key preferences] OR [none yet]
+I found your saved settings in .infographic/brand.md:
+- Brand: [Company Name] — [primary/accent colors]
+- Resolution: [default resolution]
+- Style: [tone, title style, text density]
+- Learned patterns: [2-3 key preferences]
 
 Ready to create your infographic!
 ```
@@ -182,7 +229,30 @@ options:
     description: "16:9 landscape for slides"
 ```
 
-#### Step 1.3: Complexity Assessment
+#### Step 1.3: Resolution & Quality
+
+Use `AskUserQuestion`:
+
+```
+question: "What resolution do you need?"
+header: "Quality"
+options:
+  - label: "Standard (1080px)"
+    description: "Good for social media, fast generation"
+  - label: "High / 2K (2048px) (Recommended)"
+    description: "Sharp on all screens, best balance of quality and speed"
+  - label: "Ultra / 4K (4096px)"
+    description: "Maximum quality for print or large displays"
+```
+
+**Resolution mapping:**
+| Choice | Width | Best For |
+|--------|-------|----------|
+| Standard | 1080px | Quick social posts, mobile-first |
+| 2K | 2048px | Professional social, presentations |
+| 4K | 4096px | Print, large displays, zoom-heavy slides |
+
+#### Step 1.4: Complexity Assessment
 
 Use `AskUserQuestion`:
 
@@ -200,7 +270,7 @@ options:
 
 If "Complex" selected, propose how to split into a series (2-4 posts) with specific content mapping for each.
 
-#### Step 1.4: Narrative Arc Selection
+#### Step 1.5: Narrative Arc Selection
 
 Every infographic tells a story. Identify which narrative arc fits the content.
 
@@ -239,6 +309,7 @@ Let me confirm before we move on:
 - Core insight: [...]
 - Key points: [...]
 - Platform: [...] ([aspect ratio])
+- Resolution: [Standard 1080px / 2K 2048px / 4K 4096px]
 - Format: [Single infographic / Series of N posts]
 - Story arc: [Myth→Reality / Surface→Depth / Chaos→Order / Journey→Destination]
 
@@ -247,7 +318,7 @@ All correct?
 
 Wait for confirmation before Phase 2.
 
-**Output:** Confirmed brief with insight, points, platform, format, and narrative arc.
+**Output:** Confirmed brief with insight, points, platform, resolution, format, and narrative arc.
 
 ---
 
@@ -255,9 +326,9 @@ Wait for confirmation before Phase 2.
 
 **Goal:** Establish the visual identity. Either extract from website, use presets, or collect manually.
 
-#### If Pattern Bank Has Style Preferences
+#### If Brand Config Exists
 
-If `.infographic-patterns.json` exists with learned style preferences, propose using them:
+If `.infographic/brand.md` exists with saved style preferences, propose using them:
 ```
 Based on your history, I'll use:
 - Colors: [saved palette]
@@ -360,24 +431,55 @@ options:
     description: "Lots of whitespace, sophisticated restraint"
 ```
 
-#### Save Brand Guidelines
+#### Save Brand Configuration
 
-After collecting style, save to `.infographic-brand.json`:
+After collecting style, save to `.infographic/brand.md` (Markdown for human readability):
 
 ```bash
-cat > .infographic-brand.json <<'EOF'
-{
-  "primaryColor": "#HEXCODE",
-  "accentColor": "#HEXCODE",
-  "background": "light|dark",
-  "backgroundColor": "#HEXCODE",
-  "fontStyle": "clean sans-serif|serif|handwritten|bold",
-  "tone": "professional|playful|bold|minimal",
-  "extractedFrom": "website.com|preset|manual",
-  "savedAt": "ISO-8601-timestamp"
-}
+cat > .infographic/brand.md <<'EOF'
+# Brand Configuration
+
+## Identity
+- **Company**: [Company name if known]
+- **Industry**: [Industry if known]
+- **Target Audience**: [Audience if known]
+
+## Visual Aesthetics
+- **Primary Color**: [#HEXCODE] ([Color name])
+- **Accent Color**: [#HEXCODE] ([Color name])
+- **Background**: [Light/Dark] ([#HEXCODE])
+- **Font Style**: [Clean sans-serif / Serif / Handwritten / Bold]
+- **Visual Tone**: [Professional & clean / Playful & approachable / Bold & striking / Minimal & elegant]
+
+## Quality Preferences
+- **Default Resolution**: [Standard 1080px / 2K 2048px / 4K 4096px]
+- **Preferred Platform**: [LinkedIn / Instagram / Twitter / Presentation]
+- **Preferred Aspect Ratio**: [4:5 / 1:1 / 16:9 / 9:16]
+
+## Learned Patterns
+*(Updated after each session)*
+
+- **Title Style**: [Not yet learned]
+- **Text Density**: [Not yet learned]
+- **Icon Usage**: [Not yet learned]
+- **Whitespace**: [Not yet learned]
+- **Common Metaphors**: [Not yet learned]
+
+## Session History
+*(Most recent sessions)*
+
+---
+*Last updated: [ISO-8601-timestamp]*
+*Source: [Website extraction from X / Preset: Y / Manual entry]*
 EOF
 ```
+
+This Markdown format:
+- Is human-readable and editable by the user
+- Contains all brand aesthetics in one place
+- Tracks resolution/quality preferences
+- Learns patterns over time
+- Maintains session history for context
 
 #### Checkpoint 2
 
@@ -777,34 +879,65 @@ Wait for user approval.
 
 #### Step 6.3: Generate Image
 
-If API key is available, call Gemini:
+If API key is available, call Gemini with the correct model and API:
 
 ```bash
+# Use gemini-3-pro-image-preview with streamGenerateContent
+MODEL_ID="gemini-3-pro-image-preview"
+PROMPT="YOUR CRAFTED PROMPT HERE"
+
 curl -s -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
-  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
-  -d '{
-    "contents": [{
-      "parts": [
-        {"text": "YOUR CRAFTED PROMPT HERE"}
-      ]
-    }]
-  }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > infographic-[topic-slug].png
+  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
+  -d "{
+    \"contents\": [{
+      \"role\": \"user\",
+      \"parts\": [{\"text\": \"${PROMPT}\"}]
+    }],
+    \"generationConfig\": {
+      \"responseModalities\": [\"IMAGE\", \"TEXT\"]
+    }
+  }" | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > infographic-[topic-slug].png
 ```
 
-#### Step 6.4: Save and Display
+#### Step 6.4: Save and Display (CRITICAL)
 
-1. Save with descriptive filename:
-   - Single: `infographic-[topic-slug].png`
-   - Series: `infographic-[topic-slug]-01.png`, etc.
+**You MUST display the image to the user so they can see it and provide feedback.**
 
-2. Verify the file:
+1. **Save to the `.infographic/images/` directory** with descriptive filename:
+   - Single: `.infographic/images/[topic-slug]-v1.png`
+   - Series: `.infographic/images/[topic-slug]-01-v1.png`, etc.
+   - Edits: `.infographic/images/[topic-slug]-v2.png`, `-v3.png`, etc.
+   - Final: `.infographic/images/[topic-slug]-final.png`
+
    ```bash
-   ls -la infographic-*.png
+   # Ensure directory exists
+   mkdir -p .infographic/images
+
+   # Save the image (update the curl command output path)
+   ... | base64 -d > .infographic/images/[topic-slug]-v1.png
    ```
 
-3. Show to user using Read tool
+2. **Verify the file exists:**
+   ```bash
+   ls -la .infographic/images/
+   ```
+
+3. **IMMEDIATELY display to user using Read tool:**
+   ```
+   Use the Read tool to show the image:
+   Read file: .infographic/images/[topic-slug]-v1.png
+   ```
+
+   This is CRITICAL — the user needs to SEE the image to provide feedback for Phase 7.
+
+**File naming convention:**
+| Stage | Pattern | Example |
+|-------|---------|---------|
+| First version | `[topic]-v1.png` | `success-iceberg-v1.png` |
+| After edits | `[topic]-v2.png` | `success-iceberg-v2.png` |
+| Final approved | `[topic]-final.png` | `success-iceberg-final.png` |
+| Series | `[topic]-01-v1.png` | `productivity-tips-01-v1.png` |
 
 #### If No API Key (Skip Path)
 
@@ -818,23 +951,47 @@ Here's your ready-to-use prompt:
 
 To generate:
 1. Go to Google AI Studio (aistudio.google.com)
-2. Select "Gemini 2.5 Flash" model
+2. Select "Gemini 3 Pro" model
 3. Paste this prompt
 4. Click Generate
+5. Download the image to .infographic/images/
 
 Or use any image AI of your choice.
 
-I've also saved this prompt to `infographic-prompt.txt` for later.
+I've saved this prompt to `.infographic/prompts/[topic-slug]-prompt.md`
 ```
 
 Save prompt to file:
 ```bash
-cat > infographic-prompt.txt <<'EOF'
+mkdir -p .infographic/prompts
+
+cat > .infographic/prompts/[topic-slug]-prompt.md <<'EOF'
+# Infographic Prompt: [Topic]
+
+## Specifications
+- Platform: [platform]
+- Aspect Ratio: [ratio]
+- Resolution: [resolution]
+- Style: [tone]
+
+## Prompt
+```
 [Full prompt text]
+```
+
+## Usage Instructions
+1. Go to Google AI Studio (aistudio.google.com)
+2. Select "Gemini 3 Pro" model
+3. Paste the prompt above
+4. Click Generate
+5. Download the image
+
+---
+*Generated: [ISO-8601-timestamp]*
 EOF
 ```
 
-**Output:** Image generated and displayed, OR prompt saved for manual use.
+**Output:** Image generated and DISPLAYED to user, OR prompt saved for manual use.
 
 ---
 
@@ -993,54 +1150,66 @@ options:
     description: "I'll tell you what to remember"
 ```
 
-#### Update Pattern Bank
+#### Update Brand Config
 
-If saving, update `.infographic-patterns.json`:
+If saving, update the Learned Patterns and Session History sections in `.infographic/brand.md`:
 
 ```bash
-cat > .infographic-patterns.json <<'EOF'
-{
-  "learnedPreferences": {
-    "titleStyle": "[from session]",
-    "textDensity": "[from session]",
-    "iconUsage": [true/false],
-    "colorTone": "[from session]",
-    "layoutStyle": "[from session]",
-    "whitespacePreference": "[from session]"
-  },
-  "commonChoices": {
-    "metaphors": ["[metaphors used]"],
-    "platforms": ["[platforms chosen]"],
-    "tones": ["[tones selected]"]
-  },
-  "feedback": [
-    {
-      "session": "[ISO-date]",
-      "liked": ["[what worked]"],
-      "changed": ["[what was adjusted]"]
-    }
-  ],
-  "lastUpdated": "[ISO-8601-timestamp]"
-}
+# Read existing brand.md, update the Learned Patterns section
+# This is a simplified example — in practice, parse and update the specific sections
+
+# Add to Session History
+cat >> .infographic/brand.md <<EOF
+
+- [ISO-date]: Created [metaphor] infographic for [topic]
+  - Liked: [what worked well]
+  - Changed: [what was adjusted]
 EOF
 ```
+
+**What to update in brand.md:**
+
+1. **Learned Patterns section** — based on session choices:
+   ```markdown
+   ## Learned Patterns
+   - **Title Style**: Bold & large
+   - **Text Density**: Minimal (3-5 labels)
+   - **Icon Usage**: Yes, simple line icons
+   - **Whitespace**: Generous (40%+)
+   - **Common Metaphors**: Iceberg, Timeline
+   - **Preferred Resolution**: 2K (2048px)
+   ```
+
+2. **Session History** — append new entry:
+   ```markdown
+   ## Session History
+   - 2024-01-15: Created iceberg infographic, liked bold title, made colors warmer
+   - 2024-01-20: Created timeline, preferred minimal text, increased resolution to 4K
+   ```
+
+3. **Last updated timestamp**:
+   ```markdown
+   *Last updated: 2024-01-20T10:30:00Z*
+   ```
 
 #### Wrap Up
 
 ```
 Your infographic is ready!
 
-Saved files:
-- [filename.png] — your infographic
-- .infographic-brand.json — your brand settings
-- .infographic-patterns.json — your preferences (if saved)
+Saved to .infographic/:
+├── images/
+│   └── [topic]-final.png  ← Your infographic
+├── prompts/
+│   └── [topic]-prompt.md  ← Reusable prompt (if no API key)
+└── brand.md               ← Your brand settings & learned preferences
 
 [If series] I can generate the remaining [N] posts whenever you're ready. Just say "continue the series."
 
-[If no API key] Your prompt is saved in infographic-prompt.txt. Once you have an API key, run `/infographic` again to generate.
+[If no API key] Your prompt is saved in .infographic/prompts/. Once you have an API key, run `/infographic` again to generate.
 ```
 
-**Output:** Session complete, files saved, preferences updated.
+**Output:** Session complete, files saved to organized directory, preferences updated in brand.md.
 
 ---
 
@@ -1049,41 +1218,62 @@ Saved files:
 ### API Endpoints
 
 ```bash
-# Generate image
+# Generate image (correct model and endpoint)
+MODEL_ID="gemini-3-pro-image-preview"
 curl -s -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
-  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
-  -d '{"contents": [{"parts": [{"text": "prompt"}]}]}'
+  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
+  -d '{
+    "contents": [{"role": "user", "parts": [{"text": "YOUR PROMPT"}]}],
+    "generationConfig": {"responseModalities": ["IMAGE", "TEXT"]}
+  }' | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > output.png
 
 # Edit image (multi-turn)
-IMAGE_B64=$(base64 -i image.png)
+IMAGE_B64=$(base64 -i .infographic/images/current.png | tr -d '\n')
 curl -s -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
-  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
-  -d "{\"contents\": [{\"parts\": [{\"inlineData\": {\"mimeType\": \"image/png\", \"data\": \"${IMAGE_B64}\"}}, {\"text\": \"Edit instructions\"}]}]}"
+  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
+  -d "{
+    \"contents\": [{\"role\": \"user\", \"parts\": [
+      {\"inlineData\": {\"mimeType\": \"image/png\", \"data\": \"${IMAGE_B64}\"}},
+      {\"text\": \"Edit instructions here\"}
+    ]}],
+    \"generationConfig\": {\"responseModalities\": [\"IMAGE\", \"TEXT\"]}
+  }" | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > .infographic/images/edited.png
 ```
 
-### File Locations
+### Directory Structure
 
-| File | Purpose |
-|------|---------|
-| `.env` | API key storage |
-| `.infographic-brand.json` | Brand colors, fonts, tone |
-| `.infographic-patterns.json` | Learned preferences |
-| `infographic-[topic].png` | Generated images |
-| `infographic-prompt.txt` | Saved prompts (no-key fallback) |
+```
+.infographic/
+├── brand.md           # Brand config, aesthetics, learned preferences (Markdown)
+├── images/            # All generated infographics
+│   ├── topic-v1.png
+│   ├── topic-v2.png
+│   └── topic-final.png
+└── prompts/           # Saved prompts for reuse or no-key fallback
+    └── topic-prompt.md
+
+.env                   # API key (GEMINI_API_KEY=...)
+```
+
+### Resolution Options
+
+| Quality | Width | Aspect Ratio Examples |
+|---------|-------|----------------------|
+| Standard | 1080px | 1080×1350 (4:5), 1080×1080 (1:1) |
+| 2K | 2048px | 2048×2560 (4:5), 2048×2048 (1:1) |
+| 4K | 4096px | 4096×5120 (4:5), 4096×4096 (1:1) |
 
 ### Aspect Ratios
 
-| Platform | Ratio | Pixels |
-|----------|-------|--------|
-| LinkedIn | 4:5 | 1080×1350 |
-| LinkedIn/Instagram | 1:1 | 1080×1080 |
-| Twitter | 16:9 | 1200×675 |
-| Presentation | 16:9 | 1920×1080 |
-| Stories | 9:16 | 1080×1920 |
+| Platform | Ratio | Standard | 2K | 4K |
+|----------|-------|----------|----|----|
+| LinkedIn | 4:5 | 1080×1350 | 2048×2560 | 4096×5120 |
+| Square | 1:1 | 1080×1080 | 2048×2048 | 4096×4096 |
+| Twitter | 16:9 | 1200×675 | 2048×1152 | 4096×2304 |
+| Presentation | 16:9 | 1920×1080 | 2560×1440 | 3840×2160 |
+| Stories | 9:16 | 1080×1920 | 1152×2048 | 2304×4096 |
 
 ---
 
