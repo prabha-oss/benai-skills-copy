@@ -4,10 +4,5 @@
   "version": "2.0.0",
   "author": {
     "name": "BenAI"
-  },
-  "changelog": {
-    "2.0.0": "Complete redesign: guided conversational flow, visual reasoning framework, style presets, website color extraction, pattern bank for learned preferences, multi-turn image editing, graceful no-API-key fallback",
-    "1.1.0": "Added brand guidelines persistence and series creation",
-    "1.0.0": "Initial release"
   }
 }
