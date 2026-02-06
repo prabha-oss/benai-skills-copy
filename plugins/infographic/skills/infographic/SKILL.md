@@ -777,34 +777,47 @@ Wait for user approval.
 
 #### Step 6.3: Generate Image
 
-If API key is available, call Gemini:
+If API key is available, call Gemini with the correct model and API:
 
 ```bash
+# Use gemini-3-pro-image-preview with streamGenerateContent
+MODEL_ID="gemini-3-pro-image-preview"
+PROMPT="YOUR CRAFTED PROMPT HERE"
+
 curl -s -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
-  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
   -H "Content-Type: application/json" \
-  -d '{
-    "contents": [{
-      "parts": [
-        {"text": "YOUR CRAFTED PROMPT HERE"}
-      ]
-    }]
-  }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > infographic-[topic-slug].png
+  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
+  -d "{
+    \"contents\": [{
+      \"role\": \"user\",
+      \"parts\": [{\"text\": \"${PROMPT}\"}]
+    }],
+    \"generationConfig\": {
+      \"responseModalities\": [\"IMAGE\", \"TEXT\"]
+    }
+  }" | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > infographic-[topic-slug].png
 ```
 
-#### Step 6.4: Save and Display
+#### Step 6.4: Save and Display (CRITICAL)
 
-1. Save with descriptive filename:
+**You MUST display the image to the user so they can see it and provide feedback.**
+
+1. **Save with descriptive filename** in the working directory:
    - Single: `infographic-[topic-slug].png`
    - Series: `infographic-[topic-slug]-01.png`, etc.
 
-2. Verify the file:
+2. **Verify the file exists:**
    ```bash
    ls -la infographic-*.png
    ```
 
-3. Show to user using Read tool
+3. **IMMEDIATELY display to user using Read tool:**
+   ```
+   Use the Read tool to show the image:
+   Read file: ./infographic-[topic-slug].png
+   ```
+
+   This is CRITICAL — the user needs to SEE the image to provide feedback for Phase 7.
 
 #### If No API Key (Skip Path)
 
@@ -818,9 +831,10 @@ Here's your ready-to-use prompt:
 
 To generate:
 1. Go to Google AI Studio (aistudio.google.com)
-2. Select "Gemini 2.5 Flash" model
+2. Select "Gemini 3 Pro" model
 3. Paste this prompt
 4. Click Generate
+5. Download the image
 
 Or use any image AI of your choice.
 
@@ -834,7 +848,7 @@ cat > infographic-prompt.txt <<'EOF'
 EOF
 ```
 
-**Output:** Image generated and displayed, OR prompt saved for manual use.
+**Output:** Image generated and DISPLAYED to user, OR prompt saved for manual use.
 
 ---
 
