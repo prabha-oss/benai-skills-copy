@@ -58,35 +58,68 @@ After Phase 0 completes, start the guided conversation with Phase 1.
 
 ### Phase 0: Auto-Load Config (Silent)
 
-**Goal:** Check for existing configurations and load them silently. Do NOT ask questions yet.
+**Goal:** Check for existing configurations and external context. Load silently. Do NOT ask questions yet.
 
 Run these checks in order:
 
+#### 0.1: Check for External Context (Product/Marketing)
+
 ```bash
-# 1. Check for .env with API key
+# Check for existing product/marketing context that might have brand info
+if [ -f .claude/product-marketing-context.md ]; then
+  cat .claude/product-marketing-context.md
+fi
+```
+
+If this file exists, extract:
+- Company name, industry, target audience
+- Brand voice/tone
+- Any color/style preferences mentioned
+- Product positioning or key messages
+
+This context can pre-fill answers and skip redundant questions.
+
+#### 0.2: Check for API Key
+
+```bash
+# Check for .env with API key
 if [ -f .env ]; then
   source .env 2>/dev/null
 fi
 
-# 2. Check API key
+# Verify API key
 echo "${GEMINI_API_KEY:+API key is set}"
 ```
 
+#### 0.3: Check for Brand Config
+
 ```bash
-# 3. Check for brand config
+# Check for saved brand config
 if [ -f .infographic-brand.json ]; then
   cat .infographic-brand.json
 fi
 ```
 
+#### 0.4: Check for Pattern Bank
+
 ```bash
-# 4. Check for pattern bank (learned preferences)
+# Check for learned preferences
 if [ -f .infographic-patterns.json ]; then
   cat .infographic-patterns.json
 fi
 ```
 
 **Based on what you find:**
+
+**If external context exists:**
+```
+I found your product context file. I'll use this to:
+- Pre-fill brand/style questions
+- Understand your target audience
+- Match your existing voice/tone
+
+You can override any of this as we go.
+```
 
 **If configs exist, acknowledge them briefly:**
 ```
@@ -167,6 +200,37 @@ options:
 
 If "Complex" selected, propose how to split into a series (2-4 posts) with specific content mapping for each.
 
+#### Step 1.4: Narrative Arc Selection
+
+Every infographic tells a story. Identify which narrative arc fits the content.
+
+Use `AskUserQuestion`:
+
+```
+question: "What story does this infographic tell?"
+header: "Story Arc"
+options:
+  - label: "Myth → Reality"
+    description: "You think X, but actually Y — correcting misconceptions"
+  - label: "Surface → Depth"
+    description: "What you see vs. what's really behind it — revealing hidden truth"
+  - label: "Chaos → Order"
+    description: "From messy/complex to simple/clear — showing simplification"
+  - label: "Journey → Destination"
+    description: "Steps or stages leading to an outcome — showing progression"
+```
+
+**Why this matters:** The narrative arc shapes HOW the visual should guide the viewer's eye and what emotional response it creates.
+
+| Arc | Viewer Emotion | Best Metaphors |
+|-----|---------------|----------------|
+| Myth → Reality | Surprised, corrected | Split comparison, Tangled→Straight |
+| Surface → Depth | Curious, enlightened | Iceberg, Layers |
+| Chaos → Order | Relieved, clear | Tangled→Straight, Funnel |
+| Journey → Destination | Motivated, guided | Timeline, Pyramid, Steps |
+
+This selection will inform the metaphor recommendation in Phase 3.
+
 #### Checkpoint 1
 
 Summarize what you've captured:
@@ -176,13 +240,14 @@ Let me confirm before we move on:
 - Key points: [...]
 - Platform: [...] ([aspect ratio])
 - Format: [Single infographic / Series of N posts]
+- Story arc: [Myth→Reality / Surface→Depth / Chaos→Order / Journey→Destination]
 
 All correct?
 ```
 
 Wait for confirmation before Phase 2.
 
-**Output:** Confirmed brief with insight, points, platform, and format.
+**Output:** Confirmed brief with insight, points, platform, format, and narrative arc.
 
 ---
 
@@ -333,7 +398,7 @@ Ready to choose a visualization?
 
 ### Phase 3: Visualization Selection (1-2 questions)
 
-**Goal:** Find the perfect visual metaphor by understanding the **shape** of the user's idea.
+**Goal:** Find the perfect visual metaphor by combining the **narrative arc** (from Phase 1) with the **shape** of the idea.
 
 **IMPORTANT:** Don't just match keywords to templates. Follow the reasoning process in `references/visual-reasoning.md`.
 
@@ -341,14 +406,23 @@ Ready to choose a visualization?
 
 Before presenting options, think through these questions **internally** (don't ask the user):
 
-**1. Extract the Core Tension:**
+**1. Start with the Narrative Arc (from Phase 1):**
+
+| Narrative Arc | What It Needs to Show | Best Metaphor Types |
+|--------------|----------------------|---------------------|
+| Myth → Reality | Contrast between wrong belief and truth | Split comparison, Tangled→Straight |
+| Surface → Depth | Visible surface vs. hidden depth | Iceberg, Layers, Concentric circles |
+| Chaos → Order | Complexity simplified | Tangled→Straight, Funnel, Process flow |
+| Journey → Destination | Progression through stages | Timeline, Pyramid, Steps, U-curve |
+
+**2. Extract the Core Tension:**
 What two things are in relationship?
 - What's being compared to what?
 - What's hidden vs. visible?
 - What transforms into what?
 - What leads to what?
 
-**2. Identify the Relationship Type:**
+**3. Cross-Reference with Relationship Type:**
 
 | Relationship | Visual Shape | Example Metaphors |
 |-------------|--------------|-------------------|
@@ -361,13 +435,8 @@ What two things are in relationship?
 | Convergence (many → few) | Narrowing | Funnel, Hourglass |
 | Sequence (ordered steps) | Flow | Timeline, Numbered steps |
 
-**3. Feel the Emotional Weight:**
-- Surprising/revealing → Dramatic contrast (iceberg, split)
-- Aspirational/growth → Upward movement (pyramid, climb)
-- Messy→clean → Transformation (tangled→straight)
-- Complex but ordered → Systematic (layers, nested circles)
-
 **4. Validate the Fit:**
+- Does the metaphor serve the NARRATIVE ARC?
 - Does the visual match the insight's SHAPE?
 - Would someone "get it" in 5 seconds?
 - Does the content divide naturally into this structure?
