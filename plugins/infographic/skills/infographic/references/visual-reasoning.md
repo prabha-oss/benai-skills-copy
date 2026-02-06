@@ -6,17 +6,55 @@ How to think about content to discover the right visualization. This is not abou
 
 ## The Core Principle
 
-**Every idea has a shape. Your job is to find it.**
+**Every idea has a shape. Every infographic tells a story. Your job is to find both.**
 
 When a user shares content, don't immediately think "what template fits?" Instead, ask:
 
-> "If I could see this idea as a physical object, what would it look like?"
+> "What STORY does this tell, and what SHAPE does that story take?"
 
-The answer to that question IS the visualization.
+The story is the **narrative arc**. The shape is the **visual metaphor**.
 
 ---
 
-## The 5-Step Reasoning Process
+## Narrative Arcs for Infographics
+
+Before finding the visual shape, identify the STORY the infographic tells:
+
+### The 4 Core Narrative Arcs
+
+| Arc | The Story | Viewer Emotion | Example Content |
+|-----|-----------|----------------|-----------------|
+| **Myth → Reality** | "You think X, but actually Y" | Surprised, corrected | "What people think success looks like vs. what it actually takes" |
+| **Surface → Depth** | "Here's what's hidden beneath" | Curious, enlightened | "The 90% of effort nobody sees" |
+| **Chaos → Order** | "From complex to simple" | Relieved, empowered | "How to simplify your workflow" |
+| **Journey → Destination** | "Follow these steps to get there" | Motivated, guided | "The path to mastery" |
+
+### How Narrative Arc Shapes Metaphor Choice
+
+| Arc | What the Visual Must Do | Best Metaphors |
+|-----|------------------------|----------------|
+| Myth → Reality | Show contrast between two states | Split comparison, Tangled→Straight |
+| Surface → Depth | Reveal layers or hidden content | Iceberg, Layers, Concentric circles |
+| Chaos → Order | Show transformation/simplification | Tangled→Straight, Funnel |
+| Journey → Destination | Show progression/stages | Timeline, Pyramid, Steps, U-curve |
+
+**Ask yourself:** Which arc does the user's content follow? This narrows your metaphor options before you even analyze the content's shape.
+
+---
+
+## The 6-Step Reasoning Process
+
+### Step 0: Identify the Narrative Arc
+
+Before analyzing the content's shape, identify which story it tells:
+
+**Ask:** "Is this content about..."
+- Correcting a misconception? → **Myth → Reality**
+- Revealing hidden depth? → **Surface → Depth**
+- Simplifying complexity? → **Chaos → Order**
+- Showing a progression? → **Journey → Destination**
+
+This immediately narrows your metaphor options and frames the rest of your analysis.
 
 ### Step 1: Extract the Core Tension
 
@@ -97,15 +135,21 @@ Now translate the specific content into the visual structure:
 
 Before proposing, ask:
 
-1. **Does the visual match the insight's shape?**
+1. **Does the metaphor serve the narrative arc?**
+   - Myth→Reality needs CONTRAST — does the visual show two states?
+   - Surface→Depth needs LAYERS — does the visual reveal hidden content?
+   - Chaos→Order needs TRANSFORMATION — does the visual show change?
+   - Journey→Destination needs PROGRESSION — does the visual show movement?
+
+2. **Does the visual match the insight's shape?**
    - If the insight is about hidden depth, does the visual show layers?
    - If it's about transformation, does the visual show movement?
 
-2. **Would someone "get it" in 5 seconds?**
+3. **Would someone "get it" in 5 seconds?**
    - The metaphor should feel *inevitable*, not forced
    - If you have to explain why the visual fits, it doesn't fit
 
-3. **Is the content naturally divisible?**
+4. **Is the content naturally divisible?**
    - Iceberg needs 2 groups (above/below)
    - Pyramid needs 3-5 tiers
    - Timeline needs 3-7 steps
@@ -287,10 +331,12 @@ Sometimes the content doesn't match any standard metaphor. That's when you **inv
 
 Before presenting visualization options, verify your thinking:
 
+- [ ] I identified the narrative arc (Myth→Reality, Surface→Depth, Chaos→Order, Journey→Destination)
 - [ ] I identified the core tension (what vs. what)
 - [ ] I classified the relationship type
 - [ ] I felt the emotional weight of the content
 - [ ] I mapped specific content to visual structure
+- [ ] The metaphor SERVES the narrative arc
 - [ ] The visual shape matches the idea's shape
 - [ ] Someone would "get it" in 5 seconds
 - [ ] The content divides naturally into the structure
@@ -302,6 +348,13 @@ Before presenting visualization options, verify your thinking:
 
 **User's content:**
 > "Most people think success is about talent. But really it's 10% talent, 20% strategy, and 70% consistent execution. The boring daily work is what matters most."
+
+**Step 0: Narrative arc**
+- This is "You think X, but actually Y"
+- **Myth → Reality** arc
+- Also has elements of **Surface → Depth** (revealing hidden work)
+
+This tells me: Need a visual that shows CONTRAST or REVEALS hidden content.
 
 **Step 1: Core tension**
 - Perception vs. reality
@@ -322,30 +375,35 @@ Option A — Iceberg:
 - Above water (10%): Talent (what people see)
 - Below water (90%): Strategy (20%) + Execution (70%)
 - Matches the "hidden depth" feeling
+- **Serves the narrative arc perfectly** — reveals what's hidden
 
-Option B — Pie/Donut:
+Option B — Split Comparison:
+- Left: "What people think" (Talent)
+- Right: "What it really is" (Execution + Strategy)
+- **Serves Myth→Reality arc** — shows the contrast
+
+Option C — Pie/Donut:
 - Shows exact proportions: 10%, 20%, 70%
 - But loses the "hidden vs. visible" tension
-
-Option C — Pyramid (inverted?):
-- Base (70%): Execution
-- Middle (20%): Strategy
-- Top (10%): Talent
-- Shows that the "small" thing (talent) sits on top of massive foundation
+- **Doesn't serve the narrative arc** — no revelation or contrast
 
 **Step 5: Validate**
-- Iceberg: Strong fit — matches revelation pattern, 10/90 split works
-- Pyramid: Could work — shows foundation vs. peak
-- Pie: Weak fit — shows proportion but loses the "hidden" insight
+- Iceberg: Strong fit — serves Surface→Depth arc, 10/90 split works
+- Split: Strong fit — serves Myth→Reality arc, clear contrast
+- Pie: Weak fit — shows proportion but doesn't serve either arc
 
 **Recommendation to user:**
-> "For your content about success being 70% execution, I see two strong options:
+> "Your content tells a 'Myth → Reality' story — correcting what people think about success.
 >
-> 1. **Iceberg** — Talent visible above water (10%), strategy and execution massive below (90%). This emphasizes the 'hidden work' message.
+> For this arc, I see two strong options:
 >
-> 2. **Inverted Pyramid** — Execution at the wide base (70%), talent at the narrow top (10%). This shows what the foundation really is.
+> 1. **Iceberg** — Talent visible above water (10%), strategy and execution massive below (90%). This reveals the hidden truth — what's really beneath the surface.
 >
-> Which resonates more with your message?"
+> 2. **Split Comparison** — Left side: 'What people think: Talent.' Right side: 'What it really is: Execution + Strategy.' This shows the contrast directly.
+>
+> The iceberg emphasizes the *hidden depth*. The split emphasizes the *correction of belief*.
+>
+> Which story resonates more with your message?"
 
 ---
 
@@ -353,6 +411,9 @@ Option C — Pyramid (inverted?):
 
 Don't think: "What template fits this content?"
 
-Think: "What is the **shape** of this idea, and how do I make that shape visible?"
+Think: "What **story** does this content tell, and what **shape** makes that story visible?"
 
-The templates are starting points, not destinations. The goal is always: **make the insight click instantly**.
+1. First, find the **narrative arc** — what story is being told?
+2. Then, find the **shape** — what visual form serves that story?
+
+The templates are starting points, not destinations. The goal is always: **make the insight click instantly through the right story told in the right shape**.
