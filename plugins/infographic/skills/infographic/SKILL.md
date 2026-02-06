@@ -1,9 +1,9 @@
 ---
 name: infographic
 description: |
-  Generate professional LinkedIn-style infographics using Nano Banana (Gemini AI image generation).
-  Creates clean, memorable visuals with ONE visual metaphor, flat colors, hand-drawn touches, and
-  persistent brand guidelines. Follows the "LinkedIn Visual Insight Creator" design system.
+  Generate professional LinkedIn-style infographics using Gemini AI image generation.
+  Uses a guided, conversational flow with section-by-section validation, style discovery,
+  multi-turn image editing, and learned preferences that improve over sessions.
 
   USE THIS SKILL WHEN:
   - User says "create infographic", "make a visual", "design an infographic", "generate infographic"
@@ -18,7 +18,7 @@ description: |
 
 # Infographic Generation Skill
 
-Generate professional infographics and visual content using Gemini AI's native image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.
+A guided, conversational approach to creating professional infographics. Uses section-by-section validation, style discovery, and learned preferences to create visuals that improve over sessions.
 
 ---
 
@@ -31,468 +31,686 @@ Follow these steps in order **before** responding to the user:
 Read these files NOW (use Read tool):
 
 ```
-1. references/visual-metaphors.md (12+ metaphor types, selection guide)
-2. references/gemini-image-api.md (Nano Banana API, models, multi-turn editing)
-3. references/style-guide.md (visual style rules, color systems, layouts)
-4. references/prompt-engineering.md (prompt crafting for infographics)
+1. references/visual-reasoning.md (HOW TO THINK about visualizations - READ THIS FIRST)
+2. references/visual-metaphors.md (12+ metaphor types, selection guide)
+3. references/gemini-image-api.md (API, models, multi-turn editing)
+4. references/style-guide.md (visual style rules, color systems, layouts)
+5. references/prompt-engineering.md (prompt crafting for infographics)
+6. references/style-presets.md (preset palettes for quick style selection)
+7. references/pattern-bank.md (learned preferences schema)
+8. references/image-editing.md (multi-turn editing workflow)
+9. references/api-setup.md (API key setup guide)
 ```
 
-### Step 2: Check Environment
+### Step 2: Execute Phase 0 (Auto-Load Config)
 
-Verify `GEMINI_API_KEY` is set:
+This phase runs silently. See Phase 0 below.
+
+### Step 3: Begin Phase 1
+
+After Phase 0 completes, start the guided conversation with Phase 1.
+
+**Summary:** READ FILES → AUTO-LOAD CONFIG (Phase 0) → START PHASE 1
+
+---
+
+## Workflow: 9 Phases
+
+### Phase 0: Auto-Load Config (Silent)
+
+**Goal:** Check for existing configurations and load them silently. Do NOT ask questions yet.
+
+Run these checks in order:
 
 ```bash
+# 1. Check for .env with API key
+if [ -f .env ]; then
+  source .env 2>/dev/null
+fi
+
+# 2. Check API key
 echo "${GEMINI_API_KEY:+API key is set}"
 ```
 
-If not set, ask the user to provide their Gemini API key and set it:
 ```bash
-export GEMINI_API_KEY=your-key-here
+# 3. Check for brand config
+if [ -f .infographic-brand.json ]; then
+  cat .infographic-brand.json
+fi
 ```
-
-### Step 3: Check for Brand Guidelines
-
-Look for `.infographic-brand.json` in the working directory:
 
 ```bash
-ls -la .infographic-brand.json
+# 4. Check for pattern bank (learned preferences)
+if [ -f .infographic-patterns.json ]; then
+  cat .infographic-patterns.json
+fi
 ```
 
-If it exists, read it to load the user's saved brand preferences. If it doesn't exist, you'll collect brand guidelines in Phase 3.
+**Based on what you find:**
 
-### Step 4: Create Task List (For Complex Projects)
+**If configs exist, acknowledge them briefly:**
+```
+I found your saved settings:
+- API key: [✓ configured / ✗ not set]
+- Brand: [Company palette: primary/accent colors] OR [not set]
+- Learned preferences: [list 2-3 key preferences] OR [none yet]
 
-If the user requests:
-- A series of 3+ infographics
-- Multiple concepts to visualize
-- An iterative project with many revisions
+Ready to create your infographic!
+```
 
-Create a task list using TaskCreate to track progress.
+**If no configs exist, just proceed to Phase 1** — you'll collect what you need through the guided flow.
 
-### Step 5: Begin Phase 1
-
-Start the workflow with Phase 1 below.
-
-**Summary:** READ FILES → CHECK API KEY → LOAD BRAND → CREATE TASKS (if needed) → START PHASE 1
+**Output:** Silent config load. Brief acknowledgment if configs found, then proceed to Phase 1.
 
 ---
 
-## Workflow: 7 Phases
+### Phase 1: Understand the Content (1-2 questions)
 
-### Phase 1: Idea Intake
+**Goal:** Understand what the user wants to communicate and for which platform.
 
-**Goal:** Understand what the user wants to communicate visually.
+#### Step 1.1: Extract the Core Insight
 
-1. **User shares a concept** — They provide a topic, data, idea, or content for an infographic
+Read the user's content (they may have provided a LinkedIn post, concept, data, or topic). Identify:
+- The ONE key insight or takeaway
+- The main supporting points (3-10 typically)
+- Any data/numbers/comparisons
 
-2. **Extract and confirm** the key elements:
-   - **Core insight** — What's the ONE thing someone should take away?
-   - **Key data points** — Numbers, comparisons, steps, categories, or main points
-   - **Target audience** — Who will see this? (LinkedIn professionals, Instagram followers, Twitter audience, presentation viewers)
-   - **Platform** — Where will it be posted? (LinkedIn, Instagram, Twitter, presentation, etc.)
+**Propose your understanding:**
+```
+Here's what I think the key message is:
+[Your extracted insight in one sentence]
 
-3. **Clarify the message** with the user:
-   ```
-   "What's the ONE key insight or takeaway you want people to get from this infographic?"
-   ```
+Main points:
+1. [Point 1]
+2. [Point 2]
+3. [Point 3]
+...
 
-4. **Confirm the brief** before moving forward:
-   ```
-   Here's what I understand:
-   - Core message: [...]
-   - Key points: [...]
-   - Target audience: [...]
-   - Platform: [...]
+Is this right, or would you frame it differently?
+```
 
-   Does this capture your vision?
-   ```
+Wait for user confirmation before proceeding.
 
-**Output:** A clear, confirmed brief with core insight, data points, audience, and platform.
+#### Step 1.2: Platform Selection
+
+Use `AskUserQuestion`:
+
+```
+question: "Where will this be posted?"
+header: "Platform"
+options:
+  - label: "LinkedIn"
+    description: "4:5 portrait recommended for best engagement"
+  - label: "Instagram"
+    description: "1:1 square or 4:5 portrait"
+  - label: "Twitter/X"
+    description: "16:9 landscape for timeline"
+  - label: "Presentation"
+    description: "16:9 landscape for slides"
+```
+
+#### Step 1.3: Complexity Assessment
+
+Use `AskUserQuestion`:
+
+```
+question: "How much content do you have?"
+header: "Complexity"
+options:
+  - label: "Simple (3-5 points)"
+    description: "One core idea, fits in a single infographic"
+  - label: "Medium (6-10 points)"
+    description: "One idea with multiple facets, needs simplification"
+  - label: "Complex (10+ points)"
+    description: "Multiple ideas or deep detail — recommend a series"
+```
+
+If "Complex" selected, propose how to split into a series (2-4 posts) with specific content mapping for each.
+
+#### Checkpoint 1
+
+Summarize what you've captured:
+```
+Let me confirm before we move on:
+- Core insight: [...]
+- Key points: [...]
+- Platform: [...] ([aspect ratio])
+- Format: [Single infographic / Series of N posts]
+
+All correct?
+```
+
+Wait for confirmation before Phase 2.
+
+**Output:** Confirmed brief with insight, points, platform, and format.
 
 ---
 
-### Phase 2: Simplify & Structure
+### Phase 2: Visual Style (2-3 questions)
 
-**Goal:** Determine if the concept fits one visual or needs a series.
+**Goal:** Establish the visual identity. Either extract from website, use presets, or collect manually.
 
-1. Analyze the complexity of the concept:
-   - **Simple** (1 core idea, 3-6 supporting points) → Single infographic
-   - **Medium** (1 core idea, 7-12 supporting points) → Single infographic with careful simplification
-   - **Complex** (multiple ideas, 12+ points, multi-step process) → Propose a series of 2-4 posts
+#### If Pattern Bank Has Style Preferences
 
-2. If splitting into a series:
-   - Propose how to divide the content across posts
-   - Each post should stand alone but connect to the series theme
-   - Suggest a series title and individual post angles
-
-3. If single infographic:
-   - Propose how to distill the concept into one clear visual
-   - Identify what to include and what to cut
-
-4. **Present the structure to the user for approval before proceeding.**
-
-**Output:** Approved content structure (single or series) with specific content mapping.
-
----
-
-### Phase 3: Brand Guidelines
-
-**Goal:** Establish visual identity for consistent output and save for future sessions.
-
-#### If `.infographic-brand.json` exists (loaded in Step 3):
-
-Present the saved brand guidelines to the user:
+If `.infographic-patterns.json` exists with learned style preferences, propose using them:
 ```
-I found your saved brand guidelines:
-- Primary color: [color]
-- Accent color: [color]
-- Background: [light/dark]
-- Font style: [style]
-- Tone: [tone]
+Based on your history, I'll use:
+- Colors: [saved palette]
+- Tone: [saved tone]
+- Style: [saved style preferences]
 
-Would you like to use these, or update them?
+Use these again, or start fresh?
 ```
 
-If user wants to update, proceed to collect new guidelines below.
+Use `AskUserQuestion`:
+```
+question: "Use your saved style preferences?"
+header: "Style"
+options:
+  - label: "Yes, use saved (Recommended)"
+    description: "[Brief summary of saved style]"
+  - label: "Start fresh"
+    description: "I want to choose a new style for this project"
+```
 
-#### If no saved brand guidelines:
+If "Yes, use saved" — skip to Phase 3.
 
-Ask the user for brand preferences:
+#### Style Discovery
 
-| Element | Question | Default if none |
-|---------|----------|-----------------|
-| Primary color | "What's your brand's primary color? (hex code preferred)" | `#2563EB` (professional blue) |
-| Secondary/Accent color | "Secondary/accent color?" | `#F59E0B` (warm amber) |
-| Background | "Light or dark background preference?" | Light (`#FAFAFA`) |
-| Font style | "Font preference? (clean sans-serif / serif / handwritten / bold)" | Clean sans-serif |
-| Logo | "Do you have a logo URL or description to include?" | No logo |
-| Tone | "Visual tone? (professional / playful / minimal / bold / hand-drawn)" | Professional |
+Use `AskUserQuestion`:
 
-If the user says "no brand guide," "use defaults," or "just make it look good," use the defaults above.
+```
+question: "How should I get your visual style?"
+header: "Style source"
+options:
+  - label: "Extract from my website (Recommended)"
+    description: "I'll analyze your site for colors, fonts, and brand feel"
+  - label: "Show me preset styles"
+    description: "Choose from 5 professional palettes"
+  - label: "I'll describe my colors/fonts"
+    description: "You know your exact hex codes and preferences"
+  - label: "Use a professional default"
+    description: "Clean blue and amber palette, works for most content"
+```
+
+#### If Website Extraction
+
+1. Ask for the website URL
+2. Use `WebFetch` to get the page
+3. Follow the extraction process in `references/css-extraction.md`
+4. Present extracted palette:
+   ```
+   I found these brand elements on [domain]:
+   - Primary color: [color] [hex]
+   - Secondary color: [color] [hex]
+   - Font style: [detected font family or type]
+   - Overall feel: [professional/playful/minimal/bold]
+
+   Use these?
+   ```
+5. Let user confirm or adjust
+
+#### If Preset Styles
+
+Present the 5 presets from `references/style-presets.md`:
+
+Use `AskUserQuestion`:
+```
+question: "Which style palette fits your brand?"
+header: "Palette"
+options:
+  - label: "Professional Blue"
+    description: "#2563EB blue + #F59E0B amber — corporate, trustworthy"
+  - label: "Warm Coral"
+    description: "#F97316 coral + #14B8A6 teal — energetic, approachable"
+  - label: "Modern Purple"
+    description: "#7C3AED purple + #10B981 emerald — creative, innovative"
+  - label: "Minimal Mono"
+    description: "#111827 black + #EF4444 red accent — bold, striking"
+```
+
+#### If Manual Description
+
+Ask for:
+- Primary color (hex preferred)
+- Accent color (hex preferred)
+- Background preference (light/dark)
+- Font style (sans-serif/serif/handwritten/bold)
+
+#### Visual Tone
+
+Use `AskUserQuestion`:
+
+```
+question: "What's the visual tone?"
+header: "Tone"
+options:
+  - label: "Professional & clean"
+    description: "Corporate feel, great for LinkedIn thought leadership"
+  - label: "Playful & approachable"
+    description: "Hand-drawn touches, friendly for broader audiences"
+  - label: "Bold & striking"
+    description: "High contrast, large type, attention-grabbing"
+  - label: "Minimal & elegant"
+    description: "Lots of whitespace, sophisticated restraint"
+```
 
 #### Save Brand Guidelines
 
-After collecting or confirming brand guidelines, save them to `.infographic-brand.json`:
+After collecting style, save to `.infographic-brand.json`:
 
 ```bash
 cat > .infographic-brand.json <<'EOF'
 {
-  "primaryColor": "#2563EB",
-  "accentColor": "#F59E0B",
-  "background": "light",
-  "backgroundColor": "#FAFAFA",
-  "fontStyle": "clean sans-serif",
-  "logo": null,
-  "tone": "professional",
-  "savedAt": "2026-02-04T10:30:00Z"
+  "primaryColor": "#HEXCODE",
+  "accentColor": "#HEXCODE",
+  "background": "light|dark",
+  "backgroundColor": "#HEXCODE",
+  "fontStyle": "clean sans-serif|serif|handwritten|bold",
+  "tone": "professional|playful|bold|minimal",
+  "extractedFrom": "website.com|preset|manual",
+  "savedAt": "ISO-8601-timestamp"
 }
 EOF
 ```
 
-**Output:** Brand profile saved to `.infographic-brand.json` and applied to all subsequent generations in this session.
+#### Checkpoint 2
+
+```
+Style locked in:
+- Primary: [color] [hex]
+- Accent: [color] [hex]
+- Background: [light/dark]
+- Font: [style]
+- Tone: [tone]
+
+Ready to choose a visualization?
+```
+
+**Output:** Brand profile saved and confirmed.
 
 ---
 
-### Phase 4: Visualization Ideation
+### Phase 3: Visualization Selection (1-2 questions)
 
-**Goal:** Help the user discover the perfect visual metaphor for their concept.
+**Goal:** Find the perfect visual metaphor by understanding the **shape** of the user's idea.
 
-#### IMPORTANT: Always Ask First
+**IMPORTANT:** Don't just match keywords to templates. Follow the reasoning process in `references/visual-reasoning.md`.
 
-Before presenting visualization options, ask the user:
+#### Step 3.1: Reason About the Concept Shape
 
-```
-"Would you like me to suggest 5-10 different ways to visualize this concept?
-I can present various visual metaphors (like icebergs, pyramids, timelines,
-comparisons, etc.) that could work for your idea."
-```
+Before presenting options, think through these questions **internally** (don't ask the user):
 
-**If the user says YES**, proceed with steps below. **If the user already has a specific visualization in mind**, skip to Phase 5 with their chosen approach.
+**1. Extract the Core Tension:**
+What two things are in relationship?
+- What's being compared to what?
+- What's hidden vs. visible?
+- What transforms into what?
+- What leads to what?
 
-#### Step-by-Step Process:
+**2. Identify the Relationship Type:**
 
-1. **Analyze the concept's "shape"** — Ask yourself: "What is the SHAPE of this idea?"
-   - Hidden depth? → Iceberg
-   - Hierarchy? → Pyramid
-   - Transformation over time? → U-Curve
-   - Complexity vs simplicity? → Tangled vs Straight Line
-   - Parts of a whole? → Donut Chart, Silhouette with Branches
+| Relationship | Visual Shape | Example Metaphors |
+|-------------|--------------|-------------------|
+| Revelation (hidden vs. visible) | Depth, layers | Iceberg, Layers |
+| Hierarchy (levels of importance) | Vertical stack | Pyramid, Tiers |
+| Transformation (A becomes B) | Journey, movement | U-curve, Timeline |
+| Composition (parts → whole) | Container | Pie, Silhouette, Puzzle |
+| Contrast (A vs. B) | Division | Split, Tangled→Straight |
+| Intersection (overlap) | Merger | Venn |
+| Convergence (many → few) | Narrowing | Funnel, Hourglass |
+| Sequence (ordered steps) | Flow | Timeline, Numbered steps |
 
-2. **Use the Concept Shape Mapping** (from `visual-metaphors.md`):
+**3. Feel the Emotional Weight:**
+- Surprising/revealing → Dramatic contrast (iceberg, split)
+- Aspirational/growth → Upward movement (pyramid, climb)
+- Messy→clean → Transformation (tangled→straight)
+- Complex but ordered → Systematic (layers, nested circles)
 
-| If the concept is about... | Consider these metaphors |
-|---------------------------|------------------------|
-| Hidden depth / surface vs reality | Iceberg, Split Comparison |
-| Hierarchy / levels of importance | Pyramid, Concentric Circles |
-| Transformation over time | U-Curve Journey, Timeline |
-| Process / steps | Funnel, Timeline, Steps |
-| Parts of a whole | Donut/Pie, Silhouette with Branches |
-| Comparison / contrast | Split Comparison, Venn Diagram |
-| Complexity vs simplicity | Tangled vs Straight Line |
-| Convergence / focus | Hourglass, Funnel, Bullseye |
-| Overlap / intersection | Venn Diagram, Concentric Circles |
-| Growth / accumulation | Stacked Layers, Pyramid |
+**4. Validate the Fit:**
+- Does the visual match the insight's SHAPE?
+- Would someone "get it" in 5 seconds?
+- Does the content divide naturally into this structure?
 
-3. **Think beyond the catalog** — The 12 standard metaphors are starting points. If the concept naturally maps to something else, use it:
-   - Bridge (connecting worlds)
-   - Recipe (combining ingredients)
-   - Solar system (central idea + orbits)
-   - City skyline (relative importance)
-   - Mountain path (journey with elevation)
-   - Circuit board (interconnected systems)
-   - Toolbox (collection of tools)
+#### Step 3.2: Present Your Reasoning
 
-   The best metaphor makes the insight feel **inevitable**.
-
-4. **Present 5-10 options** in this structured format:
+Show the user your thinking, then present options:
 
 ```
-Here are [N] ways to visualize "[concept]":
+Looking at your content, here's what I see:
 
-1. **[Metaphor Name]** — [Type]
-   Why it works: [1-2 sentences explaining why this fits]
-   Layout: [Brief structure description]
-   Visual example: [What they'd see — "An iceberg with visible results
-                   above water and hidden work below..."]
+The core tension is: [what vs. what]
+This is about: [relationship type — revelation/hierarchy/transformation/etc.]
+The idea's shape feels like: [description of the shape]
 
-2. **[Metaphor Name]** — [Type]
-   Why it works: [...]
-   Layout: [...]
-   Visual example: [...]
-
-[Continue for 5-10 options]
-
-Which approach(es) resonate with you? You can pick 1-3, or suggest your own idea.
+Based on this, here are visualization options:
 ```
 
-5. **Wait for user selection** — Do NOT proceed to generation until the user picks their preferred approach(es).
+#### Step 3.3: Present Options with Reasoning
 
-**Output:** Numbered list of 5-10 visual metaphor options (only if user requests suggestions), ready for user selection.
+Use `AskUserQuestion`:
+
+```
+question: "Which visualization resonates with your message?"
+header: "Visual"
+options:
+  - label: "[Metaphor 1]"
+    description: "[Why it works — connect to THEIR specific content and the shape you identified]"
+  - label: "[Metaphor 2]"
+    description: "[Why it works — different angle on the same shape]"
+  - label: "[Metaphor 3]"
+    description: "[Why it works — alternative interpretation]"
+  - label: "Something else"
+    description: "I have a different idea in mind"
+```
+
+**CRITICAL:** The descriptions must explain WHY this metaphor fits THIS content, not generic template descriptions.
+
+**Bad:** "Iceberg — Shows hidden depth"
+**Good:** "Iceberg — Your '10% talent, 90% execution' message maps perfectly: talent visible above water, the grinding work massive below"
+
+If user selects "Something else," ask them to describe what they're envisioning. Use the reasoning framework to understand what shape they're going for.
+
+#### Step 3.4: Content Mapping
+
+After metaphor selection, map their SPECIFIC content to the visual structure:
+
+```
+For a [chosen metaphor], here's how I'd map your content:
+
+[Show the exact mapping with their words]
+
+Example for Iceberg with their content:
+Above water (10% — what people see):
+- "Natural talent"
+- "The big wins"
+
+Below water (90% — the hidden work):
+- "Daily practice" (30%)
+- "Failed attempts" (25%)
+- "Strategic planning" (20%)
+- "Consistent execution" (15%)
+
+Does this mapping capture your message?
+```
+
+Let user confirm or adjust. The mapping should use THEIR language and data.
+
+#### Checkpoint 3
+
+```
+Visual direction confirmed:
+- Metaphor: [chosen metaphor]
+- Why it fits: [one sentence connecting to their content's shape]
+- Content mapping: [brief summary]
+
+Now let's set up image generation.
+```
+
+**Output:** Confirmed metaphor with clear reasoning for why it fits this specific content.
 
 ---
 
-### Phase 5: User Selection & Detailed Specification
+### Phase 4: API Key & Generation Setup
 
-**Goal:** Lock in the visual direction and gather all details needed for perfect generation.
+**Goal:** Ensure we can generate images, or provide graceful fallback.
 
-1. User picks **1-3 preferred** visualization approaches
-2. For each selected approach, create a detailed content map:
-   - Exact text/labels that will appear on the infographic
-   - Where each data point maps to in the visual
-   - Color assignments for different sections
-   - Title and subtitle text
-3. Present the refined approach(es) for final confirmation
-4. **Do NOT proceed to Phase 5.5 until the user confirms the direction.**
+#### Check API Key Status
 
-**Output:** Confirmed visual direction with detailed content mapping.
-
----
-
-### Phase 5.5: Pre-Generation Questionnaire (MANDATORY)
-
-**Goal:** Gather all specific details to craft the perfect prompt and ensure style consistency.
-
-**IMPORTANT:** You MUST ask these questions before generating ANY image. Do NOT skip this phase.
-
-Ask the user these specific questions (present them all at once for efficiency):
-
-```
-Before I generate your infographic, I need a few specific details to ensure it's perfect:
-
-📐 LAYOUT & COMPOSITION:
-1. Layout style: Vertical split, horizontal split, centered, grid, or custom?
-2. Text placement: Top-heavy (title at top), bottom-heavy, or balanced throughout?
-3. Visual hierarchy: Should one element dominate, or equal weight distribution?
-
-🎨 VISUAL STYLE:
-4. Illustration style: Flat design, hand-drawn/sketchy, geometric/minimal, or gradient/modern?
-5. Icon style: Simple line icons, filled icons, illustrated icons, or no icons?
-6. Border/frame: Clean border, no border, decorative frame, or rounded corners?
-
-✍️ TYPOGRAPHY:
-7. Title treatment: Bold & large, elegant & thin, handwritten style, or all caps?
-8. Body text size: Minimal text (large & readable), moderate text, or detailed text?
-9. Text effects: Drop shadow, outline, solid background boxes, or clean/no effects?
-
-🎯 SPECIFIC ELEMENTS:
-10. Exact title text: [What should the main title say?]
-11. Exact subtitle text (if any): [What should the subtitle say?]
-12. Bullet points/labels: [List exact text for each point]
-13. Any specific imagery: Icons, illustrations, or visual elements you want included?
-
-📱 TECHNICAL:
-14. Aspect ratio confirmed: [4:5 for LinkedIn / 1:1 square / 16:9 landscape / other?]
-15. Background treatment: Solid color, subtle gradient, texture, or pattern?
-
-Please answer as many as you can. For any you're unsure about, I'll use smart defaults based on your brand guidelines.
-```
-
-**After receiving answers:**
-- Confirm all details with the user
-- Fill in any missing details with smart defaults based on brand guidelines
-- Show a summary of the complete specification before proceeding to Phase 6
-
-**Output:** Complete specification document with all visual and content details confirmed.
-
----
-
-### Phase 6: Generate with Gemini Image Generation
-
-**Goal:** Create the infographic image(s) using Gemini's image generation with a highly detailed, style-specific prompt.
-
-1. **Read reference files** for prompt crafting:
-   - `references/prompt-engineering.md` for prompt structure
-   - `references/gemini-image-api.md` for API details and model selection
-
-2. **Select the right model:**
-   - `gemini-2.5-flash-image` — The correct model for image generation with Gemini API ✨ **Recommended**
-
-   **Default:** Use **`gemini-2.5-flash-image`** as the primary model. This is the correct model name for the Gemini image generation API.
-
-3. **Craft the ultra-detailed generation prompt** using this structure:
-
-   ```
-   [PROMPT STRUCTURE - Use ALL sections]
-   
-   Generate a professional infographic with these EXACT specifications:
-   
-   CONTENT:
-   - Title: "[exact title from Phase 5.5]"
-   - Subtitle: "[exact subtitle from Phase 5.5]"
-   - Main points: [list each bullet/label with exact text]
-   
-   LAYOUT & COMPOSITION:
-   - Layout style: [from Phase 5.5 answer #1]
-   - Visual metaphor: [from Phase 5 selection]
-   - Text placement: [from Phase 5.5 answer #2]
-   - Visual hierarchy: [from Phase 5.5 answer #3]
-   - Aspect ratio: [from Phase 5.5 answer #14] portrait/square/landscape
-   
-   VISUAL STYLE:
-   - Illustration style: [from Phase 5.5 answer #4]
-   - Icon style: [from Phase 5.5 answer #5]
-   - Border treatment: [from Phase 5.5 answer #6]
-   
-   TYPOGRAPHY:
-   - Title treatment: [from Phase 5.5 answer #7]
-   - Font style: [from brand guidelines - clean sans-serif/serif/handwritten/bold]
-   - Body text size: [from Phase 5.5 answer #8]
-   - Text effects: [from Phase 5.5 answer #9]
-   
-   COLOR PALETTE:
-   - Primary color: [hex code from brand guidelines]
-   - Accent color: [hex code from brand guidelines]
-   - Background: [from Phase 5.5 answer #15 + brand guidelines]
-   - Text color: [high contrast based on background]
-   
-   SPECIFIC ELEMENTS:
-   - [List any specific icons, illustrations, or visual elements from Phase 5.5 answer #13]
-   
-   STYLE REQUIREMENTS:
-   - Professional flat illustration style
-   - Modern sans-serif typography
-   - Clean, minimal design with 40%+ white space
-   - High contrast for mobile readability
-   - No photorealistic textures or 3D effects
-   - [Add any specific style notes from brand tone]
-   
-   TEXT PLACEMENT RULES (CRITICAL - FOLLOW EXACTLY):
-   - Each text element should appear ONLY ONCE in the infographic
-   - Place text in logical, readable positions that match the visual metaphor
-   - Title should be in the most prominent position (typically top or center)
-   - Subtitle should be directly below or near the title
-   - Body text/labels should be placed next to or inside their corresponding visual elements
-   - Maintain clear visual hierarchy: Title (largest) → Subtitle (medium) → Body text (smallest)
-   - Ensure no text overlaps or repeats
-   - Leave adequate white space around all text for readability
-   - Text should flow naturally with the visual layout (left-to-right, top-to-bottom for most layouts)
-   - For split layouts: text on each side should be distinct and non-repeating
-   - For timeline/process layouts: text should follow the sequential flow
-   - For comparison layouts: ensure labels clearly indicate which side they belong to
-   - Do NOT place the same text in multiple locations
-   - Do NOT add decorative text repetition
-   - Ensure all text is purposeful and placed exactly where it makes sense contextually
-   
-   TECHNICAL:
-   - [Aspect ratio instruction: "4:5 portrait aspect ratio" / "1:1 square" / "16:9 landscape"]
-   - High resolution, suitable for social media
-   - Optimized for [platform from Phase 1]
-   ```
-
-4. **Show the complete prompt to the user** before generating:
-   ```
-   Here's the detailed prompt I'll use to generate your infographic:
-   
-   [Show the full prompt]
-   
-   Does this capture everything correctly? Any adjustments needed?
-   ```
-
-5. **After user approval, call Gemini API** with the crafted prompt:
-   ```bash
-   curl -s -X POST \
-     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
-     -H "x-goog-api-key: ${GEMINI_API_KEY}" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "contents": [{
-         "parts": [
-           {"text": "Your detailed prompt here"}
-         ]
-       }]
-     }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
-   ```
-
-6. **Save the generated image** with descriptive naming:
-   - Single: `infographic-[topic-slug].png`
-   - Series: `infographic-[topic-slug]-01.png`, `infographic-[topic-slug]-02.png`, etc.
-
-7. **Verify the file** was created:
-   ```bash
-   ls -la infographic-*.png
-   ```
-
-8. **Show to user** — Use Read tool to display the image for review
-
-**Output:** Generated image(s) saved to disk and displayed for user feedback, with the exact prompt used saved for reference.
-
----
-
-### Phase 7: Iterate & Series
-
-**Goal:** Refine based on feedback and complete any series.
-
-1. **Feedback loop:**
-   - User provides feedback ("make it warmer," "change the title," "more whitespace")
-   - Use Gemini multi-turn chat to edit while preserving context and style
-   - Re-generate and show updated version
-   - Repeat until user is satisfied
-
-2. **Series generation** (if applicable):
-   - After the first post is approved, generate remaining posts
-   - Maintain consistent style across all posts (same colors, fonts, layout family)
-   - Each post gets its own content but shares the visual language
-   - Save with sequential numbering
-
-3. **Final export:**
-   - Confirm all images are saved with proper naming
-   - Provide a summary of all generated files
-   - Suggest optimal posting times/order for series (if applicable)
-
-**Output:** Final approved image(s) with file paths listed.
-
----
-
-## Quick Reference
-
-### API Key Setup
 ```bash
-export GEMINI_API_KEY=your-key-here
+echo "${GEMINI_API_KEY:+API key is configured}"
 ```
 
-### Generate with Gemini Image API (Quick)
+#### If API Key IS Set
+
+Skip to Phase 5.
+
+#### If API Key NOT Set
+
+Use `AskUserQuestion`:
+
+```
+question: "I need a Gemini API key to generate images. How do you want to proceed?"
+header: "API Key"
+options:
+  - label: "Set it up now (Recommended)"
+    description: "I'll guide you through getting a free key from Google AI Studio"
+  - label: "I have a key ready"
+    description: "Let me paste it or I've already exported it"
+  - label: "Skip for now"
+    description: "Just give me the prompt to use elsewhere"
+```
+
+#### Path A: Set Up Now
+
+Follow the guide in `references/api-setup.md`:
+
+1. Display step-by-step instructions:
+   ```
+   To get your Gemini API key:
+
+   1. Go to Google AI Studio: https://aistudio.google.com
+   2. Sign in with your Google account
+   3. Click "Get API Key" in the left sidebar
+   4. Click "Create API Key" and select a project (or create one)
+   5. Copy the generated key
+
+   Paste your API key below when ready.
+   ```
+
+2. After user provides key, save to `.env`:
+   ```bash
+   echo "GEMINI_API_KEY=their-provided-key" > .env
+   ```
+
+3. Verify with a test:
+   ```bash
+   source .env && curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}" | head -c 200
+   ```
+
+4. If verified, proceed to Phase 5.
+
+#### Path B: User Has Key Ready
+
+Ask user to paste the key, then:
+1. Save to `.env`
+2. Verify as above
+3. Proceed to Phase 5
+
+#### Path C: Skip Generation
+
+```
+No problem! I'll complete all the planning and give you a ready-to-use prompt.
+
+You can:
+- Paste the prompt into Google AI Studio, ChatGPT, or any image AI
+- Come back later with `/infographic` after setting up your key
+```
+
+Continue through Phases 5-6, but output the prompt as text instead of calling the API.
+
+**Output:** API key configured and verified, OR skip-generation path selected.
+
+---
+
+### Phase 5: Pre-Generation Details (3 Small Groups)
+
+**Goal:** Gather specific details in manageable chunks with validation after each.
+
+#### Group A: Layout (2 questions)
+
+Use `AskUserQuestion`:
+
+```
+question: "Where should the title and text go?"
+header: "Text placement"
+options:
+  - label: "Title at top, visual below"
+    description: "Classic layout, title draws you in"
+  - label: "Title integrated with visual"
+    description: "More artistic, title becomes part of the design"
+  - label: "Minimal text, visual-first"
+    description: "Let the image do the talking"
+```
+
+Use `AskUserQuestion`:
+
+```
+question: "What should be the visual focus?"
+header: "Hierarchy"
+options:
+  - label: "One dominant element"
+    description: "Hero visual that draws the eye first"
+  - label: "Balanced weight"
+    description: "All elements equally important"
+  - label: "Progressive reveal"
+    description: "Eye moves from top to bottom naturally"
+```
+
+**Checkpoint A:** "Layout confirmed: [title placement], [hierarchy style]."
+
+#### Group B: Typography (2 questions)
+
+Use `AskUserQuestion`:
+
+```
+question: "How should the title look?"
+header: "Title style"
+options:
+  - label: "Bold & large"
+    description: "Makes a strong statement"
+  - label: "Elegant & thin"
+    description: "Sophisticated, refined"
+  - label: "Handwritten style"
+    description: "Personal, approachable"
+  - label: "All caps bold"
+    description: "Maximum impact"
+```
+
+Use `AskUserQuestion`:
+
+```
+question: "How much text on the infographic?"
+header: "Text density"
+options:
+  - label: "Minimal (3-5 labels)"
+    description: "Large text, maximum readability"
+  - label: "Moderate (5-8 labels)"
+    description: "Good balance of info and clarity"
+  - label: "Detailed (8+ labels)"
+    description: "More information, smaller text"
+```
+
+**Checkpoint B:** "Typography confirmed: [title style], [text density]."
+
+#### Group C: Final Details (2 questions)
+
+Use `AskUserQuestion`:
+
+```
+question: "Border and frame treatment?"
+header: "Border"
+options:
+  - label: "Clean thin border"
+    description: "Neat, professional edge"
+  - label: "No border"
+    description: "Bleeds to the edge, modern feel"
+  - label: "Rounded corners"
+    description: "Softer, friendly appearance"
+```
+
+Use `AskUserQuestion`:
+
+```
+question: "Visual elements to include?"
+header: "Elements"
+options:
+  - label: "Simple icons"
+    description: "Line-style icons for visual interest"
+  - label: "Illustrations"
+    description: "Flat-style illustrations"
+  - label: "Just text and shapes"
+    description: "Clean, no decorative elements"
+```
+
+**Checkpoint C:** "Details confirmed: [border], [elements]."
+
+#### Collect Exact Text
+
+Ask for:
+- Exact title text
+- Subtitle (if any)
+- Exact text for each label/point
+
+#### Final Specification Summary
+
+```
+Complete specification:
+
+CONTENT:
+- Title: "[exact title]"
+- Subtitle: "[subtitle or none]"
+- Labels: [list each]
+
+LAYOUT:
+- Platform: [platform] ([aspect ratio])
+- Text placement: [choice]
+- Visual hierarchy: [choice]
+- Visual metaphor: [metaphor]
+
+STYLE:
+- Colors: [primary], [accent], [background]
+- Font: [style]
+- Tone: [tone]
+- Title treatment: [choice]
+- Text density: [choice]
+- Border: [choice]
+- Elements: [choice]
+
+Ready to generate?
+```
+
+**Output:** Complete specification confirmed.
+
+---
+
+### Phase 6: Generate
+
+**Goal:** Craft the prompt, show it to the user, and generate the image.
+
+#### Step 6.1: Craft the Prompt
+
+Use the complete specification from Phase 5 and the prompt patterns from `references/prompt-engineering.md` to create a detailed generation prompt.
+
+Include ALL specifications:
+- Exact text content (quoted)
+- Layout and composition details
+- Visual metaphor structure
+- Color palette with hex codes
+- Typography style
+- Style requirements
+- Negative instructions (what to avoid)
+- Aspect ratio
+
+#### Step 6.2: Show Prompt for Approval
+
+```
+Here's the prompt I'll use to generate your infographic:
+
+---
+[Full prompt text]
+---
+
+Any tweaks before I generate?
+```
+
+Wait for user approval.
+
+#### Step 6.3: Generate Image
+
+If API key is available, call Gemini:
+
 ```bash
-# Using gemini-2.5-flash-image - Correct model for image generation
 curl -s -X POST \
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
   -H "x-goog-api-key: ${GEMINI_API_KEY}" \
@@ -500,50 +718,317 @@ curl -s -X POST \
   -d '{
     "contents": [{
       "parts": [
-        {"text": "Generate a professional infographic..."}
+        {"text": "YOUR CRAFTED PROMPT HERE"}
       ]
     }]
-  }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > output.png
+  }' | jq -r '.candidates[0].content.parts[] | select(.inlineData) | .inlineData.data' | base64 -d > infographic-[topic-slug].png
 ```
 
-### Supported Aspect Ratios
-| Platform | Ratio | Use |
-|----------|-------|-----|
-| LinkedIn feed | 4:5 or 1:1 | Standard posts (4:5 recommended) |
-| LinkedIn carousel | 4:5 | Swipeable series |
-| Instagram | 1:1 or 4:5 | Feed posts |
-| Twitter | 16:9 | Timeline images |
-| Stories | 9:16 | Vertical stories |
-| Presentation | 16:9 | Slides |
+#### Step 6.4: Save and Display
 
-### Brand Guidelines File
-```json
+1. Save with descriptive filename:
+   - Single: `infographic-[topic-slug].png`
+   - Series: `infographic-[topic-slug]-01.png`, etc.
+
+2. Verify the file:
+   ```bash
+   ls -la infographic-*.png
+   ```
+
+3. Show to user using Read tool
+
+#### If No API Key (Skip Path)
+
+Output the crafted prompt with instructions:
+```
+Here's your ready-to-use prompt:
+
+---
+[Full prompt text]
+---
+
+To generate:
+1. Go to Google AI Studio (aistudio.google.com)
+2. Select "Gemini 2.5 Flash" model
+3. Paste this prompt
+4. Click Generate
+
+Or use any image AI of your choice.
+
+I've also saved this prompt to `infographic-prompt.txt` for later.
+```
+
+Save prompt to file:
+```bash
+cat > infographic-prompt.txt <<'EOF'
+[Full prompt text]
+EOF
+```
+
+**Output:** Image generated and displayed, OR prompt saved for manual use.
+
+---
+
+### Phase 7: Review & Edit
+
+**Goal:** Get feedback and iterate on the image until the user is satisfied.
+
+#### Step 7.1: First Impression
+
+Use `AskUserQuestion`:
+
+```
+question: "Here's your infographic. What's your first reaction?"
+header: "Reaction"
+options:
+  - label: "Love it!"
+    description: "Maybe small tweaks, but the direction is right"
+  - label: "Good direction, needs changes"
+    description: "Core concept works, specific things to adjust"
+  - label: "Not quite right"
+    description: "Let's try a different approach"
+  - label: "Start over"
+    description: "Let's go back and try a different concept"
+```
+
+#### If "Love it!" — Skip to Phase 8
+
+#### If "Good direction, needs changes" — Continue to Step 7.2
+
+#### If "Not quite right" — Discuss what's wrong and regenerate with adjusted prompt
+
+#### If "Start over" — Return to Phase 3 (Visualization Selection)
+
+#### Step 7.2: Specific Changes
+
+Use `AskUserQuestion` with multiSelect enabled:
+
+```
+question: "What would you like to change? (select all that apply)"
+header: "Changes"
+multiSelect: true
+options:
+  - label: "Colors"
+    description: "Too dark/light, wrong tone, specific color issues"
+  - label: "Text"
+    description: "Wording, size, placement, or readability"
+  - label: "Layout"
+    description: "Arrangement, spacing, or composition"
+  - label: "Style"
+    description: "Too busy/simple, wrong visual feel"
+```
+
+#### Get Specifics for Each Selection
+
+**If Colors selected:**
+```
+question: "What's wrong with the colors?"
+header: "Color fix"
+options:
+  - label: "Make it lighter/brighter"
+    description: "Current palette feels too dark"
+  - label: "Make it bolder/richer"
+    description: "Colors feel washed out"
+  - label: "Wrong tone"
+    description: "Show me warmer/cooler alternatives"
+  - label: "Change specific color"
+    description: "I'll tell you which one"
+```
+
+**If Text selected:**
+```
+question: "What about the text?"
+header: "Text fix"
+options:
+  - label: "Title needs rewording"
+    description: "Change the title text"
+  - label: "Labels too long/short"
+    description: "Adjust the supporting text"
+  - label: "Text too small/large"
+    description: "Resize for readability"
+  - label: "Wrong placement"
+    description: "Move text to different position"
+```
+
+**If Layout selected:**
+```
+question: "What layout issue?"
+header: "Layout fix"
+options:
+  - label: "More whitespace"
+    description: "Feels too crowded"
+  - label: "Elements misaligned"
+    description: "Things don't line up right"
+  - label: "Wrong visual balance"
+    description: "Composition feels off"
+```
+
+**If Style selected:**
+```
+question: "What style issue?"
+header: "Style fix"
+options:
+  - label: "Too busy"
+    description: "Simplify the design"
+  - label: "Too simple"
+    description: "Add more visual interest"
+  - label: "Wrong visual feel"
+    description: "Doesn't match my brand/tone"
+```
+
+#### Step 7.3: Apply Edits
+
+Follow the multi-turn editing process in `references/image-editing.md`:
+
+1. Send the current image back to Gemini with specific edit instructions
+2. Generate edited version
+3. Show comparison if helpful: "Here's before vs after"
+4. Ask if the changes are correct
+
+#### Iterate Until Satisfied
+
+Repeat Steps 7.1-7.3 until user says "Love it!" or confirms they're done.
+
+**Output:** Final approved image(s).
+
+---
+
+### Phase 8: Learn & Save
+
+**Goal:** Update the pattern bank with learned preferences for future sessions.
+
+#### Analyze Session Patterns
+
+Look at the choices made during this session:
+- Style choices (colors, fonts, tone)
+- Layout preferences
+- Text density preferences
+- Visualization types chosen
+- Feedback patterns (what they liked, what they changed)
+
+#### Offer to Save
+
+Use `AskUserQuestion`:
+
+```
+question: "I noticed some patterns in your preferences. What should I remember for next time?"
+header: "Save"
+options:
+  - label: "Save all preferences"
+    description: "Remember everything for faster sessions"
+  - label: "Save just brand/colors"
+    description: "Keep the visual identity, ask other questions"
+  - label: "Don't save anything"
+    description: "I prefer fresh choices each time"
+  - label: "Let me choose"
+    description: "I'll tell you what to remember"
+```
+
+#### Update Pattern Bank
+
+If saving, update `.infographic-patterns.json`:
+
+```bash
+cat > .infographic-patterns.json <<'EOF'
 {
-  "primaryColor": "#2563EB",
-  "accentColor": "#F59E0B",
-  "background": "light",
-  "backgroundColor": "#FAFAFA",
-  "fontStyle": "clean sans-serif",
-  "logo": null,
-  "tone": "professional",
-  "savedAt": "2026-02-04T10:30:00Z"
+  "learnedPreferences": {
+    "titleStyle": "[from session]",
+    "textDensity": "[from session]",
+    "iconUsage": [true/false],
+    "colorTone": "[from session]",
+    "layoutStyle": "[from session]",
+    "whitespacePreference": "[from session]"
+  },
+  "commonChoices": {
+    "metaphors": ["[metaphors used]"],
+    "platforms": ["[platforms chosen]"],
+    "tones": ["[tones selected]"]
+  },
+  "feedback": [
+    {
+      "session": "[ISO-date]",
+      "liked": ["[what worked]"],
+      "changed": ["[what was adjusted]"]
+    }
+  ],
+  "lastUpdated": "[ISO-8601-timestamp]"
 }
+EOF
 ```
+
+#### Wrap Up
+
+```
+Your infographic is ready!
+
+Saved files:
+- [filename.png] — your infographic
+- .infographic-brand.json — your brand settings
+- .infographic-patterns.json — your preferences (if saved)
+
+[If series] I can generate the remaining [N] posts whenever you're ready. Just say "continue the series."
+
+[If no API key] Your prompt is saved in infographic-prompt.txt. Once you have an API key, run `/infographic` again to generate.
+```
+
+**Output:** Session complete, files saved, preferences updated.
+
+---
+
+## Quick Reference
+
+### API Endpoints
+
+```bash
+# Generate image
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d '{"contents": [{"parts": [{"text": "prompt"}]}]}'
+
+# Edit image (multi-turn)
+IMAGE_B64=$(base64 -i image.png)
+curl -s -X POST \
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "x-goog-api-key: ${GEMINI_API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d "{\"contents\": [{\"parts\": [{\"inlineData\": {\"mimeType\": \"image/png\", \"data\": \"${IMAGE_B64}\"}}, {\"text\": \"Edit instructions\"}]}]}"
+```
+
+### File Locations
+
+| File | Purpose |
+|------|---------|
+| `.env` | API key storage |
+| `.infographic-brand.json` | Brand colors, fonts, tone |
+| `.infographic-patterns.json` | Learned preferences |
+| `infographic-[topic].png` | Generated images |
+| `infographic-prompt.txt` | Saved prompts (no-key fallback) |
+
+### Aspect Ratios
+
+| Platform | Ratio | Pixels |
+|----------|-------|--------|
+| LinkedIn | 4:5 | 1080×1350 |
+| LinkedIn/Instagram | 1:1 | 1080×1080 |
+| Twitter | 16:9 | 1200×675 |
+| Presentation | 16:9 | 1920×1080 |
+| Stories | 9:16 | 1080×1920 |
 
 ---
 
 ## Important Rules
 
-1. **MANDATORY Pre-Generation Questions** — ALWAYS complete Phase 5.5 questionnaire before generating. Never skip this step.
-2. **Never generate without user approval** — Always confirm the visual direction in Phase 5 AND show the complete prompt in Phase 6 before generating
-3. **Style-specific prompts** — Use ultra-detailed prompts with exact specifications from Phase 5.5 answers
-4. **One metaphor per infographic** — Don't mix metaphors in a single image. If you need multiple metaphors, create a series
-5. **Iterate, don't restart** — Use multi-turn Gemini chat for edits. Send the previous image back with modification instructions
-6. **Save every generation** — Always save to disk with descriptive filenames before showing to user
-7. **Brand consistency** — Apply the same brand profile (from `.infographic-brand.json`) across all images in a session
-8. **Simplify ruthlessly** — If text won't be readable on mobile, cut it. Less is more. Maximum 6-8 text labels per infographic
-9. **Ask before assuming** — When in doubt about style or content, ask the user
-10. **Use correct Gemini model** — Always use `gemini-2.5-flash-image` for image generation. This is the correct model name for the Gemini image generation API.
-11. **Series numbering** — For multi-post series, always include "Part X of Y" on each image
-12. **White space is essential** — Target 40%+ empty canvas. Breathing room makes it professional
-13. **Show prompt before generating** — Always display the complete prompt to the user for approval before calling the API
+1. **Reason about the shape, don't template-match** — Find the idea's shape first, then match to visuals (see `visual-reasoning.md`)
+2. **Use AskUserQuestion for every decision** — Never ask open-ended questions without structured options
+3. **Explain WHY a visualization fits** — Connect recommendations to the user's specific content and its shape
+4. **Section-by-section validation** — Confirm each phase before proceeding
+5. **Graceful no-key fallback** — Always provide value even without API key (output the prompt)
+6. **Multi-turn editing** — Use image editing to iterate, don't regenerate from scratch
+7. **Learn and remember** — Update pattern bank to speed up future sessions
+8. **One metaphor per infographic** — Don't mix metaphors; create a series instead
+9. **Simplify ruthlessly** — Max 6-8 text labels; if it won't read on mobile, cut it
+10. **40%+ white space** — Breathing room makes it professional
+11. **Show prompt before generating** — Always get approval on the exact prompt
+12. **Save every generation** — Descriptive filenames, verify files exist

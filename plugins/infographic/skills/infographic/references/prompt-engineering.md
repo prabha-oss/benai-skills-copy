@@ -357,3 +357,198 @@ Ask: "What shape does this idea naturally take?"
 The key question is always: **"Does this visual make the insight click faster?"**
 
 If you invent a new visual metaphor that perfectly fits the concept, use it. The reference guide provides proven patterns, but the best infographic is the one that makes the viewer understand instantly — regardless of whether it follows a template.
+
+---
+
+## Prompts for Manual Use (No API Key)
+
+When outputting prompts for users to use elsewhere, ensure they are complete and standalone.
+
+### Standalone Prompt Requirements
+
+A prompt for manual use must include:
+
+1. **Complete visual description** — Don't reference "as discussed" or "as specified"
+2. **Exact text in quotes** — All labels, titles, subtitles
+3. **Hex color codes** — Not "brand blue" but "#2563EB"
+4. **Explicit aspect ratio** — "4:5 portrait" not "LinkedIn format"
+5. **Style instructions** — Full description, not shorthand
+6. **Negative instructions** — What to avoid
+
+### Template for Manual-Use Prompts
+
+```
+Generate a professional infographic with these specifications:
+
+VISUAL CONCEPT:
+[Full description of the visual metaphor and structure]
+
+CONTENT:
+- Title: "[exact title text]"
+- Subtitle: "[exact subtitle text]"
+- Labels:
+  1. "[label 1]"
+  2. "[label 2]"
+  3. "[label 3]"
+  [etc.]
+
+LAYOUT:
+- Aspect ratio: [X:Y] ([platform name])
+- Composition: [layout description]
+- Text placement: [where text goes]
+- Visual hierarchy: [what draws the eye first]
+
+COLORS:
+- Primary: [color name] [#HEXCODE]
+- Accent: [color name] [#HEXCODE]
+- Background: [color name] [#HEXCODE]
+- Text: [color name] [#HEXCODE]
+
+TYPOGRAPHY:
+- Title: [size/style description]
+- Labels: [size/style description]
+- Font family: [style type]
+
+STYLE:
+- Illustration style: [flat/hand-drawn/geometric/etc.]
+- Overall tone: [professional/playful/minimal/bold]
+- Icon style: [if applicable]
+- Border/frame: [treatment]
+
+AVOID:
+- [Thing to avoid 1]
+- [Thing to avoid 2]
+- [Thing to avoid 3]
+```
+
+### Adapting for Different Platforms
+
+**Google AI Studio:** Use prompt as-is
+
+**ChatGPT/DALL-E:** May need to simplify:
+- Remove hex codes (describe colors by name)
+- Shorten overall length
+- Focus on key visual elements
+
+**Midjourney:** Requires different format:
+- Start with subject, not instructions
+- Add `--ar 4:5` for aspect ratio
+- Use `::` for emphasis weighting
+
+---
+
+## Iteration and Edit Prompts
+
+Prompts for editing existing images follow a different pattern than initial generation.
+
+### Edit Prompt Structure
+
+```
+Edit this infographic with the following changes:
+
+CHANGES:
+1. [Specific change 1]
+2. [Specific change 2]
+
+PRESERVE:
+- [Element to keep unchanged]
+- [Another element to keep]
+```
+
+### Specific Change Request Patterns
+
+**Color changes:**
+```
+Change the primary color from [old color #HEX] to [new color #HEX].
+Keep all other colors exactly the same.
+```
+
+**Text changes:**
+```
+Change the title from "[old title]" to "[new title]".
+Keep the same font, size, position, and styling.
+```
+
+**Layout adjustments:**
+```
+Add 20% more whitespace around all elements.
+Reduce the main visual by 15% and center it.
+Keep all text and colors the same.
+```
+
+**Style modifications:**
+```
+Make the design feel more [target tone].
+[Specific visual changes to achieve that tone].
+Keep the same content and color palette.
+```
+
+### Compound Edit Prompts
+
+When multiple changes are needed:
+
+```
+Edit this infographic with these changes:
+
+1. COLOR: Change the blue elements to purple (#7C3AED)
+2. TEXT: Update the title to "[new title]"
+3. LAYOUT: Add more whitespace at the bottom
+4. STYLE: Soften the corners of all shapes
+
+Keep everything else the same, including:
+- The visual metaphor structure
+- All other text labels
+- The background color
+- The overall composition
+```
+
+### Undo/Revert Prompts
+
+```
+Revert this infographic to match the previous version:
+- Restore the original title "[original title]"
+- Return to the blue color scheme (#2563EB)
+- Remove the changes made to spacing
+```
+
+### Progressive Refinement
+
+For iterative editing sessions, build on previous changes:
+
+**Round 1:**
+```
+Edit: make the colors warmer
+```
+
+**Round 2:**
+```
+Edit: keeping the warm colors, now make the title larger
+```
+
+**Round 3:**
+```
+Edit: keeping the warm colors and larger title, add more whitespace
+```
+
+This preserves context while making incremental improvements.
+
+---
+
+## Prompt Quality Checklist
+
+Before generating or outputting a prompt, verify:
+
+- [ ] All text content is in quotes
+- [ ] Colors specified with hex codes
+- [ ] Aspect ratio explicitly stated
+- [ ] Layout described spatially (top/bottom/left/right)
+- [ ] Style type named (flat, hand-drawn, geometric)
+- [ ] Negative instructions included
+- [ ] Visual metaphor structure explained
+- [ ] Text hierarchy specified (what's largest/smallest)
+- [ ] Background treatment described
+
+For manual-use prompts, also verify:
+- [ ] No references to "above" or "discussed earlier"
+- [ ] Completely standalone and self-explanatory
+- [ ] Platform-appropriate format
