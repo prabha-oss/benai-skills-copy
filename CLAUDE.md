@@ -17,6 +17,7 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 | seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
 | infographic | `/infographic` | Professional infographics via Gemini AI image generation |
 | case-study | `/case-study` | Detailed, data-driven case studies from interviews |
+| lead-research-assistant | `/lead-research-assistant` | B2B lead generation — company research, LinkedIn prospecting, ICP scoring |
 
 ## n8n Skill
 
