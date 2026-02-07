@@ -1,5 +1,5 @@
 ---
-name: benai-skills
+name: case-study
 description: >
   Create a case study presentation (PPTX). Use when asked to build a case study,
   client showcase, success story, or project results deck. Works collaboratively:
