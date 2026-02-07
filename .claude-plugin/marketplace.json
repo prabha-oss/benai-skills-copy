@@ -177,6 +177,25 @@
         "gemini",
         "design"
       ]
+    },
+    {
+      "name": "lead-research-assistant",
+      "source": "./plugins/lead-research-assistant",
+      "description": "Advanced B2B lead generation: research companies matching your ICP, discover LinkedIn contacts via web search, score leads, and export CSV + Markdown reports.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "lead-generation",
+        "b2b",
+        "linkedin",
+        "icp",
+        "sales",
+        "prospecting",
+        "scraping",
+        "research"
+      ]
     }
   ]
 }
