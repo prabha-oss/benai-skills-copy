@@ -1,5 +1,5 @@
 {
-  "name": "case-study-ppt",
+  "name": "case-study",
   "description": "Collaborative case study presentation creator. Guides you through extracting narrative from raw data, co-creates the story, and generates polished PPTX slides using PptxGenJS.",
   "version": "1.0.0",
   "author": {
