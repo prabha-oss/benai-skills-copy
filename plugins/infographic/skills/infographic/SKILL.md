@@ -879,26 +879,62 @@ Wait for user approval.
 
 #### Step 6.3: Generate Image
 
-If API key is available, call Gemini with the correct model and API:
+If API key is available, call Gemini using request.json with imageConfig:
 
 ```bash
-# Use gemini-3-pro-image-preview with streamGenerateContent
+# Set variables
 MODEL_ID="gemini-3-pro-image-preview"
+GENERATE_CONTENT_API="streamGenerateContent"
 PROMPT="YOUR CRAFTED PROMPT HERE"
+ASPECT_RATIO="4:5"  # From user's platform choice
+IMAGE_SIZE="2K"     # From user's resolution choice
 
+# Ensure output directory exists
+mkdir -p .infographic/images
+
+# Create request.json with imageConfig
+cat > /tmp/request.json << EOF
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "${PROMPT}"
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {
+      "aspectRatio": "${ASPECT_RATIO}",
+      "imageSize": "${IMAGE_SIZE}",
+      "personGeneration": ""
+    }
+  },
+  "tools": [
+    {
+      "googleSearch": {}
+    }
+  ]
+}
+EOF
+
+# Make API call and save image
 curl -s -X POST \
   -H "Content-Type: application/json" \
-  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
-  -d "{
-    \"contents\": [{
-      \"role\": \"user\",
-      \"parts\": [{\"text\": \"${PROMPT}\"}]
-    }],
-    \"generationConfig\": {
-      \"responseModalities\": [\"IMAGE\", \"TEXT\"]
-    }
-  }" | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > infographic-[topic-slug].png
+  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:${GENERATE_CONTENT_API}?key=${GEMINI_API_KEY}" \
+  -d @/tmp/request.json | \
+  jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | \
+  head -1 | base64 -d > .infographic/images/[topic-slug]-v1.png
 ```
+
+**imageConfig values:**
+| Field | Set From | Example |
+|-------|----------|---------|
+| `aspectRatio` | Platform choice (Phase 1) | `"4:5"`, `"1:1"`, `"16:9"` |
+| `imageSize` | Resolution choice (Phase 1) | `"1K"`, `"2K"`, `"4K"` |
 
 #### Step 6.4: Save and Display (CRITICAL)
 
@@ -1215,32 +1251,41 @@ Saved to .infographic/:
 
 ## Quick Reference
 
-### API Endpoints
+### API Request Format (with imageConfig)
 
 ```bash
-# Generate image (correct model and endpoint)
+# Create request.json with imageConfig
+cat > /tmp/request.json << 'EOF'
+{
+  "contents": [{"role": "user", "parts": [{"text": "YOUR PROMPT"}]}],
+  "generationConfig": {
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {
+      "aspectRatio": "4:5",
+      "imageSize": "2K",
+      "personGeneration": ""
+    }
+  },
+  "tools": [{"googleSearch": {}}]
+}
+EOF
+
+# Generate image
 MODEL_ID="gemini-3-pro-image-preview"
 curl -s -X POST \
   -H "Content-Type: application/json" \
   "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
-  -d '{
-    "contents": [{"role": "user", "parts": [{"text": "YOUR PROMPT"}]}],
-    "generationConfig": {"responseModalities": ["IMAGE", "TEXT"]}
-  }' | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > output.png
-
-# Edit image (multi-turn)
-IMAGE_B64=$(base64 -i .infographic/images/current.png | tr -d '\n')
-curl -s -X POST \
-  -H "Content-Type: application/json" \
-  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
-  -d "{
-    \"contents\": [{\"role\": \"user\", \"parts\": [
-      {\"inlineData\": {\"mimeType\": \"image/png\", \"data\": \"${IMAGE_B64}\"}},
-      {\"text\": \"Edit instructions here\"}
-    ]}],
-    \"generationConfig\": {\"responseModalities\": [\"IMAGE\", \"TEXT\"]}
-  }" | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > .infographic/images/edited.png
+  -d @/tmp/request.json | \
+  jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > .infographic/images/output-v1.png
 ```
+
+### imageConfig Options
+
+| Field | Values | Description |
+|-------|--------|-------------|
+| `aspectRatio` | `"1:1"`, `"4:5"`, `"16:9"`, `"9:16"` | Output aspect ratio |
+| `imageSize` | `"1K"`, `"2K"`, `"4K"` | Resolution quality |
+| `personGeneration` | `""` | Leave empty for infographics |
 
 ### Directory Structure
 
@@ -1257,23 +1302,22 @@ curl -s -X POST \
 .env                   # API key (GEMINI_API_KEY=...)
 ```
 
-### Resolution Options
+### Resolution Options (imageSize)
 
-| Quality | Width | Aspect Ratio Examples |
-|---------|-------|----------------------|
-| Standard | 1080px | 1080×1350 (4:5), 1080×1080 (1:1) |
-| 2K | 2048px | 2048×2560 (4:5), 2048×2048 (1:1) |
-| 4K | 4096px | 4096×5120 (4:5), 4096×4096 (1:1) |
+| imageSize | Approx Width | Best For |
+|-----------|--------------|----------|
+| `"1K"` | ~1024px | Quick social, mobile |
+| `"2K"` | ~2048px | Professional (recommended) |
+| `"4K"` | ~4096px | Print, large displays |
 
-### Aspect Ratios
+### Aspect Ratios (aspectRatio)
 
-| Platform | Ratio | Standard | 2K | 4K |
-|----------|-------|----------|----|----|
-| LinkedIn | 4:5 | 1080×1350 | 2048×2560 | 4096×5120 |
-| Square | 1:1 | 1080×1080 | 2048×2048 | 4096×4096 |
-| Twitter | 16:9 | 1200×675 | 2048×1152 | 4096×2304 |
-| Presentation | 16:9 | 1920×1080 | 2560×1440 | 3840×2160 |
-| Stories | 9:16 | 1080×1920 | 1152×2048 | 2304×4096 |
+| Platform | aspectRatio Value |
+|----------|-------------------|
+| LinkedIn | `"4:5"` |
+| Square | `"1:1"` |
+| Twitter/Presentation | `"16:9"` |
+| Stories | `"9:16"` |
 
 ---
 

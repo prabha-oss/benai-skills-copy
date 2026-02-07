@@ -45,15 +45,57 @@ If no API key is available, see the "No API Key Fallback" section below for alte
 
 ## Text-to-Image Generation
 
-### Using curl (Recommended Method)
+### Request JSON Structure (IMPORTANT)
+
+The Gemini API requires a specific JSON structure with `imageConfig` for controlling output:
+
+```json
+{
+  "contents": [
+    {
+      "role": "user",
+      "parts": [
+        {
+          "text": "YOUR PROMPT HERE"
+        }
+      ]
+    }
+  ],
+  "generationConfig": {
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {
+      "aspectRatio": "4:5",
+      "imageSize": "2K",
+      "personGeneration": ""
+    }
+  },
+  "tools": [
+    {
+      "googleSearch": {}
+    }
+  ]
+}
+```
+
+### Image Config Options
+
+| Field | Values | Description |
+|-------|--------|-------------|
+| `aspectRatio` | `"1:1"`, `"4:5"`, `"16:9"`, `"9:16"` | Output aspect ratio |
+| `imageSize` | `"1K"`, `"2K"`, `"4K"` | Resolution/quality level |
+| `personGeneration` | `""` or `"ALLOW_ADULT"` | Person generation settings |
+
+### Using curl with request.json (Recommended Method)
 
 ```bash
-# Set variables
+#!/bin/bash
+set -e -E
+
 GEMINI_API_KEY="${GEMINI_API_KEY}"
 MODEL_ID="gemini-3-pro-image-preview"
-PROMPT="Generate a professional infographic about the 5 stages of product development. Use a clean timeline layout with numbered circles connected by a blue line. Each stage has a short title and one-line description. White background, blue (#2563EB) and amber (#F59E0B) accent colors. Professional flat design style. 4:5 aspect ratio for LinkedIn."
+GENERATE_CONTENT_API="streamGenerateContent"
 
-# Create request JSON
+# Create request JSON with proper imageConfig
 cat > request.json << 'EOF'
 {
   "contents": [
@@ -61,30 +103,38 @@ cat > request.json << 'EOF'
       "role": "user",
       "parts": [
         {
-          "text": "PROMPT_PLACEHOLDER"
+          "text": "Generate a professional infographic about the 5 stages of product development. Use a clean timeline layout with numbered circles connected by a blue line. Each stage has a short title and one-line description. White background, blue (#2563EB) and amber (#F59E0B) accent colors. Professional flat design style."
         }
       ]
     }
   ],
   "generationConfig": {
-    "responseModalities": ["IMAGE", "TEXT"]
-  }
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {
+      "aspectRatio": "4:5",
+      "imageSize": "2K",
+      "personGeneration": ""
+    }
+  },
+  "tools": [
+    {
+      "googleSearch": {}
+    }
+  ]
 }
 EOF
 
-# Replace placeholder with actual prompt
-sed -i '' "s|PROMPT_PLACEHOLDER|${PROMPT}|g" request.json 2>/dev/null || sed -i "s|PROMPT_PLACEHOLDER|${PROMPT}|g" request.json
-
-# Make API call and save image
+# Make API call and save response
 curl -s -X POST \
   -H "Content-Type: application/json" \
-  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
-  -d @request.json | \
-  jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | \
-  head -1 | base64 -d > infographic-output.png
+  "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:${GENERATE_CONTENT_API}?key=${GEMINI_API_KEY}" \
+  -d @request.json > response.json
 
-# Verify and display
-ls -la infographic-output.png
+# Extract and save image
+jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' response.json | head -1 | base64 -d > .infographic/images/output-v1.png
+
+# Verify
+ls -la .infographic/images/output-v1.png
 ```
 
 ### Complete Generation Function
@@ -93,33 +143,49 @@ ls -la infographic-output.png
 generate_infographic() {
   local prompt="$1"
   local output_file="$2"
-  local aspect_ratio="${3:-}"  # Optional: "1:1", "4:5", "16:9"
+  local aspect_ratio="${3:-4:5}"
+  local image_size="${4:-2K}"
 
   local MODEL_ID="gemini-3-pro-image-preview"
+  local GENERATE_CONTENT_API="streamGenerateContent"
 
-  # Build the request JSON
-  local request_json=$(cat << EOF
+  # Ensure output directory exists
+  mkdir -p "$(dirname "$output_file")"
+
+  # Create request JSON with imageConfig
+  cat > /tmp/request.json << EOF
 {
   "contents": [
     {
       "role": "user",
       "parts": [
-        {"text": "${prompt}"}
+        {
+          "text": "${prompt}"
+        }
       ]
     }
   ],
   "generationConfig": {
-    "responseModalities": ["IMAGE", "TEXT"]
-  }
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {
+      "aspectRatio": "${aspect_ratio}",
+      "imageSize": "${image_size}",
+      "personGeneration": ""
+    }
+  },
+  "tools": [
+    {
+      "googleSearch": {}
+    }
+  ]
 }
 EOF
-)
 
   # Make the API call
   local response=$(curl -s -X POST \
     -H "Content-Type: application/json" \
-    "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
-    -d "${request_json}")
+    "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:${GENERATE_CONTENT_API}?key=${GEMINI_API_KEY}" \
+    -d @/tmp/request.json)
 
   # Check for errors
   if echo "$response" | jq -e '.error' > /dev/null 2>&1; then
@@ -148,8 +214,8 @@ EOF
   fi
 }
 
-# Usage
-generate_infographic "Your detailed prompt here" "infographic-output.png"
+# Usage with imageConfig options
+generate_infographic "Your prompt here" ".infographic/images/output-v1.png" "4:5" "2K"
 ```
 
 ---
@@ -163,14 +229,17 @@ edit_infographic() {
   local input_image="$1"
   local edit_prompt="$2"
   local output_file="$3"
+  local aspect_ratio="${4:-4:5}"
+  local image_size="${5:-2K}"
 
   local MODEL_ID="gemini-3-pro-image-preview"
+  local GENERATE_CONTENT_API="streamGenerateContent"
 
   # Encode the image
   local image_base64=$(base64 -i "$input_image" | tr -d '\n')
 
-  # Build request with image + edit prompt
-  local request_json=$(cat << EOF
+  # Build request with image + edit prompt + imageConfig
+  cat > /tmp/edit_request.json << EOF
 {
   "contents": [
     {
@@ -182,22 +251,33 @@ edit_infographic() {
             "data": "${image_base64}"
           }
         },
-        {"text": "${edit_prompt}"}
+        {
+          "text": "${edit_prompt}"
+        }
       ]
     }
   ],
   "generationConfig": {
-    "responseModalities": ["IMAGE", "TEXT"]
-  }
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {
+      "aspectRatio": "${aspect_ratio}",
+      "imageSize": "${image_size}",
+      "personGeneration": ""
+    }
+  },
+  "tools": [
+    {
+      "googleSearch": {}
+    }
+  ]
 }
 EOF
-)
 
   # Make API call
   local response=$(curl -s -X POST \
     -H "Content-Type: application/json" \
-    "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:streamGenerateContent?key=${GEMINI_API_KEY}" \
-    -d "${request_json}")
+    "https://generativelanguage.googleapis.com/v1beta/models/${MODEL_ID}:${GENERATE_CONTENT_API}?key=${GEMINI_API_KEY}" \
+    -d @/tmp/edit_request.json)
 
   # Extract and save edited image
   local image_data=$(echo "$response" | jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1)
@@ -213,7 +293,7 @@ EOF
 }
 
 # Usage
-edit_infographic "infographic-v1.png" "Make the colors warmer and increase the title size" "infographic-v2.png"
+edit_infographic ".infographic/images/topic-v1.png" "Make the colors warmer and increase the title size" ".infographic/images/topic-v2.png" "4:5" "2K"
 ```
 
 ---
@@ -296,41 +376,64 @@ fi
 
 ---
 
-## Resolution Options
+## Resolution Options (imageConfig)
 
-Include resolution in your prompt to control image quality:
+Resolution is controlled via the `imageConfig.imageSize` field in the request JSON:
 
-| Quality | Width | Best For | Add to Prompt |
-|---------|-------|----------|---------------|
-| Standard | 1080px | Quick social posts, mobile-first | "1080 pixels wide" |
-| 2K | 2048px | Professional social, presentations | "2048 pixels wide, high resolution" |
-| 4K | 4096px | Print, large displays | "4096 pixels wide, ultra high resolution" |
+| imageSize Value | Approximate Width | Best For |
+|-----------------|-------------------|----------|
+| `"1K"` | ~1024px | Quick social posts, mobile-first |
+| `"2K"` | ~2048px | Professional social, presentations (RECOMMENDED) |
+| `"4K"` | ~4096px | Print, large displays |
 
-**Example prompt with resolution:**
+**Example imageConfig:**
+```json
+"imageConfig": {
+  "aspectRatio": "4:5",
+  "imageSize": "2K",
+  "personGeneration": ""
+}
 ```
-Generate a professional infographic...
-2048 pixels wide, high resolution, 4:5 portrait aspect ratio for LinkedIn.
-```
+
+**Note:** Aspect ratio is also set in `imageConfig`, not in the prompt text.
 
 ---
 
-## Aspect Ratios
+## Aspect Ratios (imageConfig)
 
-Include the aspect ratio in your prompt text:
+Aspect ratio is set via `imageConfig.aspectRatio` in the request JSON:
 
-| Platform | Ratio | Standard (1080px) | 2K (2048px) | 4K (4096px) |
-|----------|-------|-------------------|-------------|-------------|
-| LinkedIn | 4:5 | 1080×1350 | 2048×2560 | 4096×5120 |
-| Square | 1:1 | 1080×1080 | 2048×2048 | 4096×4096 |
-| Twitter | 16:9 | 1200×675 | 2048×1152 | 4096×2304 |
-| Presentation | 16:9 | 1920×1080 | 2560×1440 | 3840×2160 |
-| Stories | 9:16 | 1080×1920 | 1152×2048 | 2304×4096 |
+| Platform | aspectRatio Value | Description |
+|----------|-------------------|-------------|
+| LinkedIn | `"4:5"` | Portrait, best engagement |
+| Square | `"1:1"` | Universal square |
+| Twitter/Presentation | `"16:9"` | Landscape widescreen |
+| Stories | `"9:16"` | Vertical/mobile |
 
-**Add to prompt:**
-- LinkedIn: "4:5 portrait aspect ratio"
-- Square: "square 1:1 aspect ratio"
-- Twitter: "16:9 landscape aspect ratio"
-- Stories: "9:16 vertical aspect ratio"
+**Example configurations by platform:**
+
+```json
+// LinkedIn (4:5 portrait, 2K quality)
+"imageConfig": {
+  "aspectRatio": "4:5",
+  "imageSize": "2K",
+  "personGeneration": ""
+}
+
+// Twitter (16:9 landscape, 2K quality)
+"imageConfig": {
+  "aspectRatio": "16:9",
+  "imageSize": "2K",
+  "personGeneration": ""
+}
+
+// Instagram Square (1:1, 2K quality)
+"imageConfig": {
+  "aspectRatio": "1:1",
+  "imageSize": "2K",
+  "personGeneration": ""
+}
+```
 
 ---
 
@@ -419,13 +522,25 @@ To generate:
 
 ## Quick Reference
 
-### Generate Image
+### Generate Image (with imageConfig)
 ```bash
 mkdir -p .infographic/images
+
+cat > /tmp/request.json << 'EOF'
+{
+  "contents": [{"role": "user", "parts": [{"text": "YOUR PROMPT HERE"}]}],
+  "generationConfig": {
+    "responseModalities": ["IMAGE", "TEXT"],
+    "imageConfig": {"aspectRatio": "4:5", "imageSize": "2K", "personGeneration": ""}
+  },
+  "tools": [{"googleSearch": {}}]
+}
+EOF
+
 curl -s -X POST \
   -H "Content-Type: application/json" \
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:streamGenerateContent?key=${GEMINI_API_KEY}" \
-  -d '{"contents":[{"role":"user","parts":[{"text":"YOUR PROMPT"}]}],"generationConfig":{"responseModalities":["IMAGE","TEXT"]}}' | \
+  -d @/tmp/request.json | \
   jq -r '.[] | .candidates[]?.content.parts[]? | select(.inlineData) | .inlineData.data' | head -1 | base64 -d > .infographic/images/output-v1.png
 ```
 
@@ -433,6 +548,13 @@ curl -s -X POST \
 ```bash
 curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}" | head -c 200
 ```
+
+### imageConfig Options
+| Field | Values |
+|-------|--------|
+| `aspectRatio` | `"1:1"`, `"4:5"`, `"16:9"`, `"9:16"` |
+| `imageSize` | `"1K"`, `"2K"`, `"4K"` |
+| `personGeneration` | `""` (default) or `"ALLOW_ADULT"` |
 
 ### Directory Structure
 ```
@@ -453,9 +575,9 @@ curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_AP
 | Series | `[topic]-01-v1.png` | `.infographic/images/` |
 | Prompts | `[topic]-prompt.md` | `.infographic/prompts/` |
 
-### Resolution Quick Reference
-| Quality | Width | Example for 4:5 |
-|---------|-------|-----------------|
-| Standard | 1080px | 1080×1350 |
-| 2K | 2048px | 2048×2560 |
-| 4K | 4096px | 4096×5120 |
+### Resolution Quick Reference (imageSize)
+| imageSize | Approx Width | Best For |
+|-----------|--------------|----------|
+| `"1K"` | ~1024px | Quick social, mobile |
+| `"2K"` | ~2048px | Professional (recommended) |
+| `"4K"` | ~4096px | Print, large displays |
