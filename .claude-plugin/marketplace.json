@@ -129,7 +129,7 @@
     },
     {
       "name": "case-study",
-      "source": "./plugins/case-study-plugin",
+      "source": "./plugins/case-study",
       "description": "Create detailed, data-driven case studies from user interviews and raw data.",
       "version": "1.0.0",
       "author": {
