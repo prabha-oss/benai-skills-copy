@@ -48,7 +48,179 @@ Read the next slide? Ask a question? Sign up? This shapes whether the slide ends
 
 ---
 
-## 3. Visual Vocabulary
+## 3. Creative Ideation: Finding the Shape of Your Idea
+
+Before choosing a diagram type, find the **visual metaphor** that captures your concept's essence. This is where presentations move from "information display" to "idea communication."
+
+### The Metaphor Discovery Process
+
+Ask yourself: **"What is this concept LIKE?"**
+
+Don't jump to boxes and arrows. First, find the *shape* of the idea:
+- Is growth like a **rocket launching**, a **staircase climbing**, or a **snowball rolling**?
+- Is complexity like a **tangled rope**, **layers of an onion**, or a **maze**?
+- Is transformation like a **caterpillar becoming butterfly**, a **bridge crossing**, or **renovating a house**?
+
+The metaphor you choose determines everything: layout, imagery, emotional tone, and what the audience remembers.
+
+### Concept-to-Visual Metaphor Library
+
+| Abstract Concept | Visual Metaphors | When to Use |
+|------------------|------------------|-------------|
+| **Growth** | 🚀 Rocket, 📈 Staircase, 🌳 Tree growing, ⛰️ Mountain climb, 🌊 Rising tide | Revenue, skills, team size, capability expansion |
+| **Connection** | 🌉 Bridge, 🤝 Handshake, 🕸️ Web/network, 🌿 Intertwined roots, 🔗 Chain links | Partnerships, integrations, relationships, ecosystems |
+| **Transformation** | 🦋 Metamorphosis, 🌅 Sunrise/new dawn, 🏗️ Renovation, 🧬 Evolution, 🔥 Phoenix | Before/after, product pivots, culture change, upgrades |
+| **Simplicity** | 🧘 Zen garden, ✏️ Single line, 🧹 Decluttered desk, 💎 Cut diamond | Removing complexity, distilling essence, clarity |
+| **Protection** | 🛡️ Shield, 🏰 Fortress, ☂️ Umbrella, 🔒 Vault, 🧱 Wall | Security, safety, defense, insurance, compliance |
+| **Speed** | ⚡ Lightning, 🏎️ Race car, 🚄 Bullet train, 🦅 Falcon dive | Performance, efficiency, quick wins, time savings |
+| **Foundation** | 🏛️ Pillars, 🧱 Building blocks, 🌳 Deep roots, ⚓ Anchor | Core values, principles, fundamentals, stability |
+| **Competition** | 🏁 Race track, ⚔️ Battlefield, ♟️ Chess board, 🥊 Boxing ring | Market positioning, rivals, strategic moves |
+| **Discovery** | 🔭 Telescope, 🗺️ Map with X, 💡 Lightbulb moment, 🔍 Magnifying glass | Insights, research, aha moments, finding hidden value |
+| **Bottleneck** | 🍾 Bottle neck, 🚧 Traffic jam, ⏳ Hourglass, 🚪 Narrow doorway | Constraints, blockers, capacity limits |
+| **Integration** | 🧩 Puzzle pieces, 🎼 Orchestra, ⚙️ Gears meshing, 🍳 Recipe ingredients | Combining systems, team synergy, product ecosystems |
+| **Journey** | 🛤️ Path/road, 🧭 Compass, 🗺️ Map, 🚶 Footsteps, 🏔️ Summit approach | Roadmaps, customer journey, career progression |
+
+### The "Movie Poster" Exercise
+
+Before designing any slide, imagine: **If this concept were a movie, what would the poster look like?**
+
+- **"We reduced costs by 40%"** → Movie poster: A heavy weight being lifted off someone's shoulders
+- **"Our platform connects buyers and sellers"** → Movie poster: A bridge spanning a canyon, people walking across
+- **"We simplify complex workflows"** → Movie poster: A tangled mess transforming into one clean line
+
+That image IS your slide. The diagram type is just how you render it.
+
+### Emotion-to-Visual Style Mapping
+
+What should the viewer **FEEL**? The emotional goal shapes the visual treatment:
+
+| Target Emotion | Visual Style | Elements to Use |
+|----------------|--------------|-----------------|
+| **Excitement** | Dynamic, diagonal, movement | Arrows, trajectories, ascending lines, bright colors |
+| **Trust** | Stable, grounded, symmetric | Balanced layouts, pillars, solid shapes, blue tones |
+| **Urgency** | Sharp, contrasted, bold | Red accents, countdown imagery, narrowing funnels |
+| **Calm/Confidence** | Spacious, clean, minimal | Lots of whitespace, muted colors, simple shapes |
+| **Curiosity** | Revealing, layered, mysterious | Partially hidden elements, peek-behind effects, doors |
+| **Empowerment** | Ascending, expansive, open | Upward arrows, breaking through, horizon imagery |
+
+### Think in Spatial Relationships
+
+Every concept has an inherent spatial logic. Find it:
+
+| Relationship Type | Spatial Expression | Example |
+|-------------------|-------------------|---------|
+| **Hierarchy** | Top-down, larger-to-smaller | Org chart, priority pyramid |
+| **Sequence** | Left-to-right, numbered steps | Timeline, process flow |
+| **Containment** | Nested, inside/outside | System layers, categories |
+| **Opposition** | Left vs. right, separated | Comparison, before/after |
+| **Radiation** | Center outward, hub-spoke | Core concept with features |
+| **Convergence** | Many→one, funnel | Leads to conversion, inputs to output |
+| **Divergence** | One→many, explosion | One cause, many effects |
+| **Cycle** | Circular, returning | Feedback loops, recurring processes |
+
+### Analogy Depth: From Surface to Core
+
+Bad presentations use **surface analogies**: "It's like a funnel" (because you've seen funnels before)
+
+Great presentations use **core analogies**: They capture *why* something works the way it does:
+
+| Concept | Surface Analogy | Deep Analogy |
+|---------|-----------------|--------------|
+| Customer Journey | A funnel | A river system — tributaries (touchpoints) feeding into one flow, with rapids (friction) and calm pools (consideration) |
+| Team Collaboration | Puzzle pieces | A jazz ensemble — each instrument distinct, improvising within structure, responding to each other in real time |
+| Technical Debt | Building blocks piled badly | Cholesterol in arteries — invisible at first, accumulating slowly, eventually blocking flow |
+| Product-Market Fit | Key in lock | Tuning fork resonance — when you hit the right frequency, everything vibrates together |
+| Data Pipeline | Assembly line | Nervous system — signals traveling, being processed, triggering responses |
+
+**The deep analogy is what makes people go "Oh, I get it now."**
+
+### Visual Reasoning Examples
+
+For complex concepts, consider these visual structures:
+
+**The Iceberg Model** — Visible behavior above water, hidden drivers below
+```
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          [What people see]
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        [What causes it]
+          [Root causes]
+            [Beliefs]
+```
+
+**The Onion/Layers Model** — Core surrounded by protective/supporting layers
+```
+    ╭──────────────────╮
+    │  ╭────────────╮  │
+    │  │  ╭──────╮  │  │
+    │  │  │ CORE │  │  │
+    │  │  ╰──────╯  │  │
+    │  ╰────────────╯  │
+    ╰──────────────────╯
+```
+
+**The Bridge Model** — Current state, gap, desired state
+```
+    [NOW]  ═══════╬═══════  [FUTURE]
+                  🌉
+              [The How]
+```
+
+**The Lever Model** — Small input, large output
+```
+    ▲
+    █    ═══════════════●
+    █         ▲
+  [Fulcrum] [Input]   [Output]
+```
+
+### Beyond Cards: When Rectangles Kill Creativity
+
+**The trap:** Most presentations default to cards, boxes, and grids because they're "safe." But rectangles are containers, not explanations. A card grid says "here are related things" — it doesn't show *how* they relate or *why* they matter.
+
+**Ask first:** Does this concept actually live in a box? Or does it flow, curve, radiate, spiral, branch, or explode?
+
+| Concept Type | Don't Default To | Try Instead |
+|--------------|------------------|-------------|
+| A process over time | Row of cards | Winding path, river with tributaries, ascending staircase |
+| Cause and effect | Two connected boxes | Domino chain, ripples in water, spark → fire → explosion |
+| Core + periphery | Grid around center | Sun with orbits, tree with branches, heart with arteries |
+| Growth story | Bar chart in boxes | Seeds → sprouts → tree, mountain ascent, rocket trajectory |
+| Tension/conflict | Left box vs right box | Tug of war, scales tipping, storm meeting calm |
+| Layers of depth | Stacked rectangles | Onion rings, Earth's core, nested caves |
+
+**Creative alternatives to cards:**
+
+1. **Organic shapes** — Use ellipses, clouds, amoeba-like blobs for softer, more human concepts
+2. **Paths and flows** — Curved arrows, rivers, roads for journeys and processes
+3. **Radial layouts** — Concepts radiating from center for hub-and-spoke relationships
+4. **Ascending/descending** — Stairs, mountains, pyramids for hierarchy and growth
+5. **Interconnected webs** — Lines connecting points organically for networks and relationships
+6. **Nested containment** — Shapes within shapes for layers, categories, zoom-levels
+7. **Freeform annotation** — Hand-drawn arrows and scribbles pointing to elements, like someone explaining on a whiteboard
+
+**The Whiteboard Test:** If a passionate person were explaining this on a whiteboard, would they draw cards? Or would they sketch shapes, scribble arrows, circle things, and draw weird diagrams that perfectly capture the idea?
+
+That's what your slide should look like.
+
+### Shape Language: What Forms Communicate
+
+Every shape carries meaning. Use this intentionally:
+
+| Shape | Communicates | Use For |
+|-------|--------------|---------|
+| **Circle** | Unity, wholeness, cycles, inclusion | Core concepts, cycles, communities |
+| **Square/Rectangle** | Stability, structure, containment | Facts, data, concrete items |
+| **Triangle** | Direction, hierarchy, tension, change | Goals, pyramids, pointing toward |
+| **Organic blob** | Flexibility, human, approachable | Ideas in progress, soft concepts |
+| **Arrow** | Movement, causation, direction | Flows, consequences, next steps |
+| **Spiral** | Growth, evolution, deepening | Learning journeys, recursive processes |
+| **Star/burst** | Energy, importance, highlight | Key moments, breakthroughs, emphasis |
+| **Wavy line** | Fluctuation, uncertainty, organic flow | Timelines with variation, natural processes |
+
+---
+
+## 4. Visual Vocabulary
 
 These are the diagram types available for slide design. Each has a natural use case, but creative remixing is encouraged — a "Hub & Spoke" can become a mind map, a solar system, or a target with rings.
 
@@ -170,7 +342,7 @@ Each slide is 800×500px. Think of it in zones:
 ### Element Specs
 
 Refer to `element-reference.md` for complete JSON specs. Key reminders:
-- **fontFamily 2** (Helvetica) for all presentation text
+- **fontFamily 2** (Excalifont) for all presentation text
 - **roughness 1** for subtle hand-drawn feel, or **roughness 0** for clean — be consistent across all slides
 - **roundness { type: 3 }** for rounded corners on cards and containers
 - All elements in a slide share the same `groupIds` value
