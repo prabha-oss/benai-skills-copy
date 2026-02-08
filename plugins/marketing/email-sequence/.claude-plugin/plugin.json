@@ -5,10 +5,6 @@
   "author": {
     "name": "Agniva"
   },
-  "repository": {
-    "type": "git",
-    "url": ""
-  },
   "license": "MIT",
   "keywords": [
     "email",

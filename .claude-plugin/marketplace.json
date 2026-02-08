@@ -10,7 +10,7 @@
   "plugins": [
     {
       "name": "n8n",
-      "source": "./plugins/n8n",
+      "source": "./plugins/operations/n8n",
       "description": "Build, test, and deploy n8n workflows via REST API with incremental testing",
       "version": "1.0.0",
       "author": {
@@ -25,7 +25,7 @@
     },
     {
       "name": "video",
-      "source": "./plugins/video",
+      "source": "./plugins/creative/video",
       "description": "Video editing with FFmpeg and Remotion - stitching, transitions, captions, teasers",
       "version": "1.0.0",
       "author": {
@@ -41,7 +41,7 @@
     },
     {
       "name": "excalidraw",
-      "source": "./plugins/excalidraw",
+      "source": "./plugins/creative/excalidraw",
       "description": "Create visual presentations, slide decks, and diagrams in Excalidraw with file output or Chrome browser injection",
       "version": "1.0.0",
       "author": {
@@ -57,7 +57,7 @@
     },
     {
       "name": "email-sequence",
-      "source": "./plugins/email-sequence",
+      "source": "./plugins/marketing/email-sequence",
       "description": "Expert email marketing and automation skill for creating email sequences, drip campaigns, nurture sequences, onboarding flows, and lifecycle email programs",
       "version": "1.0.0",
       "author": {
@@ -75,7 +75,7 @@
     },
     {
       "name": "programmatic-seo",
-      "source": "./plugins/seo/programmatic-seo",
+      "source": "./plugins/marketing/programmatic-seo",
       "description": "Generate high-quality, SEO-optimized content at scale using data sources and templates.",
       "version": "1.0.0",
       "author": {
@@ -91,7 +91,7 @@
     },
     {
       "name": "seo-optimizing",
-      "source": "./plugins/seo/seo-optimizing",
+      "source": "./plugins/marketing/seo-optimizing",
       "description": "Data-driven SEO optimization using Google Search Console — find striking-distance keywords, fix low-CTR pages, detect cannibalization, and execute content optimizations backed by real search data.",
       "version": "1.0.0",
       "author": {
@@ -112,7 +112,7 @@
     },
     {
       "name": "n8n-prd-generator",
-      "source": "./plugins/n8n-prd-generator",
+      "source": "./plugins/operations/n8n-prd-generator",
       "description": "Convert discovery call transcripts into concise n8n Automation Blueprints with interactive question flow",
       "version": "1.0.0",
       "author": {
@@ -129,7 +129,7 @@
     },
     {
       "name": "case-study",
-      "source": "./plugins/case-study",
+      "source": "./plugins/marketing/case-study",
       "description": "Create detailed, data-driven case studies from user interviews and raw data.",
       "version": "1.0.0",
       "author": {
@@ -145,7 +145,7 @@
     },
     {
       "name": "seo-audit",
-      "source": "./plugins/seo/seo-audit",
+      "source": "./plugins/marketing/seo-audit",
       "description": "Run comprehensive SEO audits on websites using seomator CLI - 16 categories, 148 rules.",
       "version": "1.0.0",
       "author": {
@@ -163,7 +163,7 @@
     },
     {
       "name": "infographic",
-      "source": "./plugins/infographic",
+      "source": "./plugins/marketing/infographic",
       "description": "Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.",
       "version": "1.0.0",
       "author": {
@@ -180,7 +180,7 @@
     },
     {
       "name": "lead-research-assistant",
-      "source": "./plugins/lead-research-assistant",
+      "source": "./plugins/sales/lead-research-assistant",
       "description": "Advanced B2B lead generation: research companies matching your ICP, discover LinkedIn contacts via web search, score leads, and export CSV + Markdown reports.",
       "version": "1.0.0",
       "author": {

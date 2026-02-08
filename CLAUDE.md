@@ -6,18 +6,42 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 
 ## Available Plugins
 
+### Marketing
 | Plugin | Command | Purpose |
 |--------|---------|---------|
-| n8n | `/n8n`, `/n8n-prd-generator` | n8n workflow automation + blueprint generator |
-| video | `/video` | Video editing with FFmpeg and Remotion |
-| excalidraw | `/excalidraw` | Visual presentations, slide decks, and diagrams in Excalidraw |
-| email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
-| programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale using templates and data |
-| seo-optimizing | `/seo-optimizing` | Analyze and optimize content for search engines |
-| seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
-| infographic | `/infographic` | Professional infographics via Gemini AI image generation |
-| case-study | `/case-study` | Detailed, data-driven case studies from interviews |
-| lead-research-assistant | `/lead-research-assistant` | B2B lead generation — company research, LinkedIn prospecting, ICP scoring |
+| programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale |
+| seo-optimizing | `/seo-optimizing` | Data-driven SEO via Search Console |
+| seo-audit | `/seo-audit` | Technical SEO audits (148 rules) |
+| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
+| case-study | `/case-study` | Data-driven case studies |
+| infographic | `/infographic` | AI-generated infographics |
+
+### Sales
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
+| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
+| case-study | `/case-study` | Data-driven case studies |
+| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+
+### Operations
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| n8n | `/n8n` | n8n workflow automation |
+| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+
+### Creative
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| video | `/video` | Video editing (FFmpeg/Remotion) |
+| excalidraw | `/excalidraw` | Presentations & diagrams |
+| infographic | `/infographic` | AI-generated infographics |
+
+### Product
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| excalidraw | `/excalidraw` | Presentations & diagrams |
+| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
 ## n8n Skill
 

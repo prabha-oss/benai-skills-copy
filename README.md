@@ -22,17 +22,42 @@ Expert automation skills for Claude Code.
 
 ## Available Plugins
 
+### Marketing
 | Plugin | Command | Purpose |
 |--------|---------|---------|
-| n8n | `/n8n`, `/n8n-prd-generator` | n8n workflow automation + blueprint generator |
-| video | `/video` | Video editing with FFmpeg and Remotion |
-| excalidraw | `/excalidraw` | Visual presentations, slides, and diagrams in Excalidraw |
-| email-sequence | `/email-sequence` | Email sequences, drip campaigns, and lifecycle email programs |
-| programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale using templates and data |
-| seo-audit | `/seo-audit` | Technical SEO audits — 16 categories, 148 rules via seomator |
-| seo-optimizing | `/seo-optimizing` | Data-driven SEO optimization using Google Search Console |
-| infographic | `/infographic` | Professional infographics via Gemini AI image generation |
-| case-study | `/case-study` | Detailed, data-driven case studies from interviews |
+| programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale |
+| seo-optimizing | `/seo-optimizing` | Data-driven SEO via Search Console |
+| seo-audit | `/seo-audit` | Technical SEO audits (148 rules) |
+| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
+| case-study | `/case-study` | Data-driven case studies |
+| infographic | `/infographic` | AI-generated infographics |
+
+### Sales
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
+| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
+| case-study | `/case-study` | Data-driven case studies |
+| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+
+### Operations
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| n8n | `/n8n` | n8n workflow automation |
+| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+
+### Creative
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| video | `/video` | Video editing (FFmpeg/Remotion) |
+| excalidraw | `/excalidraw` | Presentations & diagrams |
+| infographic | `/infographic` | AI-generated infographics |
+
+### Product
+| Plugin | Command | Purpose |
+|--------|---------|---------|
+| excalidraw | `/excalidraw` | Presentations & diagrams |
+| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
 ---
 
@@ -89,24 +114,29 @@ benai-skills/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
-│   ├── n8n/
-│   ├── video/
-│   ├── excalidraw/
-│   ├── email-sequence/
-│   ├── infographic/
-│   ├── n8n-prd-generator/
-│   ├── case-study-plugin/
-│   └── seo/
-│       ├── programmatic-seo/
-│       ├── seo-audit/
-│       └── seo-optimizing/
+│   ├── marketing/
+│   │   ├── seo-audit/
+│   │   ├── seo-optimizing/
+│   │   ├── programmatic-seo/
+│   │   ├── email-sequence/
+│   │   ├── case-study/
+│   │   └── infographic/
+│   ├── sales/
+│   │   └── lead-research-assistant/
+│   ├── operations/
+│   │   ├── n8n/
+│   │   └── n8n-prd-generator/
+│   ├── creative/
+│   │   ├── video/
+│   │   └── excalidraw/
+│   └── product/
 ├── CLAUDE.md
 └── README.md
 ```
 
 Each plugin follows the same structure:
 ```
-plugins/<name>/
+plugins/<department>/<name>/
 ├── .claude-plugin/
 │   └── plugin.json
 └── skills/<name>/
@@ -118,7 +148,7 @@ plugins/<name>/
 
 1. Create the plugin directory structure (see above)
 
-2. Create `plugins/<name>/.claude-plugin/plugin.json`:
+2. Create `plugins/<department>/<name>/.claude-plugin/plugin.json`:
    ```json
    {
      "name": "<name>",

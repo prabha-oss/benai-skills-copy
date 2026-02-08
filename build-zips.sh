@@ -7,6 +7,9 @@
 #     ├── <plugin-name>.zip              One plugin per zip (marketplace format)
 #     └── benai-skills-marketplace.zip   All plugins in one zip
 #
+#   dist/department/                     Department bundles (multiple skills per zip)
+#     └── <department>.zip               All plugins in a department
+#
 #   dist/claude/                         Claude Console (platform.claude.com)
 #     └── <plugin-name>.zip              Flat skill zip (SKILL.md + references)
 #
@@ -34,7 +37,7 @@ fi
 
 # Clean and create dist directories
 rm -rf "$DIST"
-mkdir -p "$DIST/extension" "$DIST/claude"
+mkdir -p "$DIST/extension" "$DIST/department" "$DIST/claude"
 
 # Plugins that should be bundled into the n8n zip instead of getting their own
 BUNDLE_INTO_N8N="n8n-prd-generator"
@@ -92,6 +95,7 @@ import json
 with open('$MARKETPLACE') as f:
     data = json.load(f)
 envelope = {k: v for k, v in data.items() if k != 'plugins'}
+envelope['name'] = data['name'] + '-$name'
 plugin = next(p for p in data['plugins'] if p['name'] == '$name')
 plugins = [plugin]
 if '$name' == 'n8n':
@@ -117,6 +121,56 @@ done
 (cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ > /dev/null 2>&1)
 SIZE=$(du -h "$DIST/extension/benai-skills-marketplace.zip" | cut -f1 | xargs)
 echo "  Created extension/benai-skills-marketplace.zip ($SIZE)"
+
+# =============================================================
+# DEPARTMENT ZIPS (bundle all plugins in a department)
+# Structure: .claude-plugin/marketplace.json + plugins/<dept>/<name>/
+# =============================================================
+echo ""
+echo "--- Building department zips ---"
+
+DEPARTMENTS=$(echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
+  echo "$source" | sed 's|^\./plugins/\([^/]*\)/.*|\1|'
+done | sort -u)
+
+for dept in $DEPARTMENTS; do
+  staging="$TMP/dept-$dept"
+  rm -rf "$staging"
+  mkdir -p "$staging/.claude-plugin"
+
+  echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
+    dept_of_plugin=$(echo "$source" | sed 's|^\./plugins/\([^/]*\)/.*|\1|')
+    if [ "$dept_of_plugin" = "$dept" ]; then
+      mkdir -p "$staging/$(dirname "$source")"
+      cp -R "$ROOT/$source" "$staging/$source"
+    fi
+  done
+
+  plugin_count=$(find "$staging/plugins" -mindepth 2 -maxdepth 2 -type d 2>/dev/null | wc -l | xargs)
+  if [ "$plugin_count" -eq 0 ]; then
+    echo "  Skipping $dept (no plugins)"
+    rm -rf "$staging"
+    continue
+  fi
+
+  python3 -c "
+import json
+with open('$MARKETPLACE') as f:
+    data = json.load(f)
+envelope = {k: v for k, v in data.items() if k != 'plugins'}
+envelope['name'] = data['name'] + '-$dept'
+envelope['plugins'] = [p for p in data['plugins'] if p['source'].startswith('./plugins/$dept/')]
+with open('$staging/.claude-plugin/marketplace.json', 'w') as f:
+    json.dump(envelope, f, indent=2)
+    f.write('\n')
+"
+
+  (cd "$staging" && zip -r "$DIST/department/$dept.zip" . > /dev/null 2>&1)
+  SIZE=$(du -h "$DIST/department/$dept.zip" | cut -f1 | xargs)
+  echo "  Created department/$dept.zip ($SIZE) — $plugin_count plugins"
+
+  rm -rf "$staging"
+done
 
 # =============================================================
 # CLAUDE CONSOLE ZIPS (platform.claude.com)
@@ -182,5 +236,6 @@ done
 
 echo ""
 echo "Done. All zips in $DIST/"
-echo "  extension/ — for Claude Code, Cursor, VS Code"
-echo "  claude/    — for Claude Console (platform.claude.com)"
+echo "  extension/   — for Claude Code, Cursor, VS Code"
+echo "  department/  — department bundles (multiple skills per zip)"
+echo "  claude/      — for Claude Console (platform.claude.com)"
