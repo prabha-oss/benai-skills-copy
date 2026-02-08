@@ -5,13 +5,46 @@
     "email": "naveedharri@gmail.com"
   },
   "metadata": {
-    "description": "BenAI expert skills marketplace - n8n automation, video editing, and more"
+    "description": "BenAI expert skills marketplace - department plugins for marketing, sales, operations, creative, and product teams"
   },
   "plugins": [
     {
-      "name": "n8n",
-      "source": "./plugins/operations/n8n",
-      "description": "Build, test, and deploy n8n workflows via REST API with incremental testing",
+      "name": "marketing",
+      "source": "./plugins/marketing",
+      "description": "SEO, email sequences, case studies, and infographics — everything your marketing team needs.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "seo",
+        "email",
+        "marketing",
+        "content",
+        "case-study",
+        "infographic"
+      ]
+    },
+    {
+      "name": "sales",
+      "source": "./plugins/sales",
+      "description": "Lead generation, outreach, case studies, and automation blueprints for sales teams.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "lead-generation",
+        "b2b",
+        "sales",
+        "outreach",
+        "prospecting"
+      ]
+    },
+    {
+      "name": "operations",
+      "source": "./plugins/operations",
+      "description": "n8n workflow automation and blueprint generation for operations teams.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -20,181 +53,38 @@
         "n8n",
         "workflow",
         "automation",
-        "api"
+        "operations"
       ]
     },
     {
-      "name": "video",
-      "source": "./plugins/creative/video",
-      "description": "Video editing with FFmpeg and Remotion - stitching, transitions, captions, teasers",
+      "name": "creative",
+      "source": "./plugins/creative",
+      "description": "Video editing, presentations, diagrams, and infographics for creative teams.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
       },
       "keywords": [
         "video",
-        "ffmpeg",
-        "remotion",
-        "editing",
-        "captions"
-      ]
-    },
-    {
-      "name": "excalidraw",
-      "source": "./plugins/creative/excalidraw",
-      "description": "Create visual presentations, slide decks, and diagrams in Excalidraw with file output or Chrome browser injection",
-      "version": "1.0.0",
-      "author": {
-        "name": "Agniva"
-      },
-      "keywords": [
         "excalidraw",
-        "presentation",
-        "diagrams",
-        "slides",
-        "visual"
-      ]
-    },
-    {
-      "name": "email-sequence",
-      "source": "./plugins/marketing/email-sequence",
-      "description": "Expert email marketing and automation skill for creating email sequences, drip campaigns, nurture sequences, onboarding flows, and lifecycle email programs",
-      "version": "1.0.0",
-      "author": {
-        "name": "Agniva"
-      },
-      "keywords": [
-        "email",
-        "marketing",
-        "automation",
-        "drip-campaign",
-        "onboarding",
-        "nurture",
-        "lifecycle"
-      ]
-    },
-    {
-      "name": "programmatic-seo",
-      "source": "./plugins/marketing/programmatic-seo",
-      "description": "Generate high-quality, SEO-optimized content at scale using data sources and templates.",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "seo",
-        "programmatic",
-        "content-generation",
-        "bulk",
-        "marketing"
-      ]
-    },
-    {
-      "name": "seo-optimizing",
-      "source": "./plugins/marketing/seo-optimizing",
-      "description": "Data-driven SEO optimization using Google Search Console — find striking-distance keywords, fix low-CTR pages, detect cannibalization, and execute content optimizations backed by real search data.",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "seo",
-        "optimization",
-        "google-search-console",
-        "gsc",
-        "ctr",
-        "keywords",
-        "cannibalization",
-        "striking-distance",
-        "search-performance",
-        "content-optimization"
-      ]
-    },
-    {
-      "name": "n8n-prd-generator",
-      "source": "./plugins/operations/n8n-prd-generator",
-      "description": "Convert discovery call transcripts into concise n8n Automation Blueprints with interactive question flow",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "n8n",
-        "blueprint",
-        "prd",
-        "discovery",
-        "automation",
-        "scoping"
-      ]
-    },
-    {
-      "name": "case-study",
-      "source": "./plugins/marketing/case-study",
-      "description": "Create detailed, data-driven case studies from user interviews and raw data.",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "case-study",
-        "writing",
-        "marketing",
-        "interview",
-        "customer-success"
-      ]
-    },
-    {
-      "name": "seo-audit",
-      "source": "./plugins/marketing/seo-audit",
-      "description": "Run comprehensive SEO audits on websites using seomator CLI - 16 categories, 148 rules.",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "seo",
-        "audit",
-        "technical-seo",
-        "performance",
-        "accessibility",
-        "core-web-vitals",
-        "crawl"
-      ]
-    },
-    {
-      "name": "infographic",
-      "source": "./plugins/marketing/infographic",
-      "description": "Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
         "infographic",
-        "visual",
-        "linkedin",
-        "image-generation",
-        "gemini",
+        "creative",
         "design"
       ]
     },
     {
-      "name": "lead-research-assistant",
-      "source": "./plugins/sales/lead-research-assistant",
-      "description": "Advanced B2B lead generation: research companies matching your ICP, discover LinkedIn contacts via web search, score leads, and export CSV + Markdown reports.",
+      "name": "product",
+      "source": "./plugins/product",
+      "description": "Visual tools and automation blueprints for product teams.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
       },
       "keywords": [
-        "lead-generation",
-        "b2b",
-        "linkedin",
-        "icp",
-        "sales",
-        "prospecting",
-        "scraping",
-        "research"
+        "excalidraw",
+        "product",
+        "blueprint",
+        "automation"
       ]
     }
   ]

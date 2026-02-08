@@ -1,17 +1,14 @@
 #!/bin/bash
 #
 # Builds distributable zip files for BenAI skills.
-# Reads marketplace.json, detects all plugins, and generates:
+# Reads marketplace.json, detects all department plugins, and generates:
 #
 #   dist/extension/                      Claude Code extension (Cursor, VS Code)
-#     ├── <plugin-name>.zip              One plugin per zip (marketplace format)
-#     └── benai-skills-marketplace.zip   All plugins in one zip
-#
-#   dist/department/                     Department bundles (multiple skills per zip)
-#     └── <department>.zip               All plugins in a department
+#     ├── <department>.zip               One department per zip (marketplace format)
+#     └── benai-skills-marketplace.zip   All departments in one zip
 #
 #   dist/claude/                         Claude Console (platform.claude.com)
-#     └── <plugin-name>.zip              Flat skill zip (SKILL.md + references)
+#     └── <department>.zip               Flat skill zips (SKILL.md + references)
 #
 # Usage: ./build-zips.sh
 
@@ -37,10 +34,7 @@ fi
 
 # Clean and create dist directories
 rm -rf "$DIST"
-mkdir -p "$DIST/extension" "$DIST/department" "$DIST/claude"
-
-# Plugins that should be bundled into the n8n zip instead of getting their own
-BUNDLE_INTO_N8N="n8n-prd-generator"
+mkdir -p "$DIST/extension" "$DIST/claude"
 
 # Read all plugins from marketplace.json
 PLUGINS_JSON=$(python3 -c "
@@ -51,7 +45,7 @@ for p in data['plugins']:
     print(p['name'] + '|' + p['source'])
 ")
 
-echo "Found plugins:"
+echo "Found department plugins:"
 echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
   echo "  - $name ($source)"
 done
@@ -59,37 +53,20 @@ echo ""
 
 # =============================================================
 # EXTENSION ZIPS (Claude Code / Cursor / VS Code)
-# Structure: .claude-plugin/marketplace.json + plugins/<name>/
+# Structure: .claude-plugin/marketplace.json + plugins/<department>/
 # =============================================================
 echo "--- Building extension zips ---"
 
 echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
-  # Skip plugins that are bundled into n8n
-  if echo " $BUNDLE_INTO_N8N " | grep -q " $name "; then
-    echo "  Skipping $name (bundled into n8n.zip)"
-    continue
-  fi
-
   staging="$TMP/ext-$name"
   rm -rf "$staging"
   mkdir -p "$staging/.claude-plugin"
   mkdir -p "$staging/$(dirname "$source")"
 
-  # Copy the plugin directory
+  # Copy the department plugin directory
   cp -R "$ROOT/$source" "$staging/$source"
 
-  # For n8n, also include bundled plugins
-  if [ "$name" = "n8n" ]; then
-    for bname in $BUNDLE_INTO_N8N; do
-      bsource=$(echo "$PLUGINS_JSON" | grep "^${bname}|" | head -1 | cut -d'|' -f2)
-      if [ -n "$bsource" ]; then
-        mkdir -p "$staging/$(dirname "$bsource")"
-        cp -R "$ROOT/$bsource" "$staging/$bsource"
-      fi
-    done
-  fi
-
-  # Generate a marketplace.json with this plugin (and bundled plugins for n8n)
+  # Generate a marketplace.json with this department
   python3 -c "
 import json
 with open('$MARKETPLACE') as f:
@@ -97,139 +74,68 @@ with open('$MARKETPLACE') as f:
 envelope = {k: v for k, v in data.items() if k != 'plugins'}
 envelope['name'] = data['name'] + '-$name'
 plugin = next(p for p in data['plugins'] if p['name'] == '$name')
-plugins = [plugin]
-if '$name' == 'n8n':
-    for bn in '$BUNDLE_INTO_N8N'.split():
-        bp = next((p for p in data['plugins'] if p['name'] == bn), None)
-        if bp:
-            plugins.append(bp)
-envelope['plugins'] = plugins
+envelope['plugins'] = [plugin]
 with open('$staging/.claude-plugin/marketplace.json', 'w') as f:
     json.dump(envelope, f, indent=2)
     f.write('\n')
 "
 
+  # Remove .gitkeep files and empty directories
+  find "$staging" -name ".gitkeep" -delete 2>/dev/null || true
+  find "$staging" -type d -empty -delete 2>/dev/null || true
+
   # Create zip
   (cd "$staging" && zip -r "$DIST/extension/$name.zip" . > /dev/null 2>&1)
   SIZE=$(du -h "$DIST/extension/$name.zip" | cut -f1 | xargs)
-  echo "  Created extension/$name.zip ($SIZE)"
+  SKILL_COUNT=$(find "$staging/$source/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | xargs)
+  echo "  Created extension/$name.zip ($SIZE) — $SKILL_COUNT skills"
 
   rm -rf "$staging"
 done
 
 # Full marketplace zip
-(cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ > /dev/null 2>&1)
+(cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ -x "*/\.*" > /dev/null 2>&1)
 SIZE=$(du -h "$DIST/extension/benai-skills-marketplace.zip" | cut -f1 | xargs)
 echo "  Created extension/benai-skills-marketplace.zip ($SIZE)"
 
 # =============================================================
-# DEPARTMENT ZIPS (bundle all plugins in a department)
-# Structure: .claude-plugin/marketplace.json + plugins/<dept>/<name>/
-# =============================================================
-echo ""
-echo "--- Building department zips ---"
-
-DEPARTMENTS=$(echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
-  echo "$source" | sed 's|^\./plugins/\([^/]*\)/.*|\1|'
-done | sort -u)
-
-for dept in $DEPARTMENTS; do
-  staging="$TMP/dept-$dept"
-  rm -rf "$staging"
-  mkdir -p "$staging/.claude-plugin"
-
-  echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
-    dept_of_plugin=$(echo "$source" | sed 's|^\./plugins/\([^/]*\)/.*|\1|')
-    if [ "$dept_of_plugin" = "$dept" ]; then
-      mkdir -p "$staging/$(dirname "$source")"
-      cp -R "$ROOT/$source" "$staging/$source"
-    fi
-  done
-
-  plugin_count=$(find "$staging/plugins" -mindepth 2 -maxdepth 2 -type d 2>/dev/null | wc -l | xargs)
-  if [ "$plugin_count" -eq 0 ]; then
-    echo "  Skipping $dept (no plugins)"
-    rm -rf "$staging"
-    continue
-  fi
-
-  python3 -c "
-import json
-with open('$MARKETPLACE') as f:
-    data = json.load(f)
-envelope = {k: v for k, v in data.items() if k != 'plugins'}
-envelope['name'] = data['name'] + '-$dept'
-envelope['plugins'] = [p for p in data['plugins'] if p['source'].startswith('./plugins/$dept/')]
-with open('$staging/.claude-plugin/marketplace.json', 'w') as f:
-    json.dump(envelope, f, indent=2)
-    f.write('\n')
-"
-
-  (cd "$staging" && zip -r "$DIST/department/$dept.zip" . > /dev/null 2>&1)
-  SIZE=$(du -h "$DIST/department/$dept.zip" | cut -f1 | xargs)
-  echo "  Created department/$dept.zip ($SIZE) — $plugin_count plugins"
-
-  rm -rf "$staging"
-done
-
-# =============================================================
 # CLAUDE CONSOLE ZIPS (platform.claude.com)
-# Structure: flat — SKILL.md + references/ at the root
+# Structure: flat — each skill as top-level folder (SKILL.md + references)
 # =============================================================
 echo ""
 echo "--- Building Claude Console zips ---"
 
 echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
-  # Skip plugins that are bundled into n8n
-  if echo " $BUNDLE_INTO_N8N " | grep -q " $name "; then
-    echo "  Skipping $name (bundled into n8n.zip)"
-    continue
-  fi
-
   staging="$TMP/claude-$name"
   rm -rf "$staging"
   mkdir -p "$staging"
 
-  # Find the skills directory inside the plugin
-  SKILL_DIR="$ROOT/$source/skills/$name"
+  SKILLS_DIR="$ROOT/$source/skills"
 
-  if [ ! -f "$SKILL_DIR/SKILL.md" ]; then
-    echo "  Skipping $name (no SKILL.md found at $SKILL_DIR)"
+  if [ ! -d "$SKILLS_DIR" ]; then
+    echo "  Skipping $name (no skills/ directory)"
     continue
   fi
 
-  # Copy into a single top-level folder named after the skill
-  mkdir -p "$staging/$name"
-  cp -R "$SKILL_DIR"/* "$staging/$name/" 2>/dev/null || true
-  cp -R "$SKILL_DIR"/.[!.]* "$staging/$name/" 2>/dev/null || true
+  # Copy each skill as a top-level folder
+  for skill_dir in "$SKILLS_DIR"/*/; do
+    skill_name=$(basename "$skill_dir")
+    if [ -f "$skill_dir/SKILL.md" ]; then
+      mkdir -p "$staging/$skill_name"
+      cp -R "$skill_dir"/* "$staging/$skill_name/" 2>/dev/null || true
+      cp -R "$skill_dir"/.[!.]* "$staging/$skill_name/" 2>/dev/null || true
 
-  # For n8n, also include bundled plugin skills
-  if [ "$name" = "n8n" ]; then
-    for bname in $BUNDLE_INTO_N8N; do
-      bsource=$(echo "$PLUGINS_JSON" | grep "^${bname}|" | head -1 | cut -d'|' -f2)
-      if [ -n "$bsource" ]; then
-        BSKILL_DIR="$ROOT/$bsource/skills/$bname"
-        if [ -f "$BSKILL_DIR/SKILL.md" ]; then
-          mkdir -p "$staging/$bname"
-          cp -R "$BSKILL_DIR"/* "$staging/$bname/" 2>/dev/null || true
-          cp -R "$BSKILL_DIR"/.[!.]* "$staging/$bname/" 2>/dev/null || true
-          find "$staging/$bname" -name ".gitkeep" -delete 2>/dev/null || true
-          find "$staging/$bname" -type d -empty -delete 2>/dev/null || true
-        fi
-      fi
-    done
-  fi
-
-  # Remove empty .gitkeep files
-  find "$staging/$name" -name ".gitkeep" -delete 2>/dev/null || true
-
-  # Remove empty directories
-  find "$staging/$name" -type d -empty -delete 2>/dev/null || true
+      # Remove .gitkeep files and empty directories
+      find "$staging/$skill_name" -name ".gitkeep" -delete 2>/dev/null || true
+      find "$staging/$skill_name" -type d -empty -delete 2>/dev/null || true
+    fi
+  done
 
   # Create zip with skill folders as top-level entries
   (cd "$staging" && zip -r "$DIST/claude/$name.zip" . > /dev/null 2>&1)
   SIZE=$(du -h "$DIST/claude/$name.zip" | cut -f1 | xargs)
-  echo "  Created claude/$name.zip ($SIZE)"
+  SKILL_COUNT=$(find "$staging" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | xargs)
+  echo "  Created claude/$name.zip ($SIZE) — $SKILL_COUNT skills"
 
   rm -rf "$staging"
 done
@@ -237,5 +143,4 @@ done
 echo ""
 echo "Done. All zips in $DIST/"
 echo "  extension/   — for Claude Code, Cursor, VS Code"
-echo "  department/  — department bundles (multiple skills per zip)"
 echo "  claude/      — for Claude Console (platform.claude.com)"

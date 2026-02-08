@@ -1,8 +1,0 @@
-{
-  "name": "infographic",
-  "description": "Generate professional infographics using Gemini AI with a guided, conversational flow. Features visual reasoning (finds the shape of your idea, not just template matching), style discovery (extract from website or choose presets), section-by-section validation, multi-turn image editing, and learned preferences that improve over sessions. Gracefully handles missing API keys by outputting ready-to-use prompts.",
-  "version": "2.0.0",
-  "author": {
-    "name": "BenAI"
-  }
-}

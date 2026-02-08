@@ -2,13 +2,13 @@
 
 ## What This Is
 
-A marketplace of expert automation plugins for Claude Code. Each plugin can be installed individually.
+A marketplace of expert automation plugins for Claude Code, organized by department. Each department is a single installable plugin containing multiple skills.
 
-## Available Plugins
+## Available Departments
 
-### Marketing
-| Plugin | Command | Purpose |
-|--------|---------|---------|
+### Marketing (6 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
 | programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale |
 | seo-optimizing | `/seo-optimizing` | Data-driven SEO via Search Console |
 | seo-audit | `/seo-audit` | Technical SEO audits (148 rules) |
@@ -16,30 +16,30 @@ A marketplace of expert automation plugins for Claude Code. Each plugin can be i
 | case-study | `/case-study` | Data-driven case studies |
 | infographic | `/infographic` | AI-generated infographics |
 
-### Sales
-| Plugin | Command | Purpose |
-|--------|---------|---------|
+### Sales (4 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
 | lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
 | email-sequence | `/email-sequence` | Email sequences & drip campaigns |
 | case-study | `/case-study` | Data-driven case studies |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
-### Operations
-| Plugin | Command | Purpose |
-|--------|---------|---------|
+### Operations (2 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
 | n8n | `/n8n` | n8n workflow automation |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
-### Creative
-| Plugin | Command | Purpose |
-|--------|---------|---------|
+### Creative (3 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
 | video | `/video` | Video editing (FFmpeg/Remotion) |
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 | infographic | `/infographic` | AI-generated infographics |
 
-### Product
-| Plugin | Command | Purpose |
-|--------|---------|---------|
+### Product (2 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
@@ -170,4 +170,4 @@ Fall back to REST API skills when MCP is unavailable.
 
 ## Building Distributable Zips
 
-Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates one zip per plugin plus a full marketplace zip. The `n8n-prd-generator` plugin is bundled into the `n8n.zip`. Run it after adding or updating any plugin.
+Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all department plugins, and creates one zip per department plus a full marketplace zip. Run it after adding or updating any plugin.

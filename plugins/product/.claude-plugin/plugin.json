@@ -1,0 +1,8 @@
+{
+  "name": "product",
+  "description": "Visual tools and automation blueprints for product teams.",
+  "version": "1.0.0",
+  "author": {
+    "name": "BenAI"
+  }
+}

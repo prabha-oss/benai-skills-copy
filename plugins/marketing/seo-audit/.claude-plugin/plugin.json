@@ -1,8 +1,0 @@
-{
-    "name": "seo-audit",
-    "description": "Run comprehensive SEO audits on websites using seomator CLI - 16 categories, 148 rules covering technical SEO, performance, accessibility, security, and more.",
-    "version": "1.0.0",
-    "author": {
-        "name": "BenAI"
-    }
-}

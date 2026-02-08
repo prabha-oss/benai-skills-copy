@@ -1,6 +1,6 @@
 # BenAI Skills
 
-Expert automation skills for Claude Code.
+Expert automation skills for Claude Code, organized by department.
 
 ## Installation
 
@@ -8,56 +8,52 @@ Expert automation skills for Claude Code.
 # Add marketplace
 /plugin marketplace add naveedharri/benai-skills
 
-# Install individual plugins
-/plugin install n8n@benai-skills
-/plugin install video@benai-skills
-/plugin install excalidraw@benai-skills
-/plugin install email-sequence@benai-skills
-/plugin install programmatic-seo@benai-skills
-/plugin install seo-audit@benai-skills
-/plugin install seo-optimizing@benai-skills
-/plugin install infographic@benai-skills
-/plugin install case-study@benai-skills
+# Install a department plugin
+/plugin install marketing@benai-skills
+/plugin install sales@benai-skills
+/plugin install operations@benai-skills
+/plugin install creative@benai-skills
+/plugin install product@benai-skills
 ```
 
-## Available Plugins
+## Available Departments
 
-### Marketing
-| Plugin | Command | Purpose |
-|--------|---------|---------|
-| programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale |
-| seo-optimizing | `/seo-optimizing` | Data-driven SEO via Search Console |
-| seo-audit | `/seo-audit` | Technical SEO audits (148 rules) |
-| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
-| case-study | `/case-study` | Data-driven case studies |
-| infographic | `/infographic` | AI-generated infographics |
+### Marketing (6 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| Programmatic SEO | `/programmatic-seo` | SEO-optimized pages at scale |
+| SEO Optimizing | `/seo-optimizing` | Data-driven SEO via Search Console |
+| SEO Audit | `/seo-audit` | Technical SEO audits (148 rules) |
+| Email Sequence | `/email-sequence` | Email sequences & drip campaigns |
+| Case Study | `/case-study` | Data-driven case studies |
+| Infographic | `/infographic` | AI-generated infographics |
 
-### Sales
-| Plugin | Command | Purpose |
-|--------|---------|---------|
-| lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
-| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
-| case-study | `/case-study` | Data-driven case studies |
-| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+### Sales (4 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| Lead Research Assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
+| Email Sequence | `/email-sequence` | Email sequences & drip campaigns |
+| Case Study | `/case-study` | Data-driven case studies |
+| n8n Blueprint Generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
-### Operations
-| Plugin | Command | Purpose |
-|--------|---------|---------|
-| n8n | `/n8n` | n8n workflow automation |
-| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+### Operations (2 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| n8n Automation | `/n8n` | n8n workflow automation |
+| n8n Blueprint Generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
-### Creative
-| Plugin | Command | Purpose |
-|--------|---------|---------|
-| video | `/video` | Video editing (FFmpeg/Remotion) |
-| excalidraw | `/excalidraw` | Presentations & diagrams |
-| infographic | `/infographic` | AI-generated infographics |
+### Creative (3 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| Video | `/video` | Video editing (FFmpeg/Remotion) |
+| Excalidraw | `/excalidraw` | Presentations & diagrams |
+| Infographic | `/infographic` | AI-generated infographics |
 
-### Product
-| Plugin | Command | Purpose |
-|--------|---------|---------|
-| excalidraw | `/excalidraw` | Presentations & diagrams |
-| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+### Product (2 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| Excalidraw | `/excalidraw` | Presentations & diagrams |
+| n8n Blueprint Generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
 ---
 
@@ -115,61 +111,71 @@ benai-skills/
 │   └── marketplace.json
 ├── plugins/
 │   ├── marketing/
-│   │   ├── seo-audit/
-│   │   ├── seo-optimizing/
-│   │   ├── programmatic-seo/
-│   │   ├── email-sequence/
-│   │   ├── case-study/
-│   │   └── infographic/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/benai-start.md
+│   │   └── skills/
+│   │       ├── programmatic-seo/
+│   │       ├── seo-optimizing/
+│   │       ├── seo-audit/
+│   │       ├── email-sequence/
+│   │       ├── case-study/
+│   │       └── infographic/
 │   ├── sales/
-│   │   └── lead-research-assistant/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/benai-start.md
+│   │   └── skills/
+│   │       ├── lead-research-assistant/
+│   │       ├── email-sequence/
+│   │       ├── case-study/
+│   │       └── n8n-prd-generator/
 │   ├── operations/
-│   │   ├── n8n/
-│   │   └── n8n-prd-generator/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/benai-start.md
+│   │   └── skills/
+│   │       ├── n8n/
+│   │       └── n8n-prd-generator/
 │   ├── creative/
-│   │   ├── video/
-│   │   └── excalidraw/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/benai-start.md
+│   │   └── skills/
+│   │       ├── video/
+│   │       ├── excalidraw/
+│   │       └── infographic/
 │   └── product/
+│       ├── .claude-plugin/plugin.json
+│       ├── commands/benai-start.md
+│       └── skills/
+│           ├── excalidraw/
+│           └── n8n-prd-generator/
 ├── CLAUDE.md
 └── README.md
 ```
 
-Each plugin follows the same structure:
+Each department plugin follows the same structure:
 ```
-plugins/<department>/<name>/
+plugins/<department>/
 ├── .claude-plugin/
 │   └── plugin.json
-└── skills/<name>/
-    ├── SKILL.md
-    └── references/
+├── commands/
+│   └── benai-start.md
+└── skills/
+    └── <skill-name>/
+        ├── SKILL.md
+        └── references/
 ```
 
-## Adding New Plugins
+## Adding New Skills
 
-1. Create the plugin directory structure (see above)
-
-2. Create `plugins/<department>/<name>/.claude-plugin/plugin.json`:
-   ```json
-   {
-     "name": "<name>",
-     "description": "Your plugin description",
-     "version": "1.0.0"
-   }
-   ```
-
-3. Write `SKILL.md` with frontmatter including trigger keywords in the description
-
-4. Add reference files in `references/` for detailed documentation
-
-5. Register in `.claude-plugin/marketplace.json`
+1. Add the skill directory under the appropriate department's `skills/` folder
+2. Write `SKILL.md` with frontmatter including trigger keywords in the description
+3. Add reference files in `references/` for detailed documentation
+4. Update the department's `commands/benai-start.md` to list the new skill
 
 ## Building Distributable Zips
 
-Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all plugins, and creates:
-- One zip per plugin (standalone, installable individually)
-- `benai-skills-marketplace.zip` (all plugins in one package)
-
-The `n8n-prd-generator` plugin is bundled into the `n8n.zip` rather than having its own standalone zip.
+Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all department plugins, and creates:
+- One zip per department (standalone, installable individually)
+- `benai-skills-marketplace.zip` (all departments in one package)
 
 Run it after adding or updating any plugin.
 

@@ -1,0 +1,18 @@
+{
+  "name": "marketing",
+  "description": "SEO, email sequences, case studies, and infographics — everything your marketing team needs.",
+  "version": "1.0.0",
+  "author": {
+    "name": "BenAI"
+  },
+  "mcpServers": {
+    "webflow": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://mcp.webflow.com/mcp"
+      ]
+    }
+  }
+}
