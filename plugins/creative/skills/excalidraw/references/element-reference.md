@@ -675,9 +675,31 @@ Examples:
 
 ---
 
-## Complete Single-Slide Example
+## Complete Single-Slide Examples
 
-Here's a complete, copy-paste ready slide with a title, three cards, and connecting arrows:
+### Example 1: Illustrative Slide (PREFERRED)
+
+Think illustration-first. This example shows a concept using size, shape variety, and spatial relationships — not just cards:
+
+**Concept:** "One thing becomes many" (e.g., farming → modern industries)
+- One large ellipse (the origin) dominates the left
+- Thin radiating lines connect to scattered smaller ellipses of varying sizes on the right
+- Small unlabeled dots suggest "and more beyond what's shown"
+- The visual mass on the right clearly exceeds the left — you SEE the expansion
+- Text is minimal: labels on shapes, nothing else
+
+**Key techniques used:**
+- **Size contrast:** Large origin vs small derivatives — shows the transformation
+- **Shape variety:** Ellipses for organic concepts, not rectangles
+- **Scattered positioning:** Not a grid — feels like an explosion, which IS the concept
+- **Radiating lines:** Show connection without heavy arrows
+- **Unlabeled dots:** Suggest abundance without cluttering with text
+
+Always try to build slides like this FIRST. Only fall back to cards when the content is genuinely a list of equal items.
+
+### Example 2: Card-Based Slide (FALLBACK)
+
+Here's a complete, copy-paste ready slide with a title, three cards, and connecting arrows. Use this pattern ONLY for homogeneous lists (features, team members, pricing tiers):
 
 ```json
 {

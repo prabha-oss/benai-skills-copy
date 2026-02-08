@@ -276,14 +276,20 @@ Example:
 ```
 Here's my proposed flow:
 
-1. "The Problem" — Single Concept + Annotation (pain point with callouts)
-2. "Why It Happens" — Hub & Spoke (root causes radiating from the problem)
-3. "Our Solution" — Pipeline (3-step process flow)
-4. "The Results" — Metrics/Results (big numbers with context)
-5. "Next Steps" — CTA slide (single action with supporting points)
+1. "The Problem" — Visual metaphor: heavy weight crushing down, red tones,
+   one dominant shape showing the pain
+2. "Why It Happens" — Tangled web radiating from a central knot, showing
+   interconnected root causes (not a list of boxes)
+3. "Our Solution" — Winding path from dark/cramped (left) to open/bright
+   (right), showing the transformation journey
+4. "The Results" — Giant "47%" as the visual anchor, with small supporting
+   context around it. The number IS the slide.
+5. "Next Steps" — Single bold shape with CTA, clean and spacious
 
 Want to add, remove, or reorder anything?
 ```
+
+**Important:** When proposing visual concepts, think ILLUSTRATION — describe what the slide would look like as a drawing, not which layout template to use. "Hub & spoke" or "2x2 grid" are fallbacks, not defaults.
 
 Wait for the user to confirm or adjust before proceeding.
 
@@ -295,15 +301,20 @@ This is where slides get built. **One at a time.** For EACH slide:
 
 ### Step 4.1: Present the Visual Concept
 
-Before generating any JSON, describe the plan in plain English:
+Before generating any JSON, describe the plan as a **visual picture** — what would someone SEE, not what template you're using:
 
 ```
 **[SLIDE 1: The Problem]**
-**Diagram Type:** Single Concept + Annotation
-**Visual Concept:** Large central text showing the problem statement, with 3 callout
-arrows pointing to specific pain points. Red/warm tones for urgency.
-**Complexity:** Simple (5-7 elements)
+**What you'll see:** A large, heavy dark shape dominates the center — it
+feels oppressive, like a weight pressing down. Three smaller red shapes
+are being crushed underneath it, each labeled with a specific pain point.
+The visual immediately communicates "something is wrong and heavy."
+**Shapes used:** Large ellipse (the problem), small compressed rectangles
+(the pain points), downward arrows showing pressure
+**Mood:** Tense, urgent — red/dark tones, high contrast
 ```
+
+Describe the illustration, not the template. "Hub & spoke with 4 nodes" tells the user nothing about what they'll see. "A central sun with 4 planets orbiting at different distances" paints a picture.
 
 ### Step 4.2: Ask for Approval
 
@@ -328,11 +339,17 @@ Once approved:
 
 1. Read `references/element-reference.md` for JSON specs
 2. Read `references/design-principles.md` for visual design philosophy
-3. Generate the slide elements:
+3. **CRITICAL — Think Illustration First:**
+   - Before generating ANY elements, ask: "What visual SHAPE tells this story?"
+   - Find the spatial metaphor: Does this concept expand, contract, branch, cycle, collide, radiate, layer, or flow?
+   - Use the full shape palette: ellipses for organic concepts, diamonds for decision points, varying sizes for hierarchy, curved arrows for flows — NOT just rectangles
+   - Think like someone sketching on a whiteboard: they'd draw circles, scribble arrows, make things big or tiny to show importance — not lay out a grid of cards
+   - Cards and grids are a LAST RESORT for when items are truly homogeneous (feature lists, team members). For concepts, relationships, and stories, use illustrative layouts
+4. Generate the slide elements:
    - Start with a frame rectangle at the slide's grid position
    - Apply brand colors from Phase 2
    - Follow the Outcome Thinking framework (Purpose → Transformation → Memory → Action)
-   - Apply the Visual Vocabulary diagram type chosen for this slide
+   - Use shapes, size contrast, and spatial relationships to carry meaning — not text in boxes
    - Run the pre-generation checklist from design-principles.md
 
 #### CRITICAL: Generate GroupIds First

@@ -4,6 +4,46 @@ Design thinking for building Excalidraw presentations that communicate, not just
 
 ---
 
+## 0. THE GOLDEN RULE: Illustrate, Don't Decorate
+
+**Every slide is an illustration, not a layout.**
+
+Before you place a single element, close your eyes and imagine: if a brilliant teacher were explaining this concept on a whiteboard to someone they cared about, what would they draw? They wouldn't draw a 2x2 grid of cards. They'd draw a big circle shrinking into a small one. They'd sketch a tree branching out. They'd scribble an explosion of arrows radiating from a point. They'd make one thing HUGE and another thing tiny to show scale.
+
+**That's what your slide should look like.**
+
+### The Illustration Mandate
+
+1. **Shape IS meaning.** A large circle shrinking to a small dot communicates "decline" without a single word. A cluster of scattered bubbles radiating from a point communicates "explosion of possibilities." Use shape, size, and spatial arrangement to tell the story BEFORE adding any text.
+
+2. **Text is a label, not the content.** If someone can't understand the slide's message from shapes alone, the illustration has failed. Text should name things, not explain them. The layout explains.
+
+3. **Vary your elements aggressively.** Use ellipses, diamonds, lines, arrows, size contrasts, opacity differences, spacing, and clustering. A slide with only rectangles is a spreadsheet, not an illustration. Mix shapes intentionally — circles for organic/human concepts, rectangles for structured/concrete things, diamonds for pivots, arrows for causation.
+
+4. **Size is your most powerful tool.** The most important thing should be visually dominant — 2-3x the size of supporting elements. Don't make everything the same size. That's the visual equivalent of speaking in monotone.
+
+5. **Spatial relationships carry meaning.** Things that are close together are related. Things that are far apart are opposed. Things that overlap are intertwined. Things arranged in a line show sequence. Things scattered show diversity. Use space deliberately.
+
+6. **Push creative boundaries.** Don't settle for the first "safe" layout that comes to mind. The safe layout is almost always a grid of cards. Push past that. Ask: what visual would make someone say "Oh, I GET it now"? That's the slide.
+
+### The Card Trap
+
+**Cards and grids are the junk food of presentation design.** They're easy, they're predictable, and they communicate almost nothing beyond "here are some related items."
+
+| If you're about to make... | Stop. Try this instead. |
+|---|---|
+| A 2x2 grid of features | A hub-and-spoke with the product at center and features radiating outward at different sizes based on importance |
+| A row of process boxes with arrows | A winding path, a river, a staircase ascending, or a funnel narrowing — something that SHOWS the transformation |
+| Side-by-side comparison cards | Dramatically different sized shapes — a cramped, heavy cluster (before) vs an open, light, expansive layout (after) |
+| A list of benefits in boxes | A tree growing from a seed, with branches representing each benefit, bigger branches for bigger benefits |
+| A timeline of equal cards | An actual visual journey — small at the start, growing bigger as you progress, with terrain changes showing the nature of each phase |
+
+**The only legitimate uses for card grids:** Feature comparison tables. Team member introductions. Pricing tiers. Things that are genuinely homogeneous and equal in importance.
+
+For everything else — and especially for concepts, stories, arguments, and transformations — **illustrate.**
+
+---
+
 ## 1. Core Philosophy
 
 ### Show, Don't Tell
