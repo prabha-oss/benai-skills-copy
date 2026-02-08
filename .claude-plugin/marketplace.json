@@ -5,13 +5,13 @@
     "email": "naveedharri@gmail.com"
   },
   "metadata": {
-    "description": "BenAI expert skills marketplace - department plugins for marketing, sales, operations, creative, and product teams"
+    "description": "Expert automation plugins that turn Claude into a specialist for your team. Install by department to get skills for marketing, sales, operations, creative, and product workflows."
   },
   "plugins": [
     {
       "name": "marketing",
       "source": "./plugins/marketing",
-      "description": "SEO, email sequences, case studies, and infographics — everything your marketing team needs.",
+      "description": "Rank higher and grow organic traffic with programmatic SEO, technical audits, and Search Console optimization. Create email sequences that convert, build compelling case studies, and generate professional infographics.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -28,7 +28,7 @@
     {
       "name": "sales",
       "source": "./plugins/sales",
-      "description": "Lead generation, outreach, case studies, and automation blueprints for sales teams.",
+      "description": "Research and score B2B leads, craft personalized outreach sequences, and build client success stories. Turn discovery call transcripts into actionable automation blueprints.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -44,7 +44,7 @@
     {
       "name": "operations",
       "source": "./plugins/operations",
-      "description": "n8n workflow automation and blueprint generation for operations teams.",
+      "description": "Build, test, and deploy n8n workflows through incremental REST API automation. Convert discovery call transcripts into implementation-ready automation blueprints.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -59,7 +59,7 @@
     {
       "name": "creative",
       "source": "./plugins/creative",
-      "description": "Video editing, presentations, diagrams, and infographics for creative teams.",
+      "description": "Edit and render videos with FFmpeg and Remotion, from stitching and transitions to captions and teasers. Design presentations in Excalidraw and generate AI-powered infographics.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -75,7 +75,7 @@
     {
       "name": "product",
       "source": "./plugins/product",
-      "description": "Visual tools and automation blueprints for product teams.",
+      "description": "Design presentations, pitch decks, and process diagrams collaboratively in Excalidraw. Turn discovery call transcripts into structured automation blueprints your team can implement.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
