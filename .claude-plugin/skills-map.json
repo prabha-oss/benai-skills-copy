@@ -23,6 +23,16 @@
           "env": {
             "GEMINI_API_KEY": "${GEMINI_API_KEY}"
           }
+        },
+        "apify": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "@apify/actors-mcp-server"
+          ],
+          "env": {
+            "APIFY_TOKEN": "${APIFY_TOKEN}"
+          }
         }
       },
       "skills": {
