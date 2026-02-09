@@ -31,7 +31,9 @@ fi
 rm -rf "$ROOT/plugins"
 mkdir -p "$ROOT/plugins"
 
-export ROOT SHARED SKILLS_MAP MARKETPLACE
+COMMANDS="$ROOT/commands"
+
+export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS
 
 python3 << 'PYEOF'
 import json, os, shutil
@@ -40,6 +42,7 @@ root = os.environ.get("ROOT", "")
 shared = os.environ.get("SHARED", "")
 skills_map_path = os.environ.get("SKILLS_MAP", "")
 marketplace_path = os.environ.get("MARKETPLACE", "")
+commands_src = os.environ.get("COMMANDS", "")
 
 with open(skills_map_path) as f:
     skills_map = json.load(f)
@@ -74,35 +77,17 @@ for dept_name, dept_config in departments.items():
         json.dump(plugin_data, f, indent=2)
         f.write("\n")
 
-    # --- commands/benai-start.md ---
+    # --- commands/ ---
     commands_dir = os.path.join(dept_dir, "commands")
     os.makedirs(commands_dir, exist_ok=True)
 
-    title = dept_name.capitalize()
-    rows = []
-    for skill_id, meta in skills.items():
-        display = meta.get("displayName", skill_id)
-        summary = meta.get("summary", "")
-        rows.append(f"| {display} | `/{skill_id}` | {summary} |")
-
-    table = "\n".join(rows)
-    benai_md = f"""---
-description: See all {title} skills and get started
----
-
-# BenAI {title}
-
-You have the following {dept_name} skills available. Present them to the user in a clean table and ask what they'd like to work on:
-
-| Skill | Command | What it does |
-|-------|---------|-------------|
-{table}
-
-Ask the user which skill they want to use, then invoke that skill's slash command.
-"""
-
-    with open(os.path.join(commands_dir, "benai-start.md"), "w") as f:
-        f.write(benai_md)
+    cmd_list = dept_config.get("commands", [])
+    for cmd_name in cmd_list:
+        src = os.path.join(commands_src, f"{cmd_name}.md")
+        if os.path.isfile(src):
+            shutil.copy2(src, os.path.join(commands_dir, f"{cmd_name}.md"))
+        else:
+            print(f"  Warning: commands/{cmd_name}.md not found, skipping")
 
     # --- skills/ ---
     skills_dir = os.path.join(dept_dir, "skills")

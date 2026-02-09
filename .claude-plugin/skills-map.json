@@ -1,6 +1,9 @@
 {
   "departments": {
     "marketing": {
+      "commands": [
+        "marketing"
+      ],
       "mcpServers": {
         "webflow": {
           "command": "npx",
@@ -39,6 +42,9 @@
       }
     },
     "sales": {
+      "commands": [
+        "sales"
+      ],
       "skills": {
         "lead-research-assistant": {
           "displayName": "Lead Research Assistant",
@@ -59,6 +65,9 @@
       }
     },
     "operations": {
+      "commands": [
+        "operations"
+      ],
       "skills": {
         "n8n": {
           "displayName": "n8n Automation",
@@ -71,6 +80,9 @@
       }
     },
     "creative": {
+      "commands": [
+        "creative"
+      ],
       "skills": {
         "video": {
           "displayName": "Video Editing",
@@ -87,6 +99,9 @@
       }
     },
     "product": {
+      "commands": [
+        "product"
+      ],
       "skills": {
         "excalidraw": {
           "displayName": "Excalidraw",
