@@ -11,7 +11,7 @@
     {
       "name": "marketing",
       "source": "./plugins/marketing",
-      "description": "Rank higher and grow organic traffic with programmatic SEO, technical audits, and Search Console optimization. Create email sequences that convert, build compelling case studies, and generate professional infographics.",
+      "description": "Rank higher and grow organic traffic with programmatic SEO, technical audits, and Search Console optimization. Create email sequences that convert, build compelling case studies, and generate professional infographics. Repurpose YouTube content into LinkedIn posts, newsletters, GIFs, and visual diagrams.",
       "version": "1.0.0",
       "author": {
         "name": "BenAI"
@@ -22,7 +22,12 @@
         "marketing",
         "content",
         "case-study",
-        "infographic"
+        "infographic",
+        "youtube",
+        "linkedin",
+        "newsletter",
+        "repurpose",
+        "gif"
       ]
     },
     {
@@ -85,23 +90,6 @@
         "product",
         "blueprint",
         "automation"
-      ]
-    },
-    {
-      "name": "repurposing",
-      "source": "./plugins/repurposing",
-      "description": "Repurpose YouTube content into LinkedIn posts, newsletters, and GIFs. Generate optimized video titles and create visual diagrams for content distribution.",
-      "version": "1.0.0",
-      "author": {
-        "name": "BenAI"
-      },
-      "keywords": [
-        "youtube",
-        "linkedin",
-        "newsletter",
-        "repurpose",
-        "content",
-        "gif"
       ]
     }
   ]

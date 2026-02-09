@@ -1,15 +1,25 @@
 # API Key Setup Guide
 
-Step-by-step instructions for setting up the Gemini API key, with fallback options for users who want to skip.
+How the Gemini API key is configured for image generation via the Nano Banana MCP server.
+
+---
+
+## How It Works
+
+The Nano Banana MCP server is automatically registered when you install the marketing or creative department plugin. The API key can be provided in three ways (checked in this order):
+
+1. **Plugin MCP env config** — Set `GEMINI_API_KEY` in your shell environment; the plugin passes it to the MCP server automatically
+2. **Local config file** — Created by `configure_gemini_token` tool, persists across sessions
+3. **Runtime configuration** — Use `configure_gemini_token` during the skill session
 
 ---
 
 ## Three Paths for API Key Handling
 
-When the API key is not set, offer three options:
+When the key is not configured, offer three options:
 
-1. **Set it up now** — Guide through Google AI Studio
-2. **User has key ready** — Just paste/export it
+1. **Set it up now** — Guide through Google AI Studio + configure via MCP tool
+2. **User has key ready** — Configure via MCP tool
 3. **Skip for now** — Output prompt for manual use elsewhere
 
 ---
@@ -46,31 +56,19 @@ for normal infographic generation usage.
 
 ### After User Provides Key
 
-1. **Save to .env file:**
-   ```bash
-   echo "GEMINI_API_KEY=USER_PROVIDED_KEY" > .env
+1. **Configure via MCP tool:**
+
+   Call tool: `configure_gemini_token`
+   Parameters: `{ "apiKey": "user-provided-key" }`
+
+2. **Verify configuration:**
+
+   Call tool: `get_configuration_status`
+
+3. **Confirm to user:**
    ```
-
-2. **Source the file:**
-   ```bash
-   source .env
-   ```
-
-3. **Verify the key works:**
-   ```bash
-   curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}" | head -c 200
-   ```
-
-4. **Check response:**
-   - If you see `"models"` in the response → Key is valid
-   - If you see `"error"` → Key is invalid or expired
-
-5. **Confirm to user:**
-   ```
-   API key verified and saved to .env
-
-   Your key is now stored locally and will be loaded automatically
-   in future sessions. Ready to generate!
+   API key configured and verified. Your key is stored locally
+   and will be loaded automatically in future sessions. Ready to generate!
    ```
 
 ---
@@ -80,25 +78,13 @@ for normal infographic generation usage.
 If user selects "I have a key ready":
 
 ```
-Great! You can either:
-
-A) Paste your API key here and I'll save it for you
-
-B) If you've already exported it in your shell:
-   export GEMINI_API_KEY=your-key-here
-
-   Just confirm and I'll verify it works.
+Great! Paste your API key here and I'll configure it.
 ```
 
 If user pastes a key:
-1. Save to `.env`
-2. Verify as above
+1. Call `configure_gemini_token` with the key
+2. Call `get_configuration_status` to verify
 3. Proceed to generation
-
-If user confirms they exported it:
-1. Run verification check
-2. If valid, proceed
-3. If invalid, ask for the key again
 
 ---
 
@@ -121,9 +107,9 @@ Let's continue with the design...
 ### What Changes in Skip Mode
 
 - Complete Phases 1-5 normally (all planning and specification)
-- In Phase 6, instead of calling the API:
+- In Phase 6, instead of calling the MCP tool:
   1. Show the complete prompt
-  2. Save prompt to `infographic-prompt.txt`
+  2. Save prompt to `.infographic/prompts/[topic]-prompt.md`
   3. Provide instructions for manual generation
 
 ### Skip Mode Output
@@ -148,54 +134,70 @@ Option 2: Other Image AIs
 This prompt works with most image generation tools.
 Paste it into your preferred service.
 
-I've saved this prompt to: infographic-prompt.txt
+I've saved this prompt to: .infographic/prompts/[topic]-prompt.md
 
 When you're ready to set up your API key, run /infographic again
 and I'll use your saved brand preferences.
 ```
 
 Save the prompt:
+
 ```bash
-cat > infographic-prompt.txt <<'EOF'
-[The complete prompt]
+mkdir -p .infographic/prompts
+
+cat > .infographic/prompts/[topic-slug]-prompt.md <<'EOF'
+# Infographic Prompt: [Topic]
+
+## Specifications
+- Platform: [platform]
+- Aspect Ratio: [ratio]
+- Resolution: [resolution]
+- Style: [tone]
+
+## Prompt
+```
+[Full prompt text]
+```
+
+## Usage Instructions
+1. Go to Google AI Studio (aistudio.google.com)
+2. Select "Gemini" model
+3. Paste the prompt above
+4. Click Generate
+5. Download the image
+
+---
+*Generated: [ISO-8601-timestamp]*
 EOF
 ```
 
 ---
 
-## Verification Commands
+## Verification
 
-### Check if key is set:
-```bash
-echo "${GEMINI_API_KEY:+API key is configured}"
-```
+### Check if key is configured:
 
-### Test key validity:
-```bash
-curl -s "https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}" | head -c 200
-```
+Call tool: `get_configuration_status`
 
-### Quick generation test:
-```bash
-curl -s -X POST \
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_API_KEY}" \
-  -H "Content-Type: application/json" \
-  -d '{"contents":[{"parts":[{"text":"Generate a simple blue square"}]}]}' \
-  | head -c 500
-```
+No curl commands needed — the MCP tool handles all API communication.
 
 ---
 
 ## Troubleshooting
 
-### "API key not valid" Error
+### "MCP tool not available"
 
-Possible causes:
-- Key was copied incorrectly (missing characters)
-- Key was disabled in Google Cloud Console
-- Key restrictions block the Gemini API
+The Nano Banana MCP server may not be running. This happens if:
+- The plugin was not installed correctly
+- npx cannot find the `nano-banana-mcp` package
+- Network issues preventing npx download
 
-Solution:
+Solution: Verify the plugin installation, ensure internet connectivity, or fall back to the "Skip for now" path.
+
+### "API key not valid"
+
+The key may be incorrect or expired:
+
 ```
 That key doesn't seem to work. Let's try again:
 
@@ -206,7 +208,11 @@ That key doesn't seem to work. Let's try again:
 5. Paste it here
 ```
 
-### "Quota exceeded" Error
+Solution:
+1. Call `configure_gemini_token` with a new key
+2. Verify with `get_configuration_status`
+
+### "Quota exceeded"
 
 ```
 You've hit the API rate limit. This usually resets within a minute.
@@ -217,7 +223,7 @@ Options:
 3. Check your quota at console.cloud.google.com
 ```
 
-### "Permission denied" Error
+### "Permission denied"
 
 ```
 Your API key may have restrictions that block image generation.
@@ -233,31 +239,16 @@ To fix:
 
 ---
 
-## .env File Format
-
-The `.env` file should contain:
-
-```
-GEMINI_API_KEY=AIzaSy...your-key-here
-```
-
-Notes:
-- No quotes around the value
-- No spaces around the `=`
-- One variable per line
-- File should be in the working directory
-
----
-
 ## Security Notes
 
 Remind users:
-- Don't commit `.env` to version control
-- Add `.env` to `.gitignore`
+- The API key is stored locally in `.nano-banana-config.json` (not in `.env`)
+- Don't commit `.nano-banana-config.json` to version control
+- Add `.nano-banana-config.json` to `.gitignore`
 - Don't share your API key publicly
-- You can regenerate keys anytime in Google Cloud Console
+- You can reconfigure the key anytime with `configure_gemini_token`
 
 ```bash
 # Add to .gitignore if it exists
-echo ".env" >> .gitignore 2>/dev/null || true
+echo ".nano-banana-config.json" >> .gitignore 2>/dev/null || true
 ```
