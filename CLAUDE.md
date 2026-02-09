@@ -168,6 +168,26 @@ If the n8n MCP server is available, prefer using MCP tools for:
 
 Fall back to REST API skills when MCP is unavailable.
 
+## Shared Skills (`shared-skills/`)
+
+All skills live in `shared-skills/` as the single source of truth. The department-to-skill mapping is defined in `.claude-plugin/skills-map.json`. Running `./sync-skills.sh` copies skills into each department's `plugins/*/skills/` folder.
+
+**Never edit skills directly in `plugins/*/skills/`** — those are overwritten by sync.
+
+### Editing workflow
+
+1. Edit the skill in `shared-skills/<skill>/`
+2. If adding a new skill or changing which departments get it, update `.claude-plugin/skills-map.json`
+3. Run `./sync-skills.sh`
+
+### Before every push
+
+Always run these before pushing:
+```bash
+./sync-skills.sh
+```
+This ensures `plugins/*/skills/` is in sync with `shared-skills/` and `.claude-plugin/skills-map.json`.
+
 ## Building Distributable Zips
 
-Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script reads `marketplace.json`, detects all department plugins, and creates one zip per department plus a full marketplace zip. Run it after adding or updating any plugin.
+Run `./build-zips.sh` to generate downloadable zip files in `dist/`. The script automatically runs `sync-skills.sh` first, then reads `marketplace.json`, detects all department plugins, and creates one zip per department plus a full marketplace zip.
