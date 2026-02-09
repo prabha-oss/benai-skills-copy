@@ -112,6 +112,34 @@
           "summary": "Convert discovery call transcripts into automation blueprints"
         }
       }
+    },
+    "repurposing": {
+      "commands": [
+        "repurpose",
+        "core-yt"
+      ],
+      "skills": {
+        "linkedin": {
+          "displayName": "LinkedIn",
+          "summary": "Create LinkedIn posts and carousels from existing content"
+        },
+        "newsletter": {
+          "displayName": "Newsletter",
+          "summary": "Transform content into engaging newsletter editions"
+        },
+        "title-generation": {
+          "displayName": "Title Generation",
+          "summary": "Generate optimized YouTube video titles"
+        },
+        "gif-creator": {
+          "displayName": "GIF Creator",
+          "summary": "Create GIFs from video clips for social media"
+        },
+        "excalidraw": {
+          "displayName": "Excalidraw",
+          "summary": "Create visual presentations, slide decks, and diagrams"
+        }
+      }
     }
   }
 }

@@ -86,6 +86,23 @@
         "blueprint",
         "automation"
       ]
+    },
+    {
+      "name": "repurposing",
+      "source": "./plugins/repurposing",
+      "description": "Repurpose YouTube content into LinkedIn posts, newsletters, and GIFs. Generate optimized video titles and create visual diagrams for content distribution.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "youtube",
+        "linkedin",
+        "newsletter",
+        "repurpose",
+        "content",
+        "gif"
+      ]
     }
   ]
 }
