@@ -30,10 +30,15 @@ mkdir -p .infographic/images
 mkdir -p .infographic/prompts
 ```
 
-### 0.2: Check Nano Banana MCP Availability
+### 0.2: Check for API Key
 
-```
-Call tool: get_configuration_status
+```bash
+# Load .env if it exists
+if [ -f .env ]; then
+  source .env 2>/dev/null
+fi
+
+echo "${GEMINI_API_KEY:+API key is configured}"
 ```
 
 If configured: Proceed silently.
@@ -67,7 +72,8 @@ Read the user's content (LinkedIn post, concept, data, or topic). Identify:
 - The main supporting points
 - Any data, numbers, or comparisons
 
-Propose your understanding:
+Propose your understanding, then confirm with `AskUserQuestion`:
+
 ```
 Here's what I see as the key message:
 [Your extracted insight in one sentence]
@@ -76,11 +82,21 @@ Main points:
 1. [Point 1]
 2. [Point 2]
 3. [Point 3]
-
-Is this right, or would you frame it differently?
 ```
 
-Wait for confirmation.
+Use `AskUserQuestion`:
+
+```
+question: "Does this capture your key message correctly?"
+header: "Content"
+options:
+  - label: "Yes, that's right"
+    description: "Move on to platform selection"
+  - label: "Close, but adjust"
+    description: "I'll tell you what to change"
+  - label: "No, let me reframe"
+    description: "I'll explain the key message differently"
+```
 
 ### 1.2: Platform & Resolution
 
@@ -121,11 +137,27 @@ Looking at your content, here are the parts worth visualizing:
 3. **[Concept C]** — [brief description]. Great for visualization because [reason].
 4. **[Concept D]** — [brief description]. Great for visualization because [reason].
 5. **[Concept E]** — [brief description]. Great for visualization because [reason].
-
-Which one would you like to turn into an infographic?
 ```
 
-**Wait for user to choose.** Never proceed without their selection.
+Then use `AskUserQuestion` (use the actual concept names as labels):
+
+```
+question: "Which concept would you like to turn into an infographic?"
+header: "Concept"
+options:
+  - label: "[Concept A short name]"
+    description: "[Brief reason why it's visualizable]"
+  - label: "[Concept B short name]"
+    description: "[Brief reason why it's visualizable]"
+  - label: "[Concept C short name]"
+    description: "[Brief reason why it's visualizable]"
+  - label: "[Concept D short name]"
+    description: "[Brief reason why it's visualizable]"
+```
+
+Note: `AskUserQuestion` supports up to 4 options. If you have 5 concepts, present the top 4 and the user can pick "Other" to choose the 5th.
+
+**Never proceed without their selection.**
 
 ---
 
@@ -146,16 +178,24 @@ Think about what visual structure fits the concept's shape:
 | Overlap | Venn diagram |
 | Transformation | Tangled → straight, chaos → order |
 
-Present 3 options:
+Present 3 options, then use `AskUserQuestion`:
 
 ```
 For "[chosen concept]", here are 3 ways to visualize it:
+```
 
-1. **[Layout Type A]** — [Description of how the content maps to this layout]. Best because [reason].
-2. **[Layout Type B]** — [Description of how the content maps to this layout]. Best because [reason].
-3. **[Layout Type C]** — [Description of how the content maps to this layout]. Best because [reason].
+Use `AskUserQuestion`:
 
-Which approach do you prefer?
+```
+question: "Which visualization approach do you prefer?"
+header: "Layout"
+options:
+  - label: "[Layout Type A]"
+    description: "[How content maps to this layout and why it fits]"
+  - label: "[Layout Type B]"
+    description: "[How content maps to this layout and why it fits]"
+  - label: "[Layout Type C]"
+    description: "[How content maps to this layout and why it fits]"
 ```
 
 **Wait for user to choose.** Then map their specific content to the chosen structure:
@@ -165,27 +205,48 @@ Here's how your content maps to [chosen approach]:
 
 [Show the exact mapping with their words — e.g., what goes in each section,
 what text appears where, how the visual hierarchy works]
-
-Does this mapping look right?
 ```
 
-Wait for confirmation before generating.
+Use `AskUserQuestion`:
+
+```
+question: "Does this content mapping look right?"
+header: "Mapping"
+options:
+  - label: "Yes, looks good"
+    description: "Proceed to generate the infographic"
+  - label: "Adjust the mapping"
+    description: "I'll tell you what to change"
+  - label: "Try a different approach"
+    description: "Go back and pick another visualization style"
+```
 
 ---
 
-## Phase 4: MCP Configuration
+## Phase 4: API Key Setup
 
-**Goal:** Ensure the Nano Banana MCP is ready to generate images.
+**Goal:** Ensure the Gemini API key is available for the Nano Banana MCP server.
 
-### Check Configuration
+### Check if Key Exists
 
+```bash
+echo "${GEMINI_API_KEY:+API key is configured}"
 ```
-Call tool: get_configuration_status
+
+### If Key IS Set → Skip to Phase 5
+
+### If Key NOT Set
+
+Check for a saved `.env` file:
+
+```bash
+if [ -f .env ] && grep -q GEMINI_API_KEY .env; then
+  source .env
+  echo "Loaded key from .env"
+fi
 ```
 
-### If Configured → Skip to Phase 5
-
-### If NOT Configured
+If still not set, ask the user:
 
 Use `AskUserQuestion`:
 
@@ -215,20 +276,24 @@ To get your Gemini API key:
 Paste your API key below when ready.
 ```
 
-After user provides key:
+**Path B: User Has Key** — Paste it below.
+
+**After user provides key (Path A or B):**
+
+Tell the user to save the key in their Claude Code environment settings:
 
 ```
-Call tool: configure_gemini_token
-Parameters: { "apiKey": "user-provided-key" }
+Great! To make this work, add your API key to Claude Code's environment:
+
+1. Open Claude Code settings (or ~/.claude/settings.json)
+2. Add GEMINI_API_KEY as an environment variable with your key value
+3. Restart Claude Code
+
+The Nano Banana MCP server will pick up the key automatically on startup.
+Then run /infographic again — it will work from now on.
 ```
 
-Verify:
-
-```
-Call tool: get_configuration_status
-```
-
-**Path B: User Has Key** — Paste → `configure_gemini_token` → verify → proceed.
+**The MCP server's `env` block references `${GEMINI_API_KEY}`, which Claude Code resolves from its settings and passes to the MCP process at startup.**
 
 **Path C: Skip** — Complete all phases but output the prompt as text instead of generating. Save to `.infographic/prompts/[topic]-prompt.md`.
 
@@ -263,11 +328,21 @@ Here's the prompt I'll use:
 ---
 [Full prompt text]
 ---
-
-Any tweaks before I generate?
 ```
 
-Wait for approval.
+Use `AskUserQuestion`:
+
+```
+question: "Ready to generate with this prompt?"
+header: "Prompt"
+options:
+  - label: "Yes, generate"
+    description: "Looks good, go ahead"
+  - label: "Tweak the prompt"
+    description: "I want to adjust something before generating"
+  - label: "Start over"
+    description: "Go back to concept selection"
+```
 
 ### 5.3: Generate
 

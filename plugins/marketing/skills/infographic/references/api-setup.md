@@ -6,11 +6,13 @@ How the Gemini API key is configured for image generation via the Nano Banana MC
 
 ## How It Works
 
-The Nano Banana MCP server is automatically registered when you install the marketing or creative department plugin. The API key can be provided in three ways (checked in this order):
+The Nano Banana MCP server is automatically registered when you install the marketing or creative department plugin. The MCP server reads `GEMINI_API_KEY` from its environment at startup (configured via the `env` block in `plugin.json`).
 
-1. **Plugin MCP env config** — Set `GEMINI_API_KEY` in your shell environment; the plugin passes it to the MCP server automatically
-2. **Local config file** — Created by `configure_gemini_token` tool, persists across sessions
-3. **Runtime configuration** — Use `configure_gemini_token` during the skill session
+**Setup flow:**
+1. User provides their Gemini API key during the skill's Phase 4
+2. The skill saves it to a `.env` file in the project directory
+3. User restarts Claude Code — the key is now in the shell environment
+4. The MCP server picks up `GEMINI_API_KEY` from the env block → works automatically from then on
 
 ---
 
@@ -56,19 +58,24 @@ for normal infographic generation usage.
 
 ### After User Provides Key
 
-1. **Configure via MCP tool:**
+1. **Save to `.env` file:**
+   ```bash
+   echo "GEMINI_API_KEY=user-provided-key" > .env
+   echo ".env" >> .gitignore 2>/dev/null || true
+   ```
 
-   Call tool: `configure_gemini_token`
-   Parameters: `{ "apiKey": "user-provided-key" }`
-
-2. **Verify configuration:**
-
-   Call tool: `get_configuration_status`
+2. **Source it:**
+   ```bash
+   source .env
+   ```
 
 3. **Confirm to user:**
    ```
-   API key configured and verified. Your key is stored locally
-   and will be loaded automatically in future sessions. Ready to generate!
+   API key saved to .env.
+
+   IMPORTANT: Please restart Claude Code so the Nano Banana MCP server
+   picks up the key. Then run /infographic again — it will work
+   automatically from now on.
    ```
 
 ---
@@ -82,9 +89,9 @@ Great! Paste your API key here and I'll configure it.
 ```
 
 If user pastes a key:
-1. Call `configure_gemini_token` with the key
-2. Call `get_configuration_status` to verify
-3. Proceed to generation
+1. Save to `.env` file
+2. Source it
+3. Tell user to restart Claude Code
 
 ---
 
@@ -175,11 +182,19 @@ EOF
 
 ## Verification
 
-### Check if key is configured:
+### Check if key is set:
 
-Call tool: `get_configuration_status`
+```bash
+echo "${GEMINI_API_KEY:+API key is configured}"
+```
 
-No curl commands needed — the MCP tool handles all API communication.
+### Check `.env` file:
+
+```bash
+if [ -f .env ] && grep -q GEMINI_API_KEY .env; then
+  echo "Key found in .env"
+fi
+```
 
 ---
 
@@ -242,13 +257,13 @@ To fix:
 ## Security Notes
 
 Remind users:
-- The API key is stored locally in `.nano-banana-config.json` (not in `.env`)
-- Don't commit `.nano-banana-config.json` to version control
-- Add `.nano-banana-config.json` to `.gitignore`
+- The API key is stored in `.env` in the project directory
+- Don't commit `.env` to version control
+- The skill automatically adds `.env` to `.gitignore`
 - Don't share your API key publicly
-- You can reconfigure the key anytime with `configure_gemini_token`
+- You can regenerate keys anytime in Google Cloud Console
 
 ```bash
-# Add to .gitignore if it exists
-echo ".nano-banana-config.json" >> .gitignore 2>/dev/null || true
+# Ensure .env is in .gitignore
+echo ".env" >> .gitignore 2>/dev/null || true
 ```
