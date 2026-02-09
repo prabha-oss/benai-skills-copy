@@ -2,7 +2,8 @@
   "departments": {
     "marketing": {
       "commands": [
-        "marketing"
+        "marketing",
+        "repurpose"
       ],
       "mcpServers": {
         "webflow": {
@@ -11,6 +12,13 @@
             "-y",
             "mcp-remote",
             "https://mcp.webflow.com/mcp"
+          ]
+        },
+        "nano-banana": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "nano-banana-mcp"
           ]
         }
       },
@@ -38,6 +46,26 @@
         "infographic": {
           "displayName": "Infographic",
           "summary": "Generate professional infographics using Gemini AI"
+        },
+        "linkedin": {
+          "displayName": "LinkedIn",
+          "summary": "Create LinkedIn posts and carousels from existing content"
+        },
+        "newsletter": {
+          "displayName": "Newsletter",
+          "summary": "Transform content into engaging newsletter editions"
+        },
+        "title-generation": {
+          "displayName": "Title Generation",
+          "summary": "Generate optimized YouTube video titles"
+        },
+        "gif-creator": {
+          "displayName": "GIF Creator",
+          "summary": "Create GIFs from video clips for social media"
+        },
+        "excalidraw": {
+          "displayName": "Excalidraw",
+          "summary": "Create visual presentations, slide decks, and diagrams"
         }
       }
     },
@@ -83,6 +111,15 @@
       "commands": [
         "creative"
       ],
+      "mcpServers": {
+        "nano-banana": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "nano-banana-mcp"
+          ]
+        }
+      },
       "skills": {
         "video": {
           "displayName": "Video Editing",
@@ -110,34 +147,6 @@
         "n8n-prd-generator": {
           "displayName": "n8n Blueprint Generator",
           "summary": "Convert discovery call transcripts into automation blueprints"
-        }
-      }
-    },
-    "repurposing": {
-      "commands": [
-        "repurpose",
-        "core-yt"
-      ],
-      "skills": {
-        "linkedin": {
-          "displayName": "LinkedIn",
-          "summary": "Create LinkedIn posts and carousels from existing content"
-        },
-        "newsletter": {
-          "displayName": "Newsletter",
-          "summary": "Transform content into engaging newsletter editions"
-        },
-        "title-generation": {
-          "displayName": "Title Generation",
-          "summary": "Generate optimized YouTube video titles"
-        },
-        "gif-creator": {
-          "displayName": "GIF Creator",
-          "summary": "Create GIFs from video clips for social media"
-        },
-        "excalidraw": {
-          "displayName": "Excalidraw",
-          "summary": "Create visual presentations, slide decks, and diagrams"
         }
       }
     }
