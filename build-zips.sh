@@ -15,6 +15,10 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
+
+# Sync skills from _shared/ into department plugins before building
+"$ROOT/sync-skills.sh"
+echo ""
 DIST="$ROOT/dist"
 MARKETPLACE="$ROOT/.claude-plugin/marketplace.json"
 TMP="$(mktemp -d)"

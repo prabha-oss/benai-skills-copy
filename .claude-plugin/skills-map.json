@@ -1,0 +1,102 @@
+{
+  "departments": {
+    "marketing": {
+      "mcpServers": {
+        "webflow": {
+          "command": "npx",
+          "args": [
+            "-y",
+            "mcp-remote",
+            "https://mcp.webflow.com/mcp"
+          ]
+        }
+      },
+      "skills": {
+        "programmatic-seo": {
+          "displayName": "Programmatic SEO",
+          "summary": "Generate SEO-optimized pages at scale using templates and data sources"
+        },
+        "seo-optimizing": {
+          "displayName": "SEO Optimizing",
+          "summary": "Data-driven SEO optimization using Google Search Console"
+        },
+        "seo-audit": {
+          "displayName": "SEO Audit",
+          "summary": "Run comprehensive technical SEO audits (16 categories, 148 rules)"
+        },
+        "email-sequence": {
+          "displayName": "Email Sequence",
+          "summary": "Create email sequences, drip campaigns, and lifecycle email programs"
+        },
+        "case-study": {
+          "displayName": "Case Study",
+          "summary": "Build data-driven case studies from interviews and raw data"
+        },
+        "infographic": {
+          "displayName": "Infographic",
+          "summary": "Generate professional infographics using Gemini AI"
+        }
+      }
+    },
+    "sales": {
+      "skills": {
+        "lead-research-assistant": {
+          "displayName": "Lead Research Assistant",
+          "summary": "B2B lead generation — research companies, discover LinkedIn contacts, score leads"
+        },
+        "email-sequence": {
+          "displayName": "Email Sequence",
+          "summary": "Create email sequences, drip campaigns, and lifecycle email programs"
+        },
+        "case-study": {
+          "displayName": "Case Study",
+          "summary": "Build data-driven case studies from interviews and raw data"
+        },
+        "n8n-prd-generator": {
+          "displayName": "n8n Blueprint Generator",
+          "summary": "Convert discovery call transcripts into automation blueprints"
+        }
+      }
+    },
+    "operations": {
+      "skills": {
+        "n8n": {
+          "displayName": "n8n Automation",
+          "summary": "Build, test, and deploy n8n workflows via REST API"
+        },
+        "n8n-prd-generator": {
+          "displayName": "n8n Blueprint Generator",
+          "summary": "Convert discovery call transcripts into automation blueprints"
+        }
+      }
+    },
+    "creative": {
+      "skills": {
+        "video": {
+          "displayName": "Video Editing",
+          "summary": "Video editing with FFmpeg and Remotion — stitching, transitions, captions"
+        },
+        "excalidraw": {
+          "displayName": "Excalidraw",
+          "summary": "Create visual presentations, slide decks, and diagrams"
+        },
+        "infographic": {
+          "displayName": "Infographic",
+          "summary": "Generate professional infographics using Gemini AI"
+        }
+      }
+    },
+    "product": {
+      "skills": {
+        "excalidraw": {
+          "displayName": "Excalidraw",
+          "summary": "Create visual presentations, slide decks, and diagrams"
+        },
+        "n8n-prd-generator": {
+          "displayName": "n8n Blueprint Generator",
+          "summary": "Convert discovery call transcripts into automation blueprints"
+        }
+      }
+    }
+  }
+}
