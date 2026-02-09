@@ -43,6 +43,15 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
+### Repurposing (5 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| linkedin | `/linkedin` | LinkedIn posts & carousels from content |
+| newsletter | `/newsletter` | Newsletter editions from content |
+| title-generation | `/title-generation` | Optimized YouTube video titles |
+| gif-creator | `/gif-creator` | GIFs from video clips |
+| excalidraw | `/excalidraw` | Presentations & diagrams |
+
 ## n8n Skill
 
 ### Configuration
