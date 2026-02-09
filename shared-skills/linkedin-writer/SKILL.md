@@ -48,25 +48,52 @@ You have access to these knowledge sources in the `references/` folder (relative
 
 First, figure out what the source material is and get the full content.
 
-**If the user provides a YouTube link:**
-- Navigate to `https://youtubetotranscript.com/` using browser tools
-- Enter the YouTube URL and extract the full transcript
-- If browser tools are not available, try using the `get_transcript` YouTube transcript tool if available
-- Confirm with the user that you got the transcript and give a brief 1-2 sentence summary of what it covers
+**Priority: Always use provided data first.** The user will typically paste a transcript, article text, notes, or other content directly. Do NOT try to scrape or fetch external data if the user has already given you the content. Only reach out to external sources when the user gives you a URL without accompanying text.
 
-**If the user provides a blog/article URL:**
-- Use browser tools to navigate to the URL and extract the full article text
-- Confirm with the user that you got the content and give a brief 1-2 sentence summary
+### When the user provides content directly (most common)
 
-**If the user provides a document or raw text:**
+**If the user provides a transcript, article text, raw notes, or a document:**
 - Read and acknowledge the content
 - Give a brief 1-2 sentence summary of what it covers
+- Move on — no need to fetch anything
 
 **If the user provides just an insight or idea (no source material):**
 - Acknowledge the idea and summarize it back to confirm understanding
 - This is valid input — not everything needs a source document
 
-Once you have the source material confirmed, move to Step 1.
+### When the user provides only a URL (no text content)
+
+Only attempt to fetch content if the user gives a URL without pasting the actual content. Follow this priority order:
+
+**For YouTube links:**
+1. **Apify MCP (preferred)** — If the Apify MCP server is available, use it to get the transcript:
+   ```
+   Call tool: call-actor
+   Parameters: {
+     "actorId": "topaz_sharingan/Youtube-Transcript-Scraper-1",
+     "input": { "url": "<youtube-url>" }
+   }
+   ```
+   Then retrieve results with `get-actor-output` or `get-dataset-items`.
+2. **Fallback** — If Apify is not available, ask the user to paste the transcript directly.
+
+**For blog/article links:**
+1. **Apify MCP (preferred)** — If the Apify MCP server is available, use it to scrape the page:
+   ```
+   Call tool: call-actor
+   Parameters: {
+     "actorId": "apify/web-scraper",
+     "input": { "startUrls": [{ "url": "<article-url>" }] }
+   }
+   ```
+2. **WebFetch fallback** — Use the WebFetch tool to grab the page content.
+3. **Manual fallback** — Ask the user to paste the article text.
+
+**Never scrape LinkedIn profiles or posts.** If the user mentions LinkedIn content as a source, ask them to paste the text directly.
+
+### Confirm source material
+
+After getting the content (however it was obtained), give a brief 1-2 sentence summary and confirm with the user before moving to Step 1.
 
 ---
 
