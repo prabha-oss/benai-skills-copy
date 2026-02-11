@@ -50,6 +50,19 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
+### YouTube (7 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| youtube-brief | `/youtube-brief` | Structured video briefs |
+| youtube-ideation | `/youtube-ideation` | Video topic generation |
+| youtube-packaging | `/youtube-packaging` | Titles & thumbnails for CTR |
+| youtube-outline | `/youtube-outline` | Video structure & visual planning |
+| youtube-scripting | `/youtube-scripting` | Scripts & bullet points for filming |
+| youtube-excalidraw | `/youtube-excalidraw` | On-screen excalidraw visuals |
+| title-generation | `/title-generation` | Optimized YouTube video titles |
+
+**Commands:** `/youtube` (skill overview)
+
 ## n8n Skill
 
 ### Configuration
