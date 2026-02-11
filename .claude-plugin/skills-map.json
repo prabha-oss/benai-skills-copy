@@ -165,6 +165,41 @@
           "summary": "Convert discovery call transcripts into automation blueprints"
         }
       }
+    },
+    "youtube": {
+      "commands": [
+        "youtube"
+      ],
+      "skills": {
+        "youtube-brief": {
+          "displayName": "YouTube Brief",
+          "summary": "Create detailed video briefs through a structured, collaborative process"
+        },
+        "youtube-ideation": {
+          "displayName": "YouTube Ideation",
+          "summary": "Generate and evaluate YouTube video ideas based on strategy and audience"
+        },
+        "youtube-packaging": {
+          "displayName": "YouTube Packaging",
+          "summary": "Optimize titles and thumbnail concepts for maximum click-through rate"
+        },
+        "youtube-outline": {
+          "displayName": "YouTube Outline",
+          "summary": "Structure video content with demos, examples, and visual planning"
+        },
+        "youtube-scripting": {
+          "displayName": "YouTube Scripting",
+          "summary": "Create video scripts or bullet points for filming"
+        },
+        "youtube-excalidraw": {
+          "displayName": "YouTube Excalidraw",
+          "summary": "Create excalidraw visuals designed for YouTube video content"
+        },
+        "title-generation": {
+          "displayName": "Title Generation",
+          "summary": "Generate optimized YouTube video titles"
+        }
+      }
     }
   }
 }
