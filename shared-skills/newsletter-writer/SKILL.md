@@ -1,196 +1,334 @@
 ---
-name: linkedin-visual-animation
-description: Create animated GIF and static PNG infographics for LinkedIn posts following Ben AI's exact brand guidelines. Use this skill whenever the user wants to visualize a process, workflow, or step-by-step concept for LinkedIn — including phrases like "make a visual", "create a GIF", "infographic for LinkedIn", "visualize this workflow", "diagram for LinkedIn", "animated post", "process visual", or any request to turn a LinkedIn post or concept into a visual format. Always use this skill in combination with linkedin-post when the user wants both a written post and a visual.
+name: newsletter-writer
+description: "Iterative newsletter writing workflow for Ben Van Sprundel's audience. Use when Ben wants to write a newsletter from an insight, idea, or YouTube video transcript. This is a CREATIVE, STEP-BY-STEP process - never output a complete newsletter immediately. Each step requires suggestions, user decision, then progression to next step. Triggers: newsletter, write newsletter, email content, repurpose video, insight to newsletter."
 ---
 
-# LinkedIn Visual Animation
+# Ben's Newsletter Writer
 
-Create polished, on-brand animated GIF and static PNG infographics for LinkedIn posts. These visuals follow Ben AI's exact brand guidelines and are designed for maximum engagement on LinkedIn.
+An iterative, creative workflow for writing newsletters in Ben's authentic voice.
 
-## Two-Step Process
+## Critical Rules
 
-This skill follows a strict two-step interactive process. Never skip to creating the visual without Step 1 approval.
+1. **NEVER output a complete newsletter immediately.** This is a step-by-step creative process. At each step: provide suggestions → wait for Ben to decide → only then proceed.
 
-### Step 1: Suggest Visualization Approaches
+2. **ALWAYS read the specified context documents at each step.** Each step lists REQUIRED READING. Do not skip this. The quality of output depends entirely on using these documents.
 
-Before creating anything, propose 2-3 different ways to visualize the content. Consider:
+3. **Write only from the provided context documents.** Do not invent strategies, stories, facts, or stylistic habits not evidenced in the inputs.
 
-- **Vertical process flow**: Steps stacked top-to-bottom with arrows (best for sequential workflows, 4-10 steps)
-- **Comparison grid**: Side-by-side cards comparing approaches (best for before/after, tool comparisons)
-- **Hub and spoke**: Central concept with radiating connections (best for ecosystems, tool stacks)
-- **Timeline**: Horizontal or vertical timeline with milestones (best for journeys, evolution)
-- **Numbered list cards**: Clean cards with numbers (best for tips, tools lists, rankings)
+## Context Documents Location
 
-For each suggestion, briefly explain:
-1. The layout type
-2. What content goes in each card/node
-3. Why it fits this particular content
+All documents are in the `references/` folder bundled with this skill:
+- `references/01_Ben_Profile_Background.md` - Ben's story, credentials, values
+- `references/02_What_We_Do_Offer.md` - The offer and value proposition
+- `references/03_ICP_Ideal_Customer_Profile.md` - Target audience details
+- `references/04_Voice_Personality.md` - Tone and messaging
+- `references/05_Newsletter_Strategy.md` - Positioning and core beliefs
+- `references/07_Writing_Framework.md` - Voice DNA and patterns
+- `references/08_Newsletter_Examples.md` - Real newsletter examples to mimic
 
-Wait for user to confirm which approach before proceeding.
+---
 
-### Step 2: Create the GIF and PNG
+## The 7-Step Process
 
-Once the approach is confirmed, build the visual using PIL/Pillow following the exact brand guidelines below. Always output both:
-- An animated GIF (nodes appearing one by one)
-- A static PNG (final frame, for fallback)
+### Step 1: Input Analysis
 
-Save both to the outputs folder.
+**REQUIRED READING:** None yet - just analyze the input.
 
-## Brand Guidelines
+Determine input type and clarify scope.
 
-These are non-negotiable. Every visual must follow these exactly.
+**If YouTube transcript:**
+- Ask: "Do you want to repurpose the entire video or focus on a specific insight/section?"
+- If specific section: ask which part or let Ben specify
+- Extract the core insight(s) from the selected content
 
-### Canvas Size
-- **Final output**: 800 x 998 pixels (portrait, ~4:5 ratio — optimal for LinkedIn)
-- **Render at 3x**: 2400 x 2994 pixels, then downscale with LANCZOS for crisp text
-- Never change these dimensions
+**If insight/idea:**
+- Confirm understanding of the insight
+- Ask clarifying questions if the insight is vague
 
-### Colors
+**Output for this step:** Clear statement of the core insight to build the newsletter around.
 
-| Role | Color | Hex |
-|------|-------|-----|
-| Background | Light yellow | #FAF3E3 `(250, 243, 227)` |
-| Card background | White | #FFFFFF `(255, 255, 255)` |
-| Border / shadow / text | Near-black | #020309 `(2, 3, 9)` |
-| Title accent | Green | `(72, 160, 120)` |
-| Gray text (descriptions) | Gray | `(100, 100, 100)` |
-| Divider lines | Warm gray | `(210, 205, 190)` |
+**STOP. Wait for Ben to confirm before proceeding.**
 
-### Phase Colors (for category tags on cards)
+---
 
-| Phase | Color | Hex |
-|-------|-------|-----|
-| INPUT | Dark yellow | #FDEEC4 `(253, 238, 196)` |
-| PLAN | Light blue | #E5F5F9 `(229, 245, 249)` |
-| ENGINE | Light blue | #E5F5F9 `(229, 245, 249)` |
-| EXEC | Green | #D2ECD0 `(210, 236, 208)` |
-| DEBUG | Red/pink | #F3C1C0 `(243, 193, 192)` |
+### Step 2: Define Outcomes
 
-Phase tags are optional — use them when the content has clear phases/categories.
+**REQUIRED READING BEFORE THIS STEP:**
+- `references/03_ICP_Ideal_Customer_Profile.md` - To understand who we're writing for and their pain points
+- `references/05_Newsletter_Strategy.md` - To ensure outcomes align with positioning and core beliefs
+- `references/04_Voice_Personality.md` - To align outcomes with the message people should carry away
 
-### Typography
-- **Title**: Poppins Bold, 108pt at 3x (36pt final)
-- **Subtitle**: Poppins Medium, 42pt at 3x (14pt final)
-- **Card label**: Poppins Bold, 51pt at 3x (17pt final)
-- **Card description**: Poppins Medium, 36pt at 3x (12pt final)
-- **Step numbers**: Poppins Bold, 39pt at 3x (13pt final)
-- **Footer**: Poppins Medium, 36pt at 3x (12pt final)
-- **Phase tags**: Poppins Bold, 30pt at 3x (10pt final)
+Define the main takeaway and secondary outcomes for the ICP.
 
-Font paths: `/usr/share/fonts/truetype/google-fonts/Poppins-Bold.ttf` and `Poppins-Medium.ttf`
+Using the ICP document, consider all three audience angles:
+1. Ambitious solopreneurs (capped income, want to sell systems not hours)
+2. Career pivoters (planning escape, need exit plan)
+3. Exploring entrepreneurs (between opportunities, need clear path)
 
-### Card Style
-- **Solid shadow**: offset 15px at 3x (5px final), color #020309
-- **Solid border**: 6px at 3x (2px final), color #020309
-- **Rounded corners**: 30px at 3x (10px final)
-- **Card dimensions** (for vertical flow): 1560 x 195 at 3x
-- **Gap between cards**: 84px at 3x
-- White background with color accent strip on the left edge
-- Text (label + description) vertically centered within card
+**Main Outcome Options (suggest 3-5):**
+Format each as: "After reading this, the reader will [specific transformation/realization/action]"
 
-### Layout Structure (Vertical Process Flow)
-- Title area: ~390px at 3x (top)
-- Footer: ~150px at 3x (bottom)
-- Cards centered horizontally and vertically in remaining space
-- Downward arrows between cards (5px line, triangular arrowhead)
+Outcome types to consider:
+- Mindset shift (e.g., "realize they don't need to be an expert to start")
+- Action trigger (e.g., "feel confident to post their first content today")
+- Knowledge gain (e.g., "understand the exact roadmap from $0 to first client")
+- Belief change (e.g., "stop waiting for perfection and embrace shipping fast")
 
-### Footer
-Always include: `"Ben Van Sprundel  |  Founder @ BenAI"`
+**Secondary Outcomes (suggest 2-3 per main outcome):**
+Supporting transformations that reinforce the main message.
 
-## Icons and Logos
+**STOP. Wait for Ben to select/modify main + secondary outcomes.**
 
-Add relevant icons/logos to cards where they make sense. Draw them programmatically with PIL (do not rely on external image files). Available logo drawing patterns:
+---
 
-- **Claude logo**: Orange starburst with rays radiating from center circle. Color: `(224, 125, 79)`
-- **n8n logo**: Pink connected nodes (3 circles with connecting lines). Color: `(234, 72, 108)`
-- **Google Meet logo**: Colored camera icon with quadrants (blue, green, red, yellow)
-- **Document icon**: Gray rounded rectangle with horizontal text lines inside
+### Step 3: Suggest Newsletter Outlines
 
-For other tools/concepts, draw simple representative icons using PIL primitives (ellipses, rectangles, polygons). Keep icons small (45px radius at 3x) and positioned on the left side of each card.
+**REQUIRED READING BEFORE THIS STEP:**
+- `references/01_Ben_Profile_Background.md` - To understand which stories/experiences fit
+- `references/04_Voice_Personality.md` - To map framework to Ben's voice modes
+- `references/07_Writing_Framework.md` - To understand the 3 voice modes and emotional temperature
+- `references/08_Newsletter_Examples.md` - Study the section patterns in real examples
 
-See `references/template-code.py` for complete logo drawing implementations.
+Based on the insight, outcomes, and Ben's background, propose **at least 3 outline options** for the newsletter. Each outline defines the writing framework, the sections, their purpose, and the flow of the piece. This is where the "shape" of the newsletter gets decided — Ben picks the structure, then writing follows.
 
-## Animation Pattern
+**How to generate outlines:**
 
-The GIF animation reveals content progressively:
+Draw from writing frameworks and adapt them to Ben's newsletter style. Each outline should feel genuinely distinct — not just different labels on the same structure. Consider the content and which angle serves it best.
 
-1. **Title hold**: Show title + subtitle + footer for ~12 frames (1.2s at 100ms/frame)
-2. **Node reveal**: Add one card at a time, each holding for ~7 frames (0.7s). Arrows appear as connecting cards are revealed.
-3. **Final hold**: Complete visual holds for ~30 frames (4.5s at 150ms/frame) so viewers see the full picture.
+**Frameworks to draw from:**
 
-Frame timing: 100ms per frame for reveal, 150ms for final hold. Aim for under 300KB total.
+| Framework | Flow | Best When |
+|-----------|------|-----------|
+| **PAS** (Problem → Agitate → Solution) | Open with the pain, twist the knife, deliver the fix | The insight addresses a clear pain point or mistake |
+| **AIDA** (Attention → Interest → Desire → Action) | Hook them, build curiosity, make them want it, tell them how | The insight introduces a new concept or opportunity |
+| **BAB** (Before → After → Bridge) | Show the old way, paint the new reality, explain the bridge | The insight shows a transformation or result |
+| **FAB** (Features → Advantages → Benefits) | Show what it is, why it matters, what you get | The insight explains a tool, method, or system |
+| **Story → Lesson → Framework** | Personal narrative, extract the insight, give the system | The insight is experience-driven with a clear takeaway |
+| **Myth-Busting** | Common belief → why it's wrong → what to do instead | The insight challenges conventional thinking |
 
-## Rendering Technique
+You're not limited to these — mix, combine, or create a custom structure if the content calls for it. The goal is giving Ben meaningfully different options for how the newsletter reads.
 
-This is critical for sharp text:
-
-```python
-SCALE = 3
-WIDTH = 800 * SCALE   # 2400
-HEIGHT = 998 * SCALE   # 2994
-
-# ... draw everything at 3x size ...
-
-# Downscale for crisp final output
-final = img.resize((800, 998), Image.LANCZOS)
-```
-
-Always render at 3x and downscale. Text rendered at 1x or 2x will look blurry on LinkedIn.
-
-## Text Alignment in Cards
-
-Vertically center the text block (label + gap + description) within each card:
-
-```python
-label_bbox = draw.textbbox((0, 0), label, font=FONT_NODE_LABEL)
-label_h = label_bbox[3] - label_bbox[1]
-desc_bbox = draw.textbbox((0, 0), desc, font=FONT_NODE_DESC)
-desc_h = desc_bbox[3] - desc_bbox[1]
-text_gap = 12
-total_text_h = label_h + text_gap + desc_h
-text_top = card_y + (CARD_H - total_text_h) // 2
-```
-
-This prevents text from floating too high or low in cards.
-
-## Dependencies
-
-```bash
-pip install pillow --break-system-packages
-```
-
-PIL (Pillow) is the only required dependency.
-
-## Reference Code
-
-For the complete working implementation (logo drawing functions, card rendering, animation frame generation), read:
+**For each outline, present:**
 
 ```
-references/template-code.py
+OUTLINE [X]: [Short name]
+Framework: [Which framework or hybrid]
+Why it fits: [1-2 sentences on why this structure works for this specific content]
+
+Sections:
+1. [Section name] — [What this section covers and its purpose]
+   Voice: [Vulnerable Teacher / Strategic Authority / Encouraging Coach]
+   Length: [short/medium/long]
+
+2. [Section name] — [What this section covers and its purpose]
+   Voice: [mode]
+   Length: [guidance]
+
+3. [Continue for all sections...]
+
+Closing: [Sign-off approach]
+P.S.: [Pitch angle]
 ```
 
-This contains a fully tested template that produces a vertical process flow infographic. Adapt it for each new visual by changing the NODES data, title text, and logo assignments.
+**Map voice modes to sections** using the 3 voice modes from `references/07_Writing_Framework.md`:
+- Vulnerable Teacher (40%) — personal stories, confessions, failures
+- Strategic Authority (35%) — teaching, frameworks, specific numbers
+- Encouraging Coach (25%) — "you can do this", action steps, motivation
 
-## Adaptation Guide
+**Which stories from `references/01_Ben_Profile_Background.md` could be woven in** — mention specific story options for each outline (e.g., the 140-view video story, the bankruptcy, the CMO job).
 
-When creating a new visual, adapt the template by:
+**Every outline must include:**
+- An opening hook (vulnerability or bold statement)
+- Personal failure/struggle before wins
+- A clear teaching/value section in the middle
+- Objection handling ("I know what you're thinking...")
+- Actionable takeaway or steps the reader can do today
+- "Keep going, Ben" sign-off
+- P.S. with soft accelerator pitch
 
-1. **Change NODES list**: Update labels, descriptions, phase colors, phase tags, and logo types
-2. **Change title text**: Update `part1`, `part2` (accent colored), and subtitle
-3. **Adjust card count**: Recalculate `total_cards_h` and `start_y` based on number of nodes
-4. **Add new logo types**: If the content references tools not in the template, draw new icons using PIL primitives following the same pattern (RGBA overlay, paste with transparency)
-5. **Choose layout**: For non-sequential content, adapt the positioning logic (grid, radial, etc.) while keeping all brand guidelines intact
+**Study the "Key Patterns Across All Examples" section in `references/08_Newsletter_Examples.md`** to ensure structures follow Ben's proven patterns.
 
-## Quality Checklist
+**STOP. Wait for Ben to pick, combine, or modify outlines before writing.**
 
-Before delivering, verify:
-- [ ] Canvas is exactly 800x998
-- [ ] Rendered at 3x (2400x2994) and downscaled with LANCZOS
-- [ ] Background is #FAF3E3
-- [ ] Cards have solid black shadows, borders, and rounded corners
-- [ ] Text is crisp (not blurry)
-- [ ] Text is vertically centered in cards
-- [ ] Footer includes "Ben Van Sprundel | Founder @ BenAI"
-- [ ] Both GIF and static PNG are saved
-- [ ] GIF file size is under 500KB
-- [ ] Logos/icons are drawn programmatically (no external files)
+---
+
+### Step 4: Subject Lines
+
+**REQUIRED READING BEFORE THIS STEP:**
+- `references/08_Newsletter_Examples.md` - Study the subject line patterns from real examples
+- `references/05_Newsletter_Strategy.md` - To align subject lines with positioning and core beliefs
+- `references/04_Voice_Personality.md` - To ensure subject line tone matches Ben's voice (confident, direct, not clickbaity)
+- `references/03_ICP_Ideal_Customer_Profile.md` - To craft subject lines that resonate with the target audience's pain points and desires
+
+Now that the outline is locked, generate subject line options that align with the chosen structure and angle.
+
+**Subject Line Patterns (from `references/08_Newsletter_Examples.md`):**
+- Specific numbers: "How I built two $1M AI businesses as a Marketer"
+- Big claims: "The $10 Trillion AI Opportunity"
+- Strategy reveals: "The #1 Strategy for a high margin AI business"
+- Contrarian: "The strategy for a 90% net-margin business"
+
+**Generate 5-7 subject lines:**
+- 2 with specific numbers/results
+- 2 with curiosity gaps
+- 2 with bold claims
+- 1 contrarian/unexpected angle
+
+**For each, also suggest a preview text** (the snippet shown after subject line in inbox).
+
+Present all options.
+
+**STOP. Wait for Ben to select/combine.**
+
+---
+
+### Step 5: Suggest Hook Options
+
+**REQUIRED READING BEFORE THIS STEP:**
+- `references/08_Newsletter_Examples.md` - Study how real newsletters open — pay close attention to the first 5-10 lines of each example
+- `references/07_Writing_Framework.md` - For hook patterns, voice modes, and emotional temperature (the opening should be "cool but relatable")
+- `references/01_Ben_Profile_Background.md` - For authentic story details, failures, and experiences to use in hooks
+- `references/04_Voice_Personality.md` - For tone calibration — confident but not arrogant, vulnerable but not weak
+
+Present **3-5 hook options** that fit the selected outline. Each hook is the opening of the newsletter — the first thing the reader sees after the subject line.
+
+**Hook patterns to draw from:**
+
+1. **Bold Stat Opening** - Lead with a striking statistic or number, then reveal the insight behind it
+2. **Personal Story / Confession** - Vulnerability + lesson learned ("Let me be honest...")
+3. **Contrarian / Pattern Interrupt** - Challenge conventional wisdom or a common belief
+4. **Social Proof + Insight** - Stack results first, then explain the counterintuitive approach
+5. **Story Entry Point** - Drop the reader into a specific moment in time
+
+Each hook should be 4-8 short paragraphs, written in Ben's voice. The hook must flow naturally into the first section of the selected outline.
+
+**STOP. Wait for Ben to pick a hook.**
+
+---
+
+### Step 6: Write the Newsletter
+
+**REQUIRED READING BEFORE THIS STEP - READ ALL OF THESE:**
+- `references/08_Newsletter_Examples.md` - **CRITICAL: Almost mimic these examples. The newsletter should sound exactly like this.**
+- `references/07_Writing_Framework.md` - Voice checklist, tone temperature, content ratios
+- `references/01_Ben_Profile_Background.md` - For authentic story details and credentials
+- `references/02_What_We_Do_Offer.md` - For accurate P.S. pitch content
+- `references/04_Voice_Personality.md` - For signature phrases and messaging
+
+#### Prime Directives for Writing
+
+1. **Adhere to the provided data.** If it isn't in the context documents, don't use it.
+2. **Style is sourced, not guessed.** Match tone, cadence, and structure from `references/07_Writing_Framework.md` and `references/08_Newsletter_Examples.md`.
+3. **Insight-led.** The locked insight is the thesis. Everything in the draft should ladder up to it.
+4. **No hype drift.** Resist generic guru-isms or salesy add-ons unless present in the examples.
+5. **Sentence rule:** Avoid very short 1-4 word sentences ending with a full stop UNLESS the Writing Framework explicitly uses them (like "That's it.").
+
+#### Input Precedence (when documents conflict)
+
+1. `references/07_Writing_Framework.md` (highest)
+2. `references/08_Newsletter_Examples.md`
+3. `references/04_Voice_Personality.md`
+4. `references/05_Newsletter_Strategy.md`
+5. The insight phrasing (never contradict core meaning)
+
+#### Writing Method (follow in order)
+
+1. **Absorb Strategy:** From `references/05_Newsletter_Strategy.md` - identify audience, desired outcome, positioning
+2. **Map Personality:** From `references/04_Voice_Personality.md` - extract voice traits, formality, warmth, vulnerability level
+3. **Learn Style from Examples:** From `references/08_Newsletter_Examples.md` - note openings, paragraph length, list density, rhetoric, CTA posture, closers
+4. **Lock Structure:** Use the outline from Step 3 and hook from Step 5
+5. **Plan from Insight:** Write a one-line thesis and 3-5 bullet outline that proves/explains the insight in the selected structure
+6. **Draft the Newsletter:** Write clearly, economically, and in-voice. Keep everything grounded in the context documents.
+7. **Self-QA:** Run the Voice & Structure Checklist below. Fix any misses before presenting.
+
+#### Voice & Structure Checklist (must pass before presenting)
+
+- [ ] **Framework compliance:** Open, flow, and close match the locked structure
+- [ ] **Tone compliance:** Diction, rhythm, rhetorical devices match `references/08_Newsletter_Examples.md`
+- [ ] **Insight alignment:** Every section supports the thesis; no orphan tangents
+- [ ] **Clarity:** Short-to-medium sentences; no jargon unless in examples
+- [ ] **Sentence rule:** No 1-4 word standalone sentences with full stop (except "That's it." and similar from examples)
+- [ ] **CTA posture:** Matches examples (soft P.S. pitch, not aggressive)
+- [ ] **Factual grounding:** Every claim originates in context documents; no external facts or invented numbers
+- [ ] **Opens with vulnerability or bold statement**
+- [ ] **Personal failure/struggle before wins**
+- [ ] **Specific numbers** (not "some" but "140 views", "$20M+ company")
+- [ ] **Short paragraphs, often single sentences**
+- [ ] **Bold text for key insights**
+- [ ] **Rhetorical questions to reader**
+- [ ] **Case studies** (personal + accelerator members like Jonas, Masai)
+- [ ] **Objection handling** ("I know what you're thinking...")
+- [ ] **Clear action step**
+- [ ] **"Keep going, Ben" sign-off**
+- [ ] **P.S. with accelerator pitch** (reference `references/02_What_We_Do_Offer.md` for accurate details)
+
+#### Tone Temperature
+
+- Opening: Cool but relatable
+- Early middle: Warm vulnerability
+- Core teaching: Rising confidence
+- Late middle: Strong authority
+- Close: Warm encouragement
+
+#### Content Ratios
+
+- 30% vulnerability
+- 40% teaching/authority
+- 20% encouragement
+- 10% social proof
+
+#### Language
+
+- 80% simple everyday language
+- 15% technical terms (immediately explained)
+- 5% business terms (MRR, pipeline)
+
+Write the complete draft. Run the checklist. Fix issues.
+
+**STOP. Present draft and be ready to iterate based on Ben's feedback.**
+
+---
+
+### Step 7: Iterate
+
+After presenting the draft, be ready for feedback. This is where the newsletter gets polished. Ben may want to adjust tone, swap sections, add stories, or rework specific paragraphs. Follow the Iteration Protocol below.
+
+---
+
+## Iteration Protocol
+
+At any step, if Ben wants to revise:
+1. Acknowledge the feedback
+2. Re-read relevant context documents if needed
+3. Provide revised options based on direction
+4. Wait for new lock-in before proceeding
+
+Never rush through steps. The iterative process IS the value.
+
+## Quick Reference: Ben's Signature Elements
+
+**Phrases to use naturally:**
+- "That's it."
+- "Keep going,"
+- "Here's the thing:"
+- "But here's what I learned..."
+- "Domain Expertise + AI = Unfair Advantage"
+- "You only need to be one step ahead"
+- "99% of people... Be the 1%"
+- "It's not rocket science"
+
+**Story elements to weave in (details in `references/01_Ben_Profile_Background.md`):**
+- First startup failure and bankruptcy (5 years grinding, went bust)
+- 140-view video that got first client ($20M+ company CEO)
+- Developer with 20 years experience who couldn't build good AI
+- CMO job that felt empty and uninspired
+- Building to $1M ARR without knowing code
+- Accelerator member success stories (Jonas, Masai, Andrew, etc.)
+
+**Always end with:**
+```
+Keep going,
+Ben
+
+P.S. [Soft pitch to accelerator - reference 02_What_We_Do_Offer for accurate benefits]
+```
