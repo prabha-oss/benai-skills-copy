@@ -15,8 +15,13 @@ Create professional, on-brand infographics using Gemini AI via the Nano Banana M
 1. Read `references/design-principles.md` (brand philosophy and design thinking — internalize this deeply)    
 2. Read `references/gemini-image-api.md` (MCP tool reference)                                                 
 3. Read `references/api-setup.md` (API key setup guide)                                                       
-4. Execute Phase 0 (silent config check)                                                                      
-5. Begin Phase 1 
+4. Execute Phase 0 (silent config check)
+5. **If API key is NOT configured in Phase 0:**
+   - Skip directly to Phase 4 (API Key Setup)
+   - Do NOT proceed to Phase 1
+   - Do NOT ask about content
+6. **If API key IS configured:**
+   - Begin Phase 1
 
 ---
 
@@ -33,17 +38,30 @@ mkdir -p .infographic/prompts
 
 ### 0.2: Check for API Key
 
-```bash
-# Load .env if it exists
-if [ -f .env ]; then
-  source .env 2>/dev/null
-fi
+Check if the GEMINI_API_KEY exists. Check BOTH the environment variable AND the `.env` file:
 
-echo "${GEMINI_API_KEY:+API key is configured}"
+```bash
+# Check environment variable first, then .env file
+if [ -n "$GEMINI_API_KEY" ]; then
+  echo "API key found in environment"
+elif [ -f .env ] && grep -q "^GEMINI_API_KEY=.\+" .env; then
+  echo "API key found in .env file"
+else
+  echo "API key not configured"
+fi
 ```
 
-If configured: Proceed silently.
-If NOT configured: Flag for Phase 4.
+**Why check both?** The MCP server uses `dotenv` to load `.env` automatically at startup. So even if the bash shell doesn't have the env var set, the MCP server reads it from `.env` directly. If the key exists in `.env`, the MCP server has it.
+
+**CRITICAL DECISION POINT:**
+- If found (in env var OR `.env` file): Proceed silently to Phase 1
+- If NOT found in either: **IMMEDIATELY jump to Phase 4 (API Key Setup)**
+  - Do NOT proceed to Phase 1
+  - Do NOT ask about content
+  - Do NOT try to generate
+  - Go directly to Phase 4 to get the API key from the user
+
+**Note:** Do NOT use `get_configuration_status` MCP tool - it gives false positives.
 
 ### 0.3: Check for Brand Config
 
@@ -226,28 +244,29 @@ options:
 
 ## Phase 4: API Key Setup
 
-**Goal:** Ensure the Gemini API key is available for the Nano Banana MCP server.
+**Goal:** Ensure the Gemini API key is configured in the Nano Banana MCP server.
 
-### Check if Key Exists
+### 4.1: Check for API Key
 
-```bash
-echo "${GEMINI_API_KEY:+API key is configured}"
-```
-
-### If Key IS Set → Skip to Phase 5
-
-### If Key NOT Set
-
-Check for a saved `.env` file:
+Before generating, check if the GEMINI_API_KEY exists in the environment or `.env` file:
 
 ```bash
-if [ -f .env ] && grep -q GEMINI_API_KEY .env; then
-  source .env
-  echo "Loaded key from .env"
+if [ -n "$GEMINI_API_KEY" ]; then
+  echo "API key found in environment"
+elif [ -f .env ] && grep -q "^GEMINI_API_KEY=.\+" .env; then
+  echo "API key found in .env file"
+else
+  echo "API key not configured"
 fi
 ```
 
-If still not set, ask the user:
+### If Key IS Found (env var OR .env file) → Skip to Phase 5
+
+The MCP server uses `dotenv` to load `.env` automatically. If the key is in `.env`, the MCP server has it.
+
+### If Key NOT Found in Either
+
+Ask the user how they want to proceed:
 
 Use `AskUserQuestion`:
 
@@ -263,40 +282,100 @@ options:
     description: "Just give me the prompt to use elsewhere"
 ```
 
-**Path A: Set Up Now**
+### Path A: Set Up Now (Guided Setup)
+
+Present these instructions:
 
 ```
-To get your Gemini API key:
+To get your free Gemini API key:
 
 1. Go to Google AI Studio: https://aistudio.google.com
 2. Sign in with your Google account
 3. Click "Get API Key" in the left sidebar
-4. Click "Create API Key" and select a project
-5. Copy the generated key
+4. Click "Create API Key" and select a project (or create a new one)
+5. Copy the generated key (starts with "AIza...")
 
 Paste your API key below when ready.
 ```
 
-**Path B: User Has Key** — Paste it below.
+Wait for user to provide the key, then proceed to **Save the Key**.
 
-**After user provides key (Path A or B):**
-
-Tell the user to save the key in their Claude Code environment settings:
+### Path B: User Has Key Ready
 
 ```
-Great! To make this work, add your API key to Claude Code's environment:
-
-1. Open Claude Code settings (or ~/.claude/settings.json)
-2. Add GEMINI_API_KEY as an environment variable with your key value
-3. Restart Claude Code
-
-The Nano Banana MCP server will pick up the key automatically on startup.
-Then run /infographic again — it will work from now on.
+Great! Paste your Gemini API key below.
 ```
 
-**The MCP server's `env` block references `${GEMINI_API_KEY}`, which Claude Code resolves from its settings and passes to the MCP process at startup.**
+Wait for user to provide the key, then proceed to **Save the Key**.
 
-**Path C: Skip** — Complete all phases but output the prompt as text instead of generating. Save to `.infographic/prompts/[topic]-prompt.md`.
+### Save the Key (After Path A or B)
+
+Once user provides the key:
+
+1. **Save to `.env` file:**
+```bash
+# Create .env if it doesn't exist
+if [ ! -f .env ]; then
+  cat > .env <<'EOF'
+# BenAI Skills - API Keys Configuration
+
+# ============================================================================
+# Marketing Plugin
+# ============================================================================
+
+# GEMINI_API_KEY - Required for /infographic skill
+GEMINI_API_KEY=
+
+# APIFY_TOKEN - Required for /seo-audit and /programmatic-seo skills
+APIFY_TOKEN=
+
+EOF
+fi
+
+# Update the GEMINI_API_KEY line
+sed -i '' "s|^GEMINI_API_KEY=.*|GEMINI_API_KEY=[user-provided-key]|" .env
+
+# Add .env to .gitignore for security
+echo ".env" >> .gitignore 2>/dev/null || true
+```
+
+2. **Confirm to user and EXIT THE SKILL:**
+```
+✅ API key saved to .env!
+
+⚠️  Please restart Claude Code so the MCP server can load your new key.
+
+The Nano Banana MCP server uses dotenv to read .env automatically at startup.
+After restart, your key will be loaded and ready.
+
+Steps:
+1. Restart Claude Code
+2. Run /infographic again
+3. It will work!
+```
+
+**CRITICAL:** After showing this message, the skill MUST EXIT. Do NOT:
+- Call `configure_gemini_token` MCP tool (creates unwanted .nano-banana-config.json)
+- Call `get_configuration_status` MCP tool (gives false positives)
+- Proceed to generation
+- Continue the workflow in any way
+
+The MCP server needs to restart to load .env via dotenv. Exit the skill now.
+
+### Path C: Skip for Now
+
+```
+No problem! I'll complete all the planning phases and give you a ready-to-use prompt at the end.
+
+You can then:
+- Paste it into Google AI Studio (aistudio.google.com)
+- Use it with other image generation tools
+- Come back later with /infographic after getting your API key
+
+Let's continue with the design...
+```
+
+In this mode, complete Phases 1-5 normally, but in Phase 5.3, save the prompt to `.infographic/prompts/[topic]-prompt.md` instead of generating.
 
 ---
 

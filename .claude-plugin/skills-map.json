@@ -18,11 +18,9 @@
           "command": "npx",
           "args": [
             "-y",
-            "nano-banana-mcp"
+            "@zhibinyang/nano-banana-mcp"
           ],
-          "env": {
-            "GEMINI_API_KEY": "${GEMINI_API_KEY}"
-          }
+          "env": {}
         },
         "apify": {
           "command": "npx",
@@ -129,11 +127,9 @@
           "command": "npx",
           "args": [
             "-y",
-            "nano-banana-mcp"
+            "@zhibinyang/nano-banana-mcp"
           ],
-          "env": {
-            "GEMINI_API_KEY": "${GEMINI_API_KEY}"
-          }
+          "env": {}
         }
       },
       "skills": {
