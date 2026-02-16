@@ -79,6 +79,10 @@
         "excalidraw": {
           "displayName": "Excalidraw",
           "summary": "Create visual presentations, slide decks, and diagrams"
+        },
+        "website-launch-kit": {
+          "displayName": "Website Launch Kit",
+          "summary": "Create custom, distinctive landing pages through deep conversation and iterative design"
         }
       }
     },
