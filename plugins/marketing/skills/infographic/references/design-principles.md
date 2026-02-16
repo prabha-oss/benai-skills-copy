@@ -46,7 +46,196 @@ We do NOT want them to feel:
 
 ---
 
-## 2. The Hard Shadow Signature
+## 2. Content Analysis Framework
+
+Before designing anything, you must understand what the content is actually saying — not at the surface level, but at the deepest level. Content has layers, and most mediocre infographics fail because they visualize the wrong one.
+
+### The Four Layers of Content
+
+Every piece of content — an essay, a post, a talk, an article — contains meaning at multiple depths. Extracting the right layer is the single most important design decision you'll make.
+
+**Layer 1: NARRATIVE — What happened?**
+
+Events, timelines, biography, sequences of actions. "I moved from Vizag to Bangalore." "The company went from 3 to 300 employees." "First we built the prototype, then we launched."
+
+Narrative is the easiest layer to extract and the **worst** layer to visualize. It produces "story recap" infographics that feel like illustrated book reports. Nobody scrolling LinkedIn wants to see a timeline of someone's life. They want the MEANING of that life.
+
+→ Almost never the right thing to visualize.
+
+**Layer 2: THEMES — What is it about?**
+
+Abstract topics and patterns. "Growth." "Struggle." "Identity." "Transformation." "Resilience."
+
+Themes are slightly better than narrative but still too abstract. They lead to generic visual metaphors — a mountain for "growth," a butterfly for "transformation," a lightbulb for "ideas." These metaphors are so overused they're invisible. A viewer scrolling past a mountain metaphor feels nothing because they've seen it a thousand times.
+
+→ Better, but leads to decoration rather than communication.
+
+**Layer 3: CLAIMS — What does it SAY is true about the world?**
+
+Universal truths, philosophical statements, hard-won insights that the content asserts. These are the sentences that make you stop and think "that's true" or "I've never thought of it that way."
+
+Examples:
+- "When the suffering is something you chose, you can work with it. When it's something that happened to you, it just eats you."
+- "The fear of picking wrong is worse than the exhaustion of doing all of it badly."
+- "Nobody told me I couldn't go this fast. So I didn't know I wasn't supposed to."
+
+Claims are where editorial illustrations live. They're specific enough to visualize as a scene but universal enough that viewers recognize their own lives in them.
+
+→ This is where the best editorial illustrations come from.
+
+**Layer 4: INFORMATION — What concrete data, comparisons, or frameworks exist?**
+
+Numbers, scorecards, before/after comparisons, checklists, step-by-step frameworks, structured data. Not abstract concepts — concrete structures that can be mapped directly to visual elements.
+
+Examples:
+- "Developer: 2 advantages (code, architecture), 4 gaps. Domain Expert: 6 advantages, 0 gaps."
+- "3-item menu vs. infinite options: decision fatigue drops 70%."
+- "Before automation: 3 hours/day on email. After: 20 minutes."
+
+Information structures are where information graphics live. They transmit facts. The viewer LEARNS something in 1-2 seconds.
+
+→ This is where the best information graphics come from.
+
+### Which Layer to Visualize
+
+The default instinct is to visualize Layer 1 (story) or Layer 2 (themes). Resist this.
+
+| If the viewer should... | Visualize this layer | Output mode |
+|------------------------|---------------------|-------------|
+| **Feel** something — recognition, discomfort, inspiration | Layer 3: Claims | Editorial Illustration |
+| **Learn** something — a fact, framework, comparison | Layer 4: Information | Information Graphic |
+| **Both** — emotional hook + concrete takeaway | Layer 3 + Layer 4 | Hybrid |
+
+### The Key Question
+
+Never ask "what should we visualize?" — that question leads to decoration.
+
+Instead ask: **"What should the viewer KNOW or FEEL after 2 seconds?"**
+
+This single question changes everything downstream. If the answer is about feeling ("they should feel the weight of unchosen pain"), you're making an editorial illustration. If the answer is about knowing ("they should see that domain experts have 6 advantages"), you're making an information graphic.
+
+### Identifying Layers in Real Content
+
+When analyzing content, explicitly label what you find at each layer. Be honest about which layers are strong and weak:
+
+```
+LAYER 1 (Narrative): Weak. Personal timeline — not visualizable.
+LAYER 2 (Themes): Moderate. "Persistence" and "identity" — too generic.
+LAYER 3 (Claims): STRONG. "Chosen pain vs. inherited pain" — universal, visceral, cinematic.
+LAYER 4 (Information): Weak. No concrete data or frameworks.
+→ Recommendation: Layer 3, Editorial Illustration.
+```
+
+Sometimes content is strong at Layer 4 but weak at Layer 3, or vice versa. Some content has strong claims AND strong data. The analysis should reveal which path will produce the best visual, not force a predetermined choice.
+
+---
+
+## 3. Output Mode Taxonomy
+
+"Infographic" is not one format. There are fundamentally different types of visual output, and confusing them is one of the most common causes of mediocre results. Before any visual thinking, you must know which mode you're in.
+
+### Editorial Illustration
+
+**When:** The content's strongest layer is Layer 3 (Claims). The viewer should FEEL something.
+
+**What it looks like:** Cinematic scenes, surreal compositions, visual metaphors embodied as physical spaces. Art that sits with you. The scene IS the message — you don't illustrate a concept, you create a world that embodies a truth.
+
+**Examples:**
+- Two rooms sharing a wall: one cramped and consuming, one vast and empty. The dividing wall has a crack. (Chosen vs. inherited pain)
+- A figure standing at a kitchen counter, staring at three jars. Behind them, a infinite warehouse of options fades into fog. (The paradox of choice)
+- A person building a bridge plank by plank — standing on the last plank they placed, with nothing underneath. (Building without a map)
+
+**Text density:** Minimal. One powerful line. Maybe a title. The image does the communicating.
+
+**Style:** Discovered from the content's emotional register + user taste (see Style Discovery section). NOT the BenAI brand template.
+
+**Prompt architecture:** Style anchor → emotional register → scene description → spatial composition → texture → color → text → negatives → technical specs.
+
+### Information Graphic
+
+**When:** The content's strongest layer is Layer 4 (Information). The viewer should LEARN something.
+
+**What it looks like:** Scorecards, checklists, charts, comparisons, numbered frameworks. Clean, structured, data-driven. Scans in 1 second. The viewer saves it because it's useful.
+
+**Examples:**
+- Side-by-side scorecard: Developer (2 green, 4 red) vs. Domain Expert (6 green, 0 red). Winner obvious at a glance.
+- 3-step numbered flow: Know the Problem → Prompt the Solution → Ship It.
+- Before/after comparison: Manual process (3 hours) vs. Automated (20 minutes).
+
+**Text density:** Moderate. Structured labels, short descriptions, exact data. Every word is planned and placed.
+
+**Style:** BenAI brand system. Hard shadows, cream background, accent colors, Space Grotesk + Montserrat. Consistent across all info graphics for brand recognition.
+
+**Prompt architecture:** Format declaration → information hierarchy → data visualization → exact text → brand system → density control → scanability → technical specs.
+
+### Hybrid
+
+**When:** The content has both a strong emotional claim (Layer 3) AND concrete supporting data (Layer 4). The viewer should feel something AND learn something.
+
+**What it looks like:** An editorial visual with minimal data overlay. The emotional scene dominates, but a small data element anchors it in reality.
+
+**Examples:**
+- The "Two Rooms" scene with a small stat overlay: "87% of burnout comes from unchosen obligations."
+- A cinematic automation visual with three key metrics floating in the scene.
+
+**Text density:** Low. One headline, 2-3 data points. The art leads, the data supports.
+
+**Use sparingly.** Most content is clearly one mode or the other. Hybrid only works when both layers are genuinely strong.
+
+### The Critical Rule
+
+Never start designing until you've decided the mode. The mode determines:
+- What you extract from the content (claims vs. data structures)
+- How you propose visualizations (scenes vs. data formats)
+- What style system you use (discovered vs. brand)
+- What prompt architecture you follow
+- How you evaluate the result (feel vs. learn)
+
+---
+
+## 4. Style Discovery
+
+**This section applies ONLY to Editorial Illustration and Hybrid modes.** Information Graphics always use the BenAI brand system.
+
+### Why Style Matters Enormously
+
+"Style" in image generation isn't decoration — it's a fundamental control surface. The difference between "clean modern illustration" and "Moebius linework meets Adult Swim interstitial aesthetic" in a prompt produces completely different outputs. Specific style references give the AI model a clear visual target. Abstract descriptors give it nothing to aim at.
+
+The style should come from the content's emotional register, not from a default template. A raw personal essay about pain needs a different visual world than a reflective piece about finding peace. The style discovery process matches content tone to visual vocabulary.
+
+### Style Anchor System
+
+Style anchors are specific references — artists, movements, publications, aesthetic traditions — that reliably produce specific visual outcomes. Use these as starting points, not constraints:
+
+| Style Anchor | Prompt Vectors | Best For |
+|-------------|---------------|----------|
+| **European editorial / Adult Swim** | "Moebius linework, [as] bumps aesthetic, vintage French magazine illustration, quiet existential surrealism" | Contemplative, philosophical, existential content. Raw personal truths. |
+| **Graphic novel / comic panel** | "Bold confident linework, sequential framing, Hergé's clear line style, Chris Ware's structural precision" | Narrative-driven content, before/after transformations, sequential processes told with feeling. |
+| **Risograph / analog print** | "Risograph printing aesthetic, visible paper grain, muted analog palette, slight registration imperfections, zine energy" | Warm, human, personal content. Authenticity over polish. |
+| **Minimalist conceptual** | "Single powerful conceptual image, editorial illustration like a New Yorker cover, David Plunkert style" | One strong metaphor that says everything. Elegant simplicity. |
+| **Vintage science / technical** | "Vintage scientific illustration, detailed cross-section diagrams, elegant hand-drawn technical precision" | Analytical content about how things work, system breakdowns, deep explanations. |
+
+### Emotional Register Matching
+
+The content's emotional register should drive style selection:
+
+| Content Tone | Style Direction | Why |
+|-------------|----------------|-----|
+| Raw, painful, visceral | European editorial / Adult Swim | Surreal distortion matches internal emotional states |
+| Reflective, contemplative, searching | Minimalist conceptual | Silence and space mirror the thinking process |
+| Warm, human, imperfect | Risograph / analog | The tactile imperfections feel authentic |
+| Bold, confident, declarative | Graphic novel | Strong linework matches strong statements |
+| Analytical, precise, structured | Vintage science / technical | Precision visual language for precision thinking |
+
+### User Style Discovery
+
+Always ask the user about style for editorial work. Present the options from the table above, but be ready for users to describe something completely different — and use their description. The style anchor table is a starting vocabulary, not a complete list.
+
+If a user says "I want something that feels like walking through a dream" — that's a valid style direction. Translate it into specific prompt vectors: "dreamlike spatial distortion, soft focus transitions between elements, objects that shouldn't coexist sharing the same space naturally, the emotional logic of dreams rather than physical logic."
+
+---
+
+## 5. The Hard Shadow Signature
 
 ### What Is a Hard Shadow?
 
@@ -82,7 +271,7 @@ Think about how Apple products have crisp, sharp edges — the iPhone, the MacBo
 
 ---
 
-## 3. Color Philosophy
+## 6. Color Philosophy
 
 ### The Foundation: Warm Cream Background (#FAF3E3)
 
@@ -149,7 +338,7 @@ We have three accent colors that should be cycled through for visual variety:
 
 ---
 
-## 4. Typography as Communication
+## 7. Typography as Communication
 
 ### Why Font Choices Matter
 
@@ -212,17 +401,27 @@ If you can't say it in 6 words, the concept isn't clear enough. Infographics com
 
 When you're tempted to add more words, ask yourself: "Can this be said with fewer words?" Almost always, yes.
 
-### The 2-Second Test
+### The 2-Second Test (Apply BEFORE Designing)
 
-Imagine someone scrolling LinkedIn at 2x speed. They see your infographic for exactly 2 seconds before scrolling past. In those 2 seconds, can they understand:
-1. What the topic is?
-2. Why they should care?
+**CRITICAL:** The 2-second test is not a post-production quality check. It's a pre-design validation tool. Apply it BEFORE writing any prompt, not after generating an image.
 
-If not, there's too much text, or the hierarchy isn't clear, or the message is too complex. Simplify.
+Before designing, answer this question: "A person scrolling LinkedIn sees this image for exactly 2 seconds. What do they GET?"
+
+Write the answer in one sentence:
+
+**For Editorial Illustration:** "They feel [specific emotion] and stop scrolling because [specific reason]."
+Example: "They feel a jolt of recognition — they've been in both rooms — and stop because the image names something they've been living but couldn't articulate."
+
+**For Information Graphic:** "They learn [specific fact] and think 'I should save this.'"
+Example: "They learn that domain experts have 6 advantages over developers in the AI era, and think 'I should save this comparison.'"
+
+**If you can't write this sentence clearly, the concept isn't ready.** Go back and refine the concept before touching any prompt.
+
+After generation, the 2-second test becomes a validation check. If the generated image doesn't deliver the promised 2-second hit, the concept may need rethinking (not just editing).
 
 ---
 
-## 5. The Art of Restraint
+## 8. The Art of Restraint
 
 ### Why Less Is More
 
@@ -296,7 +495,7 @@ The squint test reveals whether your hierarchy is working. After squinting, you 
 
 ---
 
-## 6. Layout Thinking
+## 9. Layout Thinking
 
 When designing an infographic, the first decision is: what visual structure fits this content? Here are the main archetypes and when to use each.
 
@@ -394,27 +593,24 @@ When designing an infographic, the first decision is: what visual structure fits
 
 ---
 
-## 7. Quality Evaluation
+## 10. Quality Evaluation
 
 Before finalizing any infographic, run it through these self-checks. Think of this as quality assurance for design.
 
-### The 2-Second Test
+### The 2-Second Test (Post-Generation Validation)
 
-Imagine someone scrolling LinkedIn at 2x speed. They see your infographic for 2 seconds. In those 2 seconds:
+You should have already applied the 2-second test BEFORE designing (see Section 7: Typography). At this stage, you're validating that the generated image delivers the promised hit.
 
-1. Can they understand what the topic is?
-2. Can they understand the ONE key message?
-3. Do they feel compelled to stop scrolling?
+Look at the generated image and ask: **"Does it deliver what I promised in the pre-design 2-second statement?"**
 
-If the answer to any of these is "no" or "maybe," the design needs work.
+If yes: proceed to fine-tuning edits.
 
-**How to fix:**
-- Make the title bigger and bolder
-- Remove elements that don't serve the key message
-- Increase contrast between important and supporting elements
-- Cut words — fewer words means faster comprehension
+If no: ask the DIAGNOSTIC question — "Is the concept wrong, or is the execution wrong?"
 
-The 2-second test is brutal but necessary. Social media is a fast-scrolling environment. Designs that require study or attention to understand will be scrolled past.
+- **Concept wrong** (the scene/data doesn't communicate the right thing): Go back to visualization design. Do NOT iterate on a broken concept.
+- **Execution wrong** (the right idea but the rendering doesn't land): Iterate with edits. Adjust the prompt, change visual elements, refine the composition.
+
+This distinction prevents the most common iteration trap: spending 5+ rounds polishing a visual that was never going to work because the underlying concept doesn't transmit in 2 seconds.
 
 ### The Squint Test
 
@@ -467,7 +663,7 @@ Trust your instincts on this. If something feels "off," it probably is. The gut 
 
 ---
 
-## 8. Common Mistakes
+## 11. Common Mistakes
 
 Understanding what goes wrong helps you avoid those traps. Here are the most common mistakes and how to fix them.
 
@@ -533,7 +729,7 @@ Understanding what goes wrong helps you avoid those traps. Here are the most com
 
 ---
 
-## 9. Platform Context
+## 12. Platform Context
 
 Different platforms have different requirements and user behaviors. Here's how to adapt.
 
@@ -596,7 +792,7 @@ Different platforms have different requirements and user behaviors. Here's how t
 
 ---
 
-## 10. Prompt Engineering for Image Generation
+## 13. Prompt Engineering for Image Generation
 
 When you craft prompts for Gemini image generation, you're not just listing specifications — you're teaching the AI to understand the feeling and intent of our brand. Here's how to write effective prompts.
 
@@ -684,16 +880,117 @@ Keep everything else exactly the same — the shadows, borders, overall layout, 
 
 ---
 
+## 14. Prompt Vector Reference
+
+Prompt vectors are specific phrases that reliably control output quality in image generation. They're not magic words — they're precise instructions that give the AI model clear targets for specific dimensions of the output.
+
+### Emotional Register Vectors
+
+These control how the image FEELS:
+
+| Register | Prompt Vector | When to Use |
+|----------|--------------|-------------|
+| Quiet / contemplative | "The emotional register is quiet — this image doesn't shout, it sits with you. Contemplative, like the last page of a book." | Reflective essays, existential truths, inner experiences |
+| Bold / punchy | "Bold, confident, demands attention — designed to stop the scroll. High contrast, decisive composition." | Strong claims, challenges to convention, calls to action |
+| Raw / honest | "Unflinching, direct, no decoration — like a photograph of truth. The vulnerability is the strength." | Personal confessions, hard truths, unfiltered experiences |
+| Warm / human | "Warm, imperfect, feels made by human hands — analog warmth, gentle light, the comfort of the familiar." | Community-focused content, mentorship, personal stories |
+| Surreal / dreamlike | "Dreamlike spatial distortion — rooms feel emotionally true rather than physically accurate. Objects exist because they carry meaning, not because they make architectural sense." | Emotional claims that are felt rather than observed |
+
+### Density Vectors
+
+These control information density and whitespace:
+
+| Level | Prompt Vector | When to Use |
+|-------|--------------|-------------|
+| Minimal | "Minimal composition, generous whitespace, every element earns its place through necessity. Empty space is a design element, not wasted space." | Editorial illustrations, single-concept visuals |
+| Moderate | "Structured layout with breathing room between every element. Premium magazine spread density — organized but never cramped." | Information graphics with 3-5 elements |
+| Dense | **AVOID for social media.** "Dense information display" → leads to cramped, unreadable output. If you have this much data, make a carousel. | Never for single social media images |
+
+### Materiality Vectors
+
+These control the physical texture and feel:
+
+| Material | Prompt Vector | Effect |
+|----------|--------------|--------|
+| Paper | "Subtle paper grain texture like quality stock. Feels printed on premium paper, not rendered digitally." | Adds warmth and tactile quality. Makes digital feel physical. |
+| Ink | "Confident ink linework, like it was drawn with a technical pen by a steady hand. Line weight varies with intention." | Creates hand-drawn authority. Feels crafted, not generated. |
+| Print | "Like risograph printing — slight imperfections in registration, tactile analog warmth, the human fingerprint of mechanical reproduction." | Adds authenticity and imperfection. Anti-digital aesthetic. |
+| Canvas | "Textured like canvas or heavy watercolor paper. Visible surface grain. The medium is part of the message." | Adds weight and permanence. Art gallery feel. |
+
+### Spatial Vectors
+
+These control spatial relationships and composition:
+
+| Spatial Effect | Prompt Vector | When to Use |
+|---------------|--------------|-------------|
+| Surreal distortion | "Surreal spatial distortion — rooms and spaces feel dreamlike, not photorealistic. Architecture serves emotional truth, not physics." | Editorial illustrations about internal experiences |
+| Stylized figures | "Figures are stylized but human — not cartoonish, not hyperreal, universal. You should see yourself in them, not a specific person." | Any scene with human figures |
+| Disproportionate scale | "Disproportionate scale to emphasize emotional weight — the thing that matters most is physically largest, regardless of real-world size." | Emphasizing power dynamics, importance hierarchies |
+| Cinematic framing | "Cinematic composition — the image is a still from a film that doesn't exist. Clear focal point, intentional depth, directional light." | Any scene-based editorial illustration |
+| Clean data space | "Clean, organized spatial layout. Grid-aligned elements. Every pixel has purpose. White background feels expansive, not empty." | Information graphics, scorecards, checklists |
+
+### Negative Vectors (What NOT to Do)
+
+Always include explicit negatives. These prevent the AI from falling into common traps:
+
+| Avoid | Prompt Vector |
+|-------|--------------|
+| Cartoonish | "Not cartoonish, not anime, not clipart. Stylized but grounded in emotional reality." |
+| Hyperreal | "Not photorealistic, not 3D rendered, not stock photo aesthetic." |
+| Corporate | "Not corporate, not clip art, not template-generated. This was made by a person with a point of view." |
+| Dark backgrounds | "NO black backgrounds, NO dark gray backgrounds, NO dark mode aesthetic. Everything warm and light." |
+| Overdecorated | "No decorative elements that don't serve the message. No borders within borders, no gradients for gradient's sake." |
+
+### Combining Vectors
+
+A well-constructed prompt combines vectors from multiple dimensions. Example for an editorial illustration:
+
+```
+Emotional: "The emotional register is quiet — contemplative, like the last page of a book."
+Spatial: "Surreal spatial distortion — rooms feel emotionally true, not physically accurate."
+Materiality: "Subtle paper grain texture like quality stock. Confident ink linework."
+Density: "Minimal composition, generous whitespace, every element earns its place."
+Figures: "Figures are stylized but human — universal, not specific."
+Negative: "Not cartoonish, not hyperreal, not corporate. No black backgrounds."
+```
+
+These vectors work together to create a coherent visual world. Don't just pick one from each category — select the ones that serve your specific content's needs.
+
+---
+
 ## Summary: The Quick Reference
 
 When you're in the flow of designing, here are the essentials:
 
-### Brand Feeling
+### Before Everything: Content Analysis
+- Extract meaning at all 4 layers: Narrative → Themes → Claims → Information
+- Visualize Layer 3 (Claims) for editorial illustrations
+- Visualize Layer 4 (Information) for information graphics
+- Never default to Layer 1 (Narrative) or Layer 2 (Themes)
+- Ask: "What should the viewer KNOW or FEEL after 2 seconds?"
+
+### Output Mode
+- **Editorial Illustration:** Viewer should FEEL. Scenes, not layouts. Discover style from content.
+- **Information Graphic:** Viewer should LEARN. Scorecards, charts, checklists. BenAI brand system.
+- **Decide the mode BEFORE designing.** Never mix them up.
+
+### The 2-Second Test (Pre-Design)
+- Write ONE sentence: what the viewer GETS in 2 seconds
+- If you can't write it, the concept isn't ready
+- Apply BEFORE writing any prompt, not after generating
+
+### Brand Feeling (Information Graphics)
 - Warm, clean, confident, approachable
 - "Like a well-designed coffee shop" — premium but welcoming
 - Apple keynote energy — bold, minimal, intentional
 
-### Visual Rules
+### Style Discovery (Editorial Illustrations)
+- Use style anchors: specific artists, movements, aesthetic traditions
+- "Moebius meets Adult Swim" beats "clean modern illustration"
+- Match content tone to visual world
+- Let the user's taste guide the direction
+
+### Visual Rules (Information Graphics)
 - Background: Warm cream (#FAF3E3) — NEVER black
 - Shadows: Hard shadows only (8px, 8px, 0px, #000)
 - Borders: Solid 2px, slightly rounded corners
@@ -707,14 +1004,22 @@ When you're in the flow of designing, here are the essentials:
 - Every element must earn its place
 
 ### Quality Checks
-- 2-second test: Can they get the message instantly?
+- 2-second test: Does it deliver the promised hit?
+- Diagnostic question: Is it the concept or the execution?
 - Squint test: Is structure clear when blurred?
 - So-what test: Does every element serve the message?
-- Brand gut check: Does it feel like BenAI?
+- Brand gut check: Does it feel like BenAI? (info graphics only)
+
+### Prompt Vectors
+- Emotional register: quiet/bold/raw/warm/surreal
+- Density: minimal/moderate (never dense for social)
+- Materiality: paper/ink/print/canvas
+- Spatial: surreal distortion/stylized figures/cinematic framing
+- Always include negative vectors (what NOT to do)
 
 ### Footer
 Always: "Ben Van Sprundel | Founder @ BenAI"
 
 ---
 
-*These principles should inform every design decision. When in doubt, choose clarity over cleverness, warmth over coolness, and restraint over abundance. The best infographics feel inevitable — like there's no other way they could have been designed.*
+*These principles should inform every design decision. The quality of the output is determined by the quality of the thinking BEFORE any prompt is written. Spend 70% of the effort understanding what to visualize and 30% on how to visualize it. When in doubt, choose clarity over cleverness, warmth over coolness, and restraint over abundance.*
