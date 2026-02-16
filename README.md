@@ -17,6 +17,29 @@ Expert automation skills for Claude Code, organized by department.
 /plugin install repurposing@benai-skills
 ```
 
+## Setup
+
+Some skills require API keys. Create a `.env` file in your project directory:
+
+```bash
+# Quick setup
+curl -O https://raw.githubusercontent.com/naveedharri/benai-skills/main/.env.example
+mv .env.example .env
+# Edit .env and add your API keys
+```
+
+Or copy from this repo's `.env.example` and fill in your keys.
+
+### Required API Keys by Plugin
+
+| Plugin | Required Keys | Get Keys | Used By |
+|--------|---------------|----------|---------|
+| **Marketing** | `GEMINI_API_KEY`<br>`APIFY_TOKEN` | [Gemini](https://aistudio.google.com/apikey)<br>[Apify](https://console.apify.com) | `/infographic`<br>`/seo-audit`, `/programmatic-seo` |
+| **Creative** | `GEMINI_API_KEY` | [Gemini](https://aistudio.google.com/apikey) | `/infographic` |
+| **Operations** | `N8N_API_URL`<br>`N8N_API_KEY` | Your n8n instance | `/n8n` |
+
+**Important:** Add `.env` to your `.gitignore` to keep your API keys secure.
+
 ## Available Departments
 
 ### Marketing (6 skills)
@@ -71,12 +94,7 @@ Expert automation skills for Claude Code, organized by department.
 
 Build, test, and deploy n8n workflows via REST API with incremental testing. Includes node references for 40+ common nodes, JavaScript/Python Code node patterns, expression syntax, and credential management. Also includes the **n8n Blueprint Generator** (`/n8n-prd-generator`) for converting discovery call transcripts into n8n automation blueprints.
 
-**Setup:** Create `.env` in your working directory:
-```bash
-N8N_API_URL=https://your-n8n.app.n8n.cloud
-N8N_API_KEY=your-api-key
-N8N_CREDENTIALS_TEMPLATE_URL=https://your-n8n.app.n8n.cloud/workflow/template-id
-```
+**Requires:** `N8N_API_URL`, `N8N_API_KEY`, and `N8N_CREDENTIALS_TEMPLATE_URL` in your `.env` file (see Setup section above).
 
 ### Video Editing
 
