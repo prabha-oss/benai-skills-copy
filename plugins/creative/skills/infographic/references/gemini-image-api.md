@@ -6,9 +6,13 @@ Technical reference for generating and editing infographic images using the Nano
 
 ## Overview
 
-Image generation and editing is handled through the Nano Banana MCP server, which exposes 6 tools. The MCP server is auto-configured via the plugin system — no manual setup required beyond having a Gemini API key.
+Image generation and editing is handled through the Nano Banana MCP server (`@zhibinyang/nano-banana-mcp`), which exposes 6 tools. The MCP server is auto-configured via the plugin system — no manual setup required beyond having a Gemini API key.
 
-**Underlying model:** gemini-2.5-flash-image-preview
+**Underlying models:**
+- **Gemini 2.5 Flash Image** (`gemini-2.5-flash-image`) — Default. Fast generation, optimized for high-volume tasks
+- **Gemini 3 Pro Image** (`gemini-3-pro-image-preview`) — Highest quality, up to 4K resolution
+
+**Note:** This package was updated (Feb 2026) to use current, stable Gemini models instead of the deprecated `-preview` variants.
 
 ---
 
@@ -101,18 +105,18 @@ Retrieves metadata about the most recently created or edited image.
 
 ### 5. `configure_gemini_token`
 
-Stores the Gemini API key for the MCP server.
+**⚠️ DO NOT USE - Creates unwanted `.nano-banana-config.json` file**
 
-**Parameters:**
+This tool saves the API key to a separate JSON file instead of using the centralized `.env` approach. We want ALL API keys in one `.env` file, not scattered across multiple config files.
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `apiKey` | string | Yes | Your Gemini API key |
+**Instead:** Save the key to `.env` and restart Claude Code (see Phase 4 in skill.md).
 
-**Returns:** Confirmation that the key was saved
+**Why avoid this:**
+- Creates `.nano-banana-config.json` in the project
+- Doesn't work with the centralized `.env` pattern
+- Requires tracking multiple config files for different MCP servers
 
-**Usage:**
-
+**Deprecated usage (DO NOT USE):**
 ```
 Call tool: configure_gemini_token
 Parameters: { "apiKey": "AIzaSy..." }
@@ -122,11 +126,17 @@ Parameters: { "apiKey": "AIzaSy..." }
 
 ### 6. `get_configuration_status`
 
-Checks whether the API key is configured.
+**⚠️ DO NOT USE - Known to give false positives**
 
-**Parameters:** None
+This tool reports the key as "configured" even when it's not valid or doesn't exist. Always check the environment variable directly instead:
 
-**Returns:** Status indicating whether credentials are loaded
+```bash
+if [ -n "$GEMINI_API_KEY" ]; then
+  echo "Key is set"
+else
+  echo "Key not set"
+fi
+```
 
 ---
 
@@ -134,9 +144,11 @@ Checks whether the API key is configured.
 
 ### MCP Output Location
 
-The MCP server saves images to `./generated_imgs/` with timestamped names:
+The MCP server saves images to `./generated_imgs/` (in the current project directory) with timestamped names:
 - Generated: `generated-[timestamp]-[id].png`
 - Edited: `edited-[timestamp]-[id].png`
+
+**Note:** The MCP server uses the current working directory by default. Images are saved locally to the project, not to your Desktop.
 
 ### Copy to Project Directory
 
@@ -280,17 +292,23 @@ If the Nano Banana MCP tools are not available (MCP server not running or not co
 
 ### API Key Not Configured
 
-If `get_configuration_status` indicates no key:
-- Use `configure_gemini_token` to set it
+If the environment variable check shows no key:
+- Run Phase 4 of the skill to get the key from the user
+- Save to `.env` and restart Claude Code
 - Or follow the "Skip for now" path
 
 ### Generation Fails
 
-If `generate_image` returns an error:
-- Check configuration with `get_configuration_status`
+If `generate_image` returns an error about invalid API key:
+- Check if `GEMINI_API_KEY` environment variable is set: `echo $GEMINI_API_KEY`
+- If not set, run Phase 4 to configure it
+- If set but invalid, get a new key from Google AI Studio
+- Fall back to saving prompt for manual use
+
+If generation fails for other reasons:
 - Try simplifying the prompt
 - If the prompt was flagged for safety, rephrase and avoid sensitive terms
-- Fall back to saving prompt for manual use
+- Check API quotas at console.cloud.google.com
 
 ### Rate Limit
 
@@ -317,16 +335,17 @@ If you hit a 429 rate limit:
 
 ## Quick Reference
 
-### Check Configuration
-```
-Call tool: get_configuration_status
+### Check If Key Is Set
+```bash
+if [ -n "$GEMINI_API_KEY" ]; then
+  echo "Key is configured"
+else
+  echo "Key not found - run Phase 4"
+fi
 ```
 
 ### Configure API Key
-```
-Call tool: configure_gemini_token
-Parameters: { "apiKey": "your-key-here" }
-```
+Save to `.env` file and restart Claude Code (see Phase 4 in skill.md)
 
 ### Generate Image
 ```
