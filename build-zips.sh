@@ -70,6 +70,9 @@ echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
   # Copy the department plugin directory
   cp -R "$ROOT/$source" "$staging/$source"
 
+  # Copy .env.example
+  cp "$ROOT/.env.example" "$staging/.env.example" 2>/dev/null || true
+
   # Generate a marketplace.json with this department
   python3 -c "
 import json
@@ -98,7 +101,7 @@ with open('$staging/.claude-plugin/marketplace.json', 'w') as f:
 done
 
 # Full marketplace zip
-(cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ -x "*/\.*" > /dev/null 2>&1)
+(cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ .env.example -x "*/\.*" > /dev/null 2>&1)
 SIZE=$(du -h "$DIST/extension/benai-skills-marketplace.zip" | cut -f1 | xargs)
 echo "  Created extension/benai-skills-marketplace.zip ($SIZE)"
 
@@ -134,6 +137,9 @@ echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
       find "$staging/$skill_name" -type d -empty -delete 2>/dev/null || true
     fi
   done
+
+  # Copy .env.example to root of zip
+  cp "$ROOT/.env.example" "$staging/.env.example" 2>/dev/null || true
 
   # Create zip with skill folders as top-level entries
   (cd "$staging" && zip -r "$DIST/claude/$name.zip" . > /dev/null 2>&1)
