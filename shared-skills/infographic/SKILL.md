@@ -12,14 +12,15 @@ Create professional, on-brand infographics using Gemini AI via the Nano Banana M
 
 ## When This Skill Loads (DO THIS IMMEDIATELY)
 
-1. Read `references/gemini-image-api.md` (MCP tool reference)
-2. Read `references/api-setup.md` (API key setup guide)
-3. Execute Phase 0 (silent config check)
-4. **If API key is NOT configured in Phase 0:**
+1. Read `references/design-principles.md` (brand philosophy and design thinking — internalize this deeply)    
+2. Read `references/gemini-image-api.md` (MCP tool reference)                                                 
+3. Read `references/api-setup.md` (API key setup guide)                                                       
+4. Execute Phase 0 (silent config check)
+5. **If API key is NOT configured in Phase 0:**
    - Skip directly to Phase 4 (API Key Setup)
    - Do NOT proceed to Phase 1
    - Do NOT ask about content
-5. **If API key IS configured:**
+6. **If API key IS configured:**
    - Begin Phase 1
 
 ---
