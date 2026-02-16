@@ -6,13 +6,27 @@ How the Gemini API key is configured for image generation via the Nano Banana MC
 
 ## How It Works
 
-The Nano Banana MCP server is automatically registered when you install the marketing or creative department plugin. The MCP server reads `GEMINI_API_KEY` from its environment at startup (configured via the `env` block in `plugin.json`).
+The Nano Banana MCP server (`@zhibinyang/nano-banana-mcp`) is automatically registered when you install the marketing or creative department plugin. The MCP server has `dotenv` as a dependency and **automatically loads `.env` from the project directory at startup**.
 
 **Setup flow:**
 1. User provides their Gemini API key during the skill's Phase 4
-2. The skill saves it to a `.env` file in the project directory
-3. User restarts Claude Code — the key is now in the shell environment
-4. The MCP server picks up `GEMINI_API_KEY` from the env block → works automatically from then on
+2. The skill saves it to `.env` in the project directory
+3. User restarts Claude Code (which restarts the MCP server)
+4. MCP server's `dotenv` loads `.env` automatically → gets `GEMINI_API_KEY`
+5. Image generation works!
+
+**How the skill checks for the key:**
+- First checks bash `$GEMINI_API_KEY` environment variable
+- If not set, checks `.env` file for `GEMINI_API_KEY=<value>`
+- If found in either → the MCP server has it (via dotenv) → proceed
+- If not found in either → ask user for key (Phase 4)
+
+**Benefits of this approach:**
+- ✅ Single `.env` file for ALL API keys (Gemini, Apify, n8n, etc.)
+- ✅ No scattered config JSON files (no `.nano-banana-config.json`)
+- ✅ Standard environment variable pattern
+- ✅ MCP server loads `.env` automatically via dotenv
+- ✅ Easy to manage and version control (.env in .gitignore)
 
 ---
 
@@ -60,23 +74,34 @@ for normal infographic generation usage.
 
 1. **Save to `.env` file:**
    ```bash
-   echo "GEMINI_API_KEY=user-provided-key" > .env
+   # Create .env if it doesn't exist
+   if [ ! -f .env ]; then
+     cat > .env <<'EOF'
+# BenAI Skills - API Keys Configuration
+GEMINI_API_KEY=
+EOF
+   fi
+
+   # Update the key
+   sed -i '' "s|^GEMINI_API_KEY=.*|GEMINI_API_KEY=user-provided-key|" .env
+
+   # Add to .gitignore for security
    echo ".env" >> .gitignore 2>/dev/null || true
    ```
 
-2. **Source it:**
-   ```bash
-   source .env
+2. **Confirm to user:**
+   ```
+   ✅ API key saved to .env!
+
+   To make it work:
+   1. Restart Claude Code so it picks up the GEMINI_API_KEY from .env
+   2. OR manually set it: export GEMINI_API_KEY="your-key"
+   3. Then run /infographic again
+
+   All MCP servers that need GEMINI_API_KEY will now have access to it.
    ```
 
-3. **Confirm to user:**
-   ```
-   API key saved to .env.
-
-   IMPORTANT: Please restart Claude Code so the Nano Banana MCP server
-   picks up the key. Then run /infographic again — it will work
-   automatically from now on.
-   ```
+**Why restart is needed:** Claude Code reads environment variables at startup and passes them to MCP servers. The `.env` file is just storage—you need to load it into the environment.
 
 ---
 
@@ -90,8 +115,8 @@ Great! Paste your API key here and I'll configure it.
 
 If user pastes a key:
 1. Save to `.env` file
-2. Source it
-3. Tell user to restart Claude Code
+2. Confirm and tell user to restart Claude Code
+3. After restart, the key will be available to all MCP servers
 
 ---
 
@@ -182,19 +207,36 @@ EOF
 
 ## Verification
 
-### Check if key is set:
+### Check environment variable:
 
 ```bash
-echo "${GEMINI_API_KEY:+API key is configured}"
+if [ -n "$GEMINI_API_KEY" ]; then
+  echo "GEMINI_API_KEY is set: ${GEMINI_API_KEY:0:10}..."
+else
+  echo "GEMINI_API_KEY not found in environment"
+fi
 ```
+
+If set, the key is available to all MCP servers.
 
 ### Check `.env` file:
 
 ```bash
 if [ -f .env ] && grep -q GEMINI_API_KEY .env; then
-  echo "Key found in .env"
+  echo "Key found in .env:"
+  cat .env | grep GEMINI_API_KEY
+else
+  echo ".env file not found or key not in file"
 fi
 ```
+
+**Important:** The `.env` file is the source of truth. Claude Code loads it at startup and passes the value to MCP servers via the `env` block in `plugin.json`.
+
+**⚠️ Do NOT use these MCP tools:**
+- `get_configuration_status` - gives false positives
+- `configure_gemini_token` - creates unwanted `.nano-banana-config.json` file
+
+Always check the environment variable directly.
 
 ---
 
@@ -224,8 +266,9 @@ That key doesn't seem to work. Let's try again:
 ```
 
 Solution:
-1. Call `configure_gemini_token` with a new key
-2. Verify with `get_configuration_status`
+1. Update the key in `.env` file
+2. Restart Claude Code
+3. Verify with: `echo $GEMINI_API_KEY`
 
 ### "Quota exceeded"
 
