@@ -325,6 +325,9 @@ if [ ! -f .env ]; then
 # GEMINI_API_KEY - Required for /infographic skill
 GEMINI_API_KEY=
 
+# GEMINI_IMAGE_MODEL - Options: gemini-3-pro-image-preview (highest quality), gemini-2.5-flash-image (fast)
+GEMINI_IMAGE_MODEL=gemini-3-pro-image-preview
+
 # APIFY_TOKEN - Required for /seo-audit and /programmatic-seo skills
 APIFY_TOKEN=
 
