@@ -82,7 +82,14 @@
     },
     "sales": {
       "commands": [
-        "sales"
+        "sales",
+        "outbound-pipeline"
+      ],
+      "agents": [
+        "lead-qualifier",
+        "lead-researcher",
+        "icebreaker-writer",
+        "linkedin-scraper"
       ],
       "skills": {
         "lead-research-assistant": {
@@ -97,9 +104,17 @@
           "displayName": "Case Study",
           "summary": "Build data-driven case studies from interviews and raw data"
         },
-        "n8n-prd-generator": {
-          "displayName": "n8n Blueprint Generator",
-          "summary": "Convert discovery call transcripts into automation blueprints"
+        "email-personalization": {
+          "displayName": "Email Personalization",
+          "summary": "Generate hyper-personalized email icebreakers using lead intelligence"
+        },
+        "lead-intelligence": {
+          "displayName": "Lead Intelligence",
+          "summary": "Deep-research leads with web scraping and LinkedIn analysis"
+        },
+        "lead-qualification": {
+          "displayName": "Lead Qualification",
+          "summary": "Qualify and score leads against an Ideal Customer Profile"
         }
       }
     },
