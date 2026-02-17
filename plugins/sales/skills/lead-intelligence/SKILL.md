@@ -7,6 +7,7 @@ description: Deep-research lead intelligence gathering for B2B qualified leads. 
   "find out about these companies", "LinkedIn scraping", "scrape LinkedIn profiles", or has a qualified lead
   list and wants to gather intelligence before outreach. Also trigger when the user mentions Apify actors,
   Make.com scenarios for lead research, or wants to combine web + LinkedIn research on leads.
+allowed-tools: WebSearch
 ---
 
 # Lead Intelligence
