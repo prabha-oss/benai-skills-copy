@@ -15,21 +15,27 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | email-sequence | `/email-sequence` | Email sequences & drip campaigns |
 | case-study | `/case-study` | Data-driven case studies |
 | infographic | `/infographic` | AI-generated infographics |
-| linkedin | `/linkedin` | LinkedIn posts & carousels from content |
-| newsletter | `/newsletter` | Newsletter editions from content |
+| linkedin-writer | `/linkedin-writer` | LinkedIn posts & carousels from content |
+| newsletter-writer | `/newsletter-writer` | Newsletter editions from content |
 | title-generation | `/title-generation` | Optimized YouTube video titles |
 | gif-creator | `/gif-creator` | GIFs from video clips |
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 
 **Commands:** `/marketing` (skill overview), `/repurpose` (content repurposing workflow)
 
-### Sales (4 skills)
+### Sales (6 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
 | email-sequence | `/email-sequence` | Email sequences & drip campaigns |
 | case-study | `/case-study` | Data-driven case studies |
-| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+| email-personalization | `/email-personalization` | Hyper-personalized email icebreakers |
+| lead-intelligence | `/lead-intelligence` | Deep-research leads via web & LinkedIn |
+| lead-qualification | `/lead-qualification` | Qualify & score leads against ICP |
+
+**Commands:** `/sales` (skill overview), `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline)
+
+**Agents:** `lead-qualifier`, `lead-researcher`, `icebreaker-writer`, `linkedin-scraper`
 
 ### Operations (2 skills)
 | Skill | Command | Purpose |
