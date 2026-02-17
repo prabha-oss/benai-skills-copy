@@ -138,6 +138,13 @@ echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
     fi
   done
 
+  # Copy agents if present
+  AGENTS_DIR="$ROOT/$source/agents"
+  if [ -d "$AGENTS_DIR" ]; then
+    mkdir -p "$staging/agents"
+    cp -R "$AGENTS_DIR"/*.md "$staging/agents/" 2>/dev/null || true
+  fi
+
   # Copy .env.example to root of zip
   cp "$ROOT/.env.example" "$staging/.env.example" 2>/dev/null || true
 

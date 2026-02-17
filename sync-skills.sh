@@ -32,8 +32,9 @@ rm -rf "$ROOT/plugins"
 mkdir -p "$ROOT/plugins"
 
 COMMANDS="$ROOT/commands"
+AGENTS="$ROOT/agents"
 
-export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS
+export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS
 
 python3 << 'PYEOF'
 import json, os, shutil
@@ -43,6 +44,7 @@ shared = os.environ.get("SHARED", "")
 skills_map_path = os.environ.get("SKILLS_MAP", "")
 marketplace_path = os.environ.get("MARKETPLACE", "")
 commands_src = os.environ.get("COMMANDS", "")
+agents_src = os.environ.get("AGENTS", "")
 
 with open(skills_map_path) as f:
     skills_map = json.load(f)
@@ -104,6 +106,21 @@ for dept_name, dept_config in departments.items():
             print(f"  Warning: shared-skills/{skill_id} not found, skipping")
 
     print(f"  {dept_name}: {count} skills synced")
+
+    # --- agents/ ---
+    agent_list = dept_config.get("agents", [])
+    if agent_list:
+        agents_dir = os.path.join(dept_dir, "agents")
+        os.makedirs(agents_dir, exist_ok=True)
+        agent_count = 0
+        for agent_id in agent_list:
+            src = os.path.join(agents_src, f"{agent_id}.md")
+            if os.path.isfile(src):
+                shutil.copy2(src, os.path.join(agents_dir, f"{agent_id}.md"))
+                agent_count += 1
+            else:
+                print(f"  Warning: agents/{agent_id}.md not found, skipping")
+        print(f"  {dept_name}: {agent_count} agents synced")
 
 PYEOF
 
