@@ -144,6 +144,10 @@
         "infographic": {
           "displayName": "Infographic",
           "summary": "Generate professional infographics using Gemini AI"
+        },
+        "infographic-old": {
+          "displayName": "Infographic (Legacy)",
+          "summary": "[COMPARISON] Original infographic skill without enhanced design principles"
         }
       }
     },
