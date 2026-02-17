@@ -6,6 +6,7 @@ description: Qualify B2B leads against a user-defined Ideal Customer Profile (IC
   when the user says "qualify leads", "filter my leads", "which leads match my ICP", "score these leads",
   "segment this list", "clean up my lead list", or "find the best leads". This skill handles lead lists of
   any size by automatically batching work across parallel sub-agents.
+allowed-tools: WebSearch
 ---
 
 # Lead Qualification
@@ -56,7 +57,7 @@ This lets the user confirm the data is loaded correctly and gives you a chance t
 
 The sub-agent's job is simple:
 1. Read the CSV columns for each lead
-2. Visit the company website (use WebFetch on the `corporate website` column)
+2. Visit the company website (use WebSearch on the `corporate website` column)
 3. Check whether the website confirms the company matches the ICP
 
 **Do NOT go beyond the company website.** No extra web searching, no visiting multiple sources, no deep research. Just the CSV data + the company's own website. This keeps qualification fast and token-efficient.
@@ -71,7 +72,7 @@ Qualification MUST happen via `lead-qualifier` sub-agents for any list larger th
 Tell the user the plan before launching: "I have 606 leads to qualify. I'll launch 61 sub-agents, each handling 10 leads. Running in parallel, this should take roughly X minutes."
 
 **Time estimation guidelines:**
-- Each lead requires one WebFetch call to the company website: ~5-10 seconds per lead
+- Each lead requires one WebSearch call to the company website: ~5-10 seconds per lead
 - Sub-agents run in parallel, so wall-clock time is roughly the time for one agent's batch
 - Do NOT use WebSearch or visit multiple sources; just the company website from the CSV
 
@@ -96,7 +97,7 @@ Spawn ALL `lead-qualifier` sub-agents in a single message for maximum parallelis
 Here are your leads (JSON):
 [LEAD BATCH]
 
-MANDATORY: Use WebFetch to visit the company website (from the CSV) for EVERY lead. Never qualify based on CSV data alone. Check the website to confirm the company actually matches the ICP. Do NOT use WebSearch or visit any other sources — just the CSV data + the company website. Keep it fast and token-efficient.
+MANDATORY: Use WebSearch to look up the company website (from the CSV) for EVERY lead. Never qualify based on CSV data alone. Check the website to confirm the company actually matches the ICP. Do NOT visit any other sources — just the CSV data + the company website. Keep it fast and token-efficient.
 
 Save your results as a JSON array to: [file path]
 ```

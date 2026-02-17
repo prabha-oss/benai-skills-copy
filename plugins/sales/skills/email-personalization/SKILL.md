@@ -6,6 +6,7 @@ description: Write hyper-personalized cold email icebreakers for B2B leads using
   enriched leads and wants to write the first line of a cold email for each. Also trigger when the user has
   a CSV with lead intelligence columns and wants to generate personalized outreach copy. This skill produces
   icebreakers that sound human, reference real observations, and tie back to the user's product/service.
+allowed-tools: WebSearch
 ---
 
 # Email Personalization
