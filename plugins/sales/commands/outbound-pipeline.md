@@ -23,17 +23,13 @@ Do NOT proceed until both ICP and product context are confirmed.
 Invoke the `lead-qualification` skill. Follow its full process:
 
 1. Load and inspect the lead list file
-2. Map ICP criteria to available columns — but remember that **web research is mandatory for verification**. CSV data alone is unreliable (people change roles, companies pivot, data sources mismatch people to companies).
+2. Map ICP criteria to available columns — but remember that **the company website must be checked** to verify CSV data is accurate
 3. Tell the user the sub-agent plan (number of agents, leads per agent, estimated time)
 4. Spawn ALL `lead-qualifier` sub-agents in a single message for maximum parallelism (10 leads per agent)
 5. Collect results, add `Qualified` and `Qualification Reason` columns to the CSV
 6. Report: total leads, qualified count, percentage, time taken
 
-**Critical: Every sub-agent MUST use WebSearch and WebFetch to verify each lead.** Never trust the CSV data alone. Common issues discovered via web research:
-- Person doesn't actually work at the listed company
-- Company pivoted and no longer offers the services described
-- Company is actually a software platform, not a service provider
-- Person is a freelancer, not employed at the company
+**Critical: Every sub-agent must WebFetch the company website to verify the lead.** Don't use WebSearch or visit multiple sources — just the CSV data + the company's own website. This keeps qualification fast and token-efficient.
 
 Save the updated CSV. The qualified leads are the input for Phase 2.
 

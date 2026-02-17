@@ -50,18 +50,16 @@ Read the file and understand its structure. Report to the user:
 
 This lets the user confirm the data is loaded correctly and gives you a chance to spot issues early (missing columns, weird formatting, duplicates).
 
-### Step 2: ALWAYS Verify with Web Research (Never Trust CSV Data Alone)
+### Step 2: Verify Against the Company Website
 
-**CRITICAL RULE: NEVER rely on CSV/spreadsheet data alone for qualification.** Sales Navigator and other lead sources contain self-reported, often stale data with frequent mismatches. Every single lead MUST be verified by visiting the company website and/or web searching.
+**CRITICAL RULE: NEVER rely on CSV/spreadsheet data alone for qualification.** CSV data is frequently wrong. Every lead MUST be verified by visiting the company website listed in the CSV.
 
-Real-world data integrity issues that WILL occur:
-- **Person-company mismatch**: CSV says "CEO of Agency X" but the person runs a completely different business
-- **Stale data**: Company pivoted, was acquired, or the person changed roles
-- **Keyword stuffing**: Descriptions contain marketing keywords but it's actually a software company, sports org, etc.
-- **Name collisions**: Two similarly-named companies and the CSV matched the wrong one
-- **LinkedIn URL mismatch**: URL points to a different person than listed
+The sub-agent's job is simple:
+1. Read the CSV columns for each lead
+2. Visit the company website (use WebFetch on the `corporate website` column)
+3. Check whether the website confirms the company matches the ICP
 
-Every sub-agent MUST use WebSearch and WebFetch to verify. Tell the user: "I'll verify every lead via web research. CSV data alone is unreliable for qualification."
+**Do NOT go beyond the company website.** No extra web searching, no visiting multiple sources, no deep research. Just the CSV data + the company's own website. This keeps qualification fast and token-efficient.
 
 ### Step 3: Calculate Sub-Agent Plan
 
@@ -73,9 +71,9 @@ Qualification MUST happen via `lead-qualifier` sub-agents for any list larger th
 Tell the user the plan before launching: "I have 606 leads to qualify. I'll launch 61 sub-agents, each handling 10 leads. Running in parallel, this should take roughly X minutes."
 
 **Time estimation guidelines:**
-- Qualification ALWAYS requires web research (visiting websites, verifying services): ~15-30 seconds per lead
+- Each lead requires one WebFetch call to the company website: ~5-10 seconds per lead
 - Sub-agents run in parallel, so wall-clock time is roughly the time for one agent's batch
-- Never skip web verification even if the CSV data looks sufficient
+- Do NOT use WebSearch or visit multiple sources; just the company website from the CSV
 
 ### Step 4: Launch Sub-Agents
 
@@ -98,7 +96,7 @@ Spawn ALL `lead-qualifier` sub-agents in a single message for maximum parallelis
 Here are your leads (JSON):
 [LEAD BATCH]
 
-MANDATORY: Use WebSearch and WebFetch to visit the company website for EVERY lead. Never qualify based on CSV data alone. The CSV data is frequently wrong — companies may have pivoted, people may have changed roles, or the data source may have mismatched the person and company. Verify by actually visiting the website and confirming the company matches the ICP criteria.
+MANDATORY: Use WebFetch to visit the company website (from the CSV) for EVERY lead. Never qualify based on CSV data alone. Check the website to confirm the company actually matches the ICP. Do NOT use WebSearch or visit any other sources — just the CSV data + the company website. Keep it fast and token-efficient.
 
 Save your results as a JSON array to: [file path]
 ```
