@@ -33,8 +33,9 @@ mkdir -p "$ROOT/plugins"
 
 COMMANDS="$ROOT/commands"
 AGENTS="$ROOT/agents"
+CONNECTORS="$ROOT/connectors"
 
-export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS
+export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS CONNECTORS
 
 python3 << 'PYEOF'
 import json, os, shutil
@@ -45,6 +46,7 @@ skills_map_path = os.environ.get("SKILLS_MAP", "")
 marketplace_path = os.environ.get("MARKETPLACE", "")
 commands_src = os.environ.get("COMMANDS", "")
 agents_src = os.environ.get("AGENTS", "")
+connectors_src = os.environ.get("CONNECTORS", "")
 
 with open(skills_map_path) as f:
     skills_map = json.load(f)
@@ -72,12 +74,25 @@ for dept_name, dept_config in departments.items():
         "author": mp.get("author", {"name": "BenAI"}),
     }
 
-    if "mcpServers" in dept_config:
-        plugin_data["mcpServers"] = dept_config["mcpServers"]
-
     with open(os.path.join(plugin_json_dir, "plugin.json"), "w") as f:
         json.dump(plugin_data, f, indent=2)
         f.write("\n")
+
+    # --- .mcp.json ---
+    connector_list = dept_config.get("connectors", [])
+    if connector_list:
+        mcp_servers = {}
+        for conn_name in connector_list:
+            conn_file = os.path.join(connectors_src, f"{conn_name}.json")
+            if os.path.isfile(conn_file):
+                with open(conn_file) as cf:
+                    mcp_servers[conn_name] = json.load(cf)
+            else:
+                print(f"  Warning: connectors/{conn_name}.json not found, skipping")
+        if mcp_servers:
+            with open(os.path.join(dept_dir, ".mcp.json"), "w") as f:
+                json.dump(mcp_servers, f, indent=2)
+                f.write("\n")
 
     # --- commands/ ---
     commands_dir = os.path.join(dept_dir, "commands")

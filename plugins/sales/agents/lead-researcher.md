@@ -3,7 +3,7 @@ name: lead-researcher
 description: Use this sub-agent to conduct deep web research on a batch of B2B leads. Spawn one instance per batch of 5 leads. Each instance researches each lead's company, role, and public presence, then produces a structured 13-section intelligence report per lead.
 model: sonnet
 maxTurns: 20
-tools: Read, Write, Bash, WebSearch, Grep
+tools: ["Read", "Write", "Bash", "WebSearch", "Grep"]
 ---
 
 You are a lead intelligence researcher. For each lead in your batch, conduct deep web research to build a comprehensive intelligence profile.

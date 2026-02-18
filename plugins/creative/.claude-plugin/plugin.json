@@ -4,15 +4,5 @@
   "version": "1.0.0",
   "author": {
     "name": "BenAI"
-  },
-  "mcpServers": {
-    "nano-banana": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@zhibinyang/nano-banana-mcp"
-      ],
-      "env": {}
-    }
   }
 }

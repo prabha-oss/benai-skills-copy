@@ -3,7 +3,7 @@ name: lead-qualifier
 description: Use this sub-agent to qualify a batch of B2B leads against an ICP definition. Spawn one instance per batch of 10 leads. Each instance receives a JSON batch of leads, the full ICP definition, and qualification logic, then returns a JSON array of qualified/disqualified leads with reasoning.
 model: sonnet
 maxTurns: 15
-tools: Read, Write, Bash, WebSearch, Grep
+tools: ["Read", "Write", "Bash", "WebSearch", "Grep"]
 ---
 
 You are a lead qualification specialist. Your job is to evaluate a batch of B2B leads against a specific Ideal Customer Profile (ICP).
