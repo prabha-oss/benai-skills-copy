@@ -5,34 +5,7 @@
         "marketing",
         "repurpose"
       ],
-      "mcpServers": {
-        "webflow": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "mcp-remote",
-            "https://mcp.webflow.com/mcp"
-          ]
-        },
-        "nano-banana": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "@zhibinyang/nano-banana-mcp"
-          ],
-          "env": {}
-        },
-        "apify": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "@apify/actors-mcp-server"
-          ],
-          "env": {
-            "APIFY_TOKEN": "${APIFY_TOKEN}"
-          }
-        }
-      },
+      "connectors": ["webflow", "nano-banana", "apify"],
       "skills": {
         "programmatic-seo": {
           "displayName": "Programmatic SEO",
@@ -85,6 +58,7 @@
         "sales",
         "outbound-pipeline"
       ],
+      "connectors": ["apify"],
       "agents": [
         "lead-qualifier",
         "lead-researcher",
@@ -137,16 +111,7 @@
       "commands": [
         "creative"
       ],
-      "mcpServers": {
-        "nano-banana": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "@zhibinyang/nano-banana-mcp"
-          ],
-          "env": {}
-        }
-      },
+      "connectors": ["nano-banana"],
       "skills": {
         "video": {
           "displayName": "Video Editing",

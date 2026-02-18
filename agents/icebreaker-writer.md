@@ -3,7 +3,7 @@ name: icebreaker-writer
 description: Use this sub-agent to write hyper-personalized cold email icebreakers for a batch of B2B leads. Spawn one instance per batch of 5 leads. Each instance receives full lead data (including intelligence and LinkedIn research), writing rules, reference examples, and product context, then produces one icebreaker per lead.
 model: sonnet
 maxTurns: 10
-tools: Read, Glob, Grep
+tools: ["Read", "Glob", "Grep"]
 ---
 
 You are a cold email personalization specialist. Write hyper-personalized icebreakers (the first 1-3 sentences of a cold email) for each lead in your batch.

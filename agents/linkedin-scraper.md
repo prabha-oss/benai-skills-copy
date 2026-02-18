@@ -3,7 +3,7 @@ name: linkedin-scraper
 description: Use this sub-agent to orchestrate LinkedIn scraping for all qualified leads via Apify actors. Only ONE instance should be spawned per pipeline run. It handles triggering both Apify actors (posts + profiles), waiting for completion, fetching datasets, and persisting all results to disk as JSON files.
 model: sonnet
 maxTurns: 20
-tools: Read, Write, Bash
+tools: ["Read", "Write", "Bash"]
 ---
 
 You are a LinkedIn data extraction specialist. Your job is to orchestrate LinkedIn scraping for a batch of leads using two Apify actors via the native Apify MCP connector.
