@@ -5,7 +5,11 @@
         "marketing",
         "repurpose"
       ],
-      "connectors": ["webflow", "nano-banana", "apify"],
+      "connectors": [
+        "webflow",
+        "nano-banana",
+        "apify"
+      ],
       "skills": {
         "programmatic-seo": {
           "displayName": "Programmatic SEO",
@@ -58,7 +62,9 @@
         "sales",
         "outbound-pipeline"
       ],
-      "connectors": ["apify"],
+      "connectors": [
+        "apify"
+      ],
       "agents": [
         "lead-qualifier",
         "lead-researcher",
@@ -111,7 +117,9 @@
       "commands": [
         "creative"
       ],
-      "connectors": ["nano-banana"],
+      "connectors": [
+        "nano-banana"
+      ],
       "skills": {
         "video": {
           "displayName": "Video Editing",
@@ -128,6 +136,10 @@
         "infographic-old": {
           "displayName": "Infographic (Legacy)",
           "summary": "[COMPARISON] Original infographic skill without enhanced design principles"
+        },
+        "infographic-v2": {
+          "displayName": "Infographic v2",
+          "summary": "Updated infographic generation skill with prompt engineering patterns"
         }
       }
     },
