@@ -25,7 +25,7 @@ LinkedIn scraping uses external APIs (Apify actors) that process all URLs in a s
    - Returns: full profile data (headline, about, experience, connections, followers, email)
 
 2. **LinkedIn Posts Scraper** (Actor ID: `A3cAPGpwBEG8RJwse`)
-   - Input: `{"profileUrls": ["https://www.linkedin.com/in/handle1", ...], "maxPosts": 5}`
+   - Input: `{"profileUrls": ["https://www.linkedin.com/in/handle1", ...], "maxPosts": 2}`
    - Returns: recent posts with content, engagement, posting date
 
 **CRITICAL: Actor `2SyF0bVxmgGr8IVCZ` is for PERSONAL profiles (linkedin.com/in/...) only. Never pass company page URLs.**
