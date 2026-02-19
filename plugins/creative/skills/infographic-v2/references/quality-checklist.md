@@ -8,6 +8,8 @@ Reference for Phase 4 (Validation Gate) and Phase 7 (Review and Iterate). Covers
 
 **CRITICAL: This is a PRE-DESIGN validation tool. Apply it BEFORE writing any prompt, not after generating an image.**
 
+**This is an INTERNAL quality gate.** The AI performs this test silently. Do NOT present the 2-second statement to the user for approval. The user already approved the concept and approach -- the 2-second test validates that the AI's execution plan is clear, not that the user agrees with it.
+
 Before designing, answer this question:
 
 > "A person scrolling LinkedIn sees this image for exactly 2 seconds. What do they GET?"
@@ -24,7 +26,7 @@ Example: "They feel a jolt of recognition - they've been in both rooms - and sto
 
 Example: "They learn that domain experts have 6 advantages over developers in the AI era, and think 'I should save this comparison.'"
 
-**If you cannot write this sentence clearly, the concept is NOT ready.** Go back to Phase 3. Do NOT proceed to prompt writing. This is a gate, not a suggestion.
+**If you cannot write this sentence clearly, the concept is NOT ready.** Go back and ask the user to pick a different visualization approach. Do NOT proceed to prompt writing. This is a gate, not a suggestion.
 
 The 2-second test catches the #1 cause of bad infographics: unclear concepts that no amount of visual polish can fix. A muddled concept produces a muddled image every single time, regardless of how sophisticated the prompt is. Validate first, design second.
 

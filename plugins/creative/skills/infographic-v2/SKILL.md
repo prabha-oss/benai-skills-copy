@@ -11,7 +11,7 @@ Create professional infographics in the BenAI brand style for LinkedIn and newsl
 
 **Core philosophy:** The quality of the output is determined by the quality of the thinking BEFORE any prompt is written. Spend 70% of the effort understanding what to visualize and 30% on how to visualize it.
 
-**Meta-narrative:** This skill follows three stages: **Understand** (what to say), **Plan** (how to say it), **Execute** (make it real).
+**UX philosophy:** Every user interaction must be a genuine taste decision. If the AI can make a good default, it should make it silently and let the user override. Never ask for confirmation of something the AI decided.
 
 ---
 
@@ -70,33 +70,21 @@ If brand config exists, acknowledge briefly: "I found your saved settings. Ready
 
 **No reference files loaded.** Just collect the raw material.
 
-Use `AskUserQuestion`:
+**No AskUserQuestion.** Just say naturally:
 
-```
-question: "What content should I turn into an infographic?"
-header: "Content"
-options:
-  - label: "Paste text"
-    description: "Paste an article, essay, social post, or notes"
-  - label: "From a URL"
-    description: "Point me to a web page and I will analyze it"
-  - label: "From a file"
-    description: "Point me to a file in your project"
-```
+> "What content should I turn into an infographic? Paste text, share a URL, or point me to a file."
 
-Wait for content. Acknowledge receipt. Do NOT analyze yet.
+Wait for content. Acknowledge receipt briefly ("Got it, analyzing now..."). Proceed immediately to Phase 2.
 
 ---
 
-## Phase 2: Content Analysis + Concept Extraction
+## Phase 2: Analysis + First Choices
 
 ```
 >>> READ references/content-analysis.md NOW
 ```
 
-This is where the deep work begins. The reference file teaches the 4-layer analysis framework.
-
-### 2.1: Four-Layer Analysis
+### 2.1: Four-Layer Analysis (silent)
 
 Apply the framework from `content-analysis.md`. Extract meaning at all 4 layers:
 
@@ -107,82 +95,118 @@ Apply the framework from `content-analysis.md`. Extract meaning at all 4 layers:
 
 Present the analysis explicitly labeled by layer with honest strength ratings (Weak / Moderate / Strong).
 
-### 2.2: Intent
+### 2.2: Auto-Decide Intent + Output Mode
 
-Use `AskUserQuestion`:
+Based on the layer analysis, AUTO-DECIDE the output mode. Do NOT ask the user.
 
-```
-question: "What should a viewer GET from this visual in 2 seconds?"
-header: "Intent"
-options:
-  - label: "Feel something"
-    description: "An emotional hit - recognition, discomfort, inspiration. They stop scrolling because it resonates."
-  - label: "Learn something"
-    description: "A concrete fact, comparison, or framework. They save it because it's useful."
-  - label: "Both"
-    description: "An emotional hook with concrete information backing it up."
-```
+| Layer Strengths | Auto-Decision |
+|---|---|
+| Layer 3 Strong, Layer 4 Weak | Editorial Illustration |
+| Layer 4 Strong, Layer 3 Weak | Information Graphic |
+| Both Layer 3 and Layer 4 Strong | Hybrid (see sub-mode rules below) |
+| Both Weak | Ask the user for guidance (this is the only case where you ask) |
 
-This answer determines the output mode:
-- "Feel something" = Editorial Illustration (visualize Layer 3 claims)
-- "Learn something" = Information Graphic (visualize Layer 4 data)
-- "Both" = Hybrid
+#### Hybrid Sub-Modes
 
-### 2.3: Platform
+When both Layer 3 and Layer 4 are strong, pick the sub-mode based on which layer is STRONGER:
 
-Use `AskUserQuestion`:
+| Relative Strength | Hybrid Sub-Mode | What It Produces |
+|---|---|---|
+| Layer 4 >= Layer 3 | **Data-led hybrid** | An Information Graphic (BenAI brand system, cards, data structures) with an emotionally resonant headline or framing from Layer 3. The infographic IS the output. The claim provides the hook. |
+| Layer 3 > Layer 4 | **Editorial-led hybrid** | An Editorial Illustration (cinematic scene, artistic style) with a small data overlay anchoring the emotion. The scene IS the output. The data provides credibility. |
 
-```
-question: "Where will this be posted?"
-header: "Platform"
-options:
-  - label: "LinkedIn (Recommended)"
-    description: "4:5 portrait, optimized for feed engagement"
-  - label: "Instagram"
-    description: "1:1 square or 4:5 portrait"
-  - label: "Twitter/X"
-    description: "16:9 landscape for timeline"
-  - label: "Presentation"
-    description: "16:9 landscape for slides"
-```
+**Default when equal:** Data-led hybrid. Most LinkedIn content benefits more from a clear infographic with a strong headline than from an artistic scene with a data footnote.
 
-### 2.4: Output Mode Lock
+State the decision inline with the analysis, including the sub-mode:
 
-Based on the intent answer, declare the output mode (Editorial Illustration / Information Graphic / Hybrid). Confirm with the user:
+> "Your content is strong at both Layer 3 and Layer 4, but the concrete framework is the real asset. I'll create a **data-led hybrid** -- a clean infographic with your philosophical claim as the headline."
+
+If the user disagrees at any point, they can override by saying so in free text.
+
+### 2.3: Batch Platform + Type + Style
+
+Use ONE `AskUserQuestion` with TWO questions (batched). Always ask BOTH questions regardless of the auto-detected output mode. The user should always have the choice between infographic and editorial styles.
 
 ```
-question: "Based on your content, I recommend [mode]. Does this feel right?"
-header: "Output"
-options:
-  - label: "Editorial Illustration"
-    description: "Art that embodies a truth. Quiet, cinematic, the scene IS the message."
-  - label: "Information Graphic"
-    description: "Structured data visual. Scannable, useful, saves-worthy."
-  - label: "Hybrid"
-    description: "Emotional hook + concrete data. Best of both."
+questions:
+  - question: "Where will this be posted?"
+    header: "Platform"
+    options:
+      - label: "LinkedIn (Recommended)"
+        description: "4:5 portrait, optimized for feed engagement"
+      - label: "Instagram"
+        description: "1:1 square or 4:5 portrait"
+      - label: "Twitter/X"
+        description: "16:9 landscape for timeline"
+      - label: "Presentation"
+        description: "16:9 landscape for slides"
+
+  - question: "What type of visual should this be?"
+    header: "Type"
+    options:
+      - label: "Infographic (Recommended)"
+        description: "Clean data visual using BenAI brand system. Cards, scorecards, diagrams. Best for frameworks and comparisons."
+      - label: "Editorial illustration"
+        description: "Artistic, cinematic scene. Moebius linework, surrealism, or graphic novel style. Best for philosophical claims."
+      - label: "Risograph / analog print"
+        description: "Paper grain, muted palette, slight imperfections. Tactile and warm. Best for personal, human content."
+      - label: "Minimalist conceptual"
+        description: "Single powerful image. New Yorker cover energy. Best for one strong metaphor."
 ```
 
-### 2.5: Concept Extraction (5+ concepts)
+**Note:** The "(Recommended)" label on Infographic is the default. Move it to the editorial option instead if the auto-detected mode is Editorial Illustration or Editorial-led Hybrid.
 
-Extract at least 5 concepts at the CORRECT layer:
-- For Editorial: extract philosophical claims as truth statements
-- For Info Graphic: extract information structures as data shapes
+#### Mode Adjustment Based on Type Selection
 
-Present all 5+ with `AskUserQuestion`. Use the actual claims or data shapes as labels, not topic names.
+The user's type selection determines the output mode. This overrides the auto-detected mode from Phase 2.2.
+
+| User Selects | Output Mode Becomes |
+|---|---|
+| **Infographic** | Information Graphic (or Data-led Hybrid if both layers were strong). Lock BenAI brand system as the style. |
+| **Editorial illustration** | Editorial Illustration (or Editorial-led Hybrid if both layers were strong). Use European editorial / Adult Swim / Moebius style anchors. |
+| **Risograph / analog print** | Editorial Illustration. Use risograph style anchors. |
+| **Minimalist conceptual** | Editorial Illustration. Use minimalist conceptual style anchors. |
+| **Other (free text)** | If it describes a data visual or infographic style, route to Information Graphic. If it describes an artistic style, route to Editorial Illustration. Use their description as the style anchor. |
+
+State the locked mode after selection: "Got it -- clean infographic using the BenAI brand system." or "Got it -- editorial illustration in the risograph style."
+
+**This is ONE user interaction collecting TWO answers.**
+
+---
+
+# PLAN
+
+## Phase 3: Concept Selection
+
+### 3.1: Concept Extraction (5+ concepts)
+
+Extract at least 5 concepts. **Always extract from BOTH Layer 3 and Layer 4**, regardless of the current output mode. This gives the user the option to pick a concept that might shift the output type.
+
+For each concept, extract at the correct layer:
+- Layer 3 concepts: philosophical claims as truth statements
+- Layer 4 concepts: information structures as data shapes
+
+**Label every concept with its layer and what it naturally produces.** This is critical -- the user must see what choosing each concept implies for the output.
+
+Present all 5+ with `AskUserQuestion`. Use the actual claims or data shapes as labels, not topic names. Include the layer tag in the description.
 
 ```
 question: "Which of these should we visualize?"
 header: "Concept"
 options:
-  - label: "[First few words of claim/data shape 1]"
-    description: "[Why this is a strong visual candidate]"
-  - label: "[First few words of claim/data shape 2]"
-    description: "[Why this is a strong visual candidate]"
-  - label: "[First few words of claim/data shape 3]"
-    description: "[Why this is a strong visual candidate]"
-  - label: "[First few words of claim/data shape 4]"
-    description: "[Why this is a strong visual candidate]"
+  - label: "[First few words of data shape 1]"
+    description: "Layer 4 (infographic). [Why this is a strong visual candidate]"
+  - label: "[First few words of claim 1]"
+    description: "Layer 3 (editorial). [Why this is a strong visual candidate]"
+  - label: "[First few words of data shape 2]"
+    description: "Layer 4 (infographic). [Why this is a strong visual candidate]"
+  - label: "[First few words of claim 2]"
+    description: "Layer 3 (editorial). [Why this is a strong visual candidate]"
 ```
+
+**Ordering rule:** Present concepts that match the locked output mode FIRST. If the mode is Information Graphic or Data-led Hybrid, Layer 4 concepts come first. If Editorial, Layer 3 concepts come first. But always include concepts from both layers.
+
+**Mode adjustment on selection:** If the user picks a concept from a different layer than the locked mode, silently adjust the mode to match. For example, if the mode is Information Graphic but the user picks a Layer 3 claim, switch to Editorial Illustration. State the switch: "That's a philosophical claim -- I'll switch to an editorial illustration for this one."
 
 (Present remaining concepts as additional options. Never fewer than 5.)
 
@@ -190,141 +214,85 @@ options:
 
 ---
 
-# PLAN
-
-## Phase 3: Visualization Design
+## Phase 4: Visualization Approach
 
 ```
 >>> READ references/visualization-patterns.md NOW
 ```
 
-### 3.1: Style Discovery (Editorial/Hybrid only)
+### 4.1: Visualization Proposals (5 approaches)
 
-If the user chose Information Graphic, SKIP this step. Info Graphics use the BenAI brand system.
+#### Guard Rail: Proposal Type MUST Match the Locked Output Mode
 
-For Editorial/Hybrid, use `AskUserQuestion`:
+Before writing any proposals, check the current locked output mode. This determines what KIND of proposals you create. There are no exceptions.
 
-```
-question: "What visual world should this live in?"
-header: "Style"
-options:
-  - label: "European editorial / Adult Swim"
-    description: "Moebius linework, quiet existential surrealism. Muted warm tones."
-  - label: "Graphic novel / comic panel"
-    description: "Bold linework, sequential framing. Clear and deliberate."
-  - label: "Risograph / analog print"
-    description: "Paper grain, muted palette, slight imperfections. Tactile and warm."
-  - label: "Minimalist conceptual"
-    description: "Single powerful image. New Yorker cover energy."
-```
+| Locked Output Mode | Proposal Type | What Each Proposal Contains |
+|---|---|---|
+| Information Graphic | DATA STRUCTURES only | Format (scorecard, vertical flow, comparison, hierarchy, card grid), data mapping, 1-second takeaway, why this format fits |
+| Data-led Hybrid | DATA STRUCTURES only | Same as Info Graphic, but note which Layer 3 claim will serve as the headline |
+| Editorial Illustration | CINEMATIC SCENES only | The scene, emotional register, focal composition, 2-second hit |
+| Editorial-led Hybrid | CINEMATIC SCENES only | Same as Editorial, but note which data element will anchor the scene |
 
-If the user describes a different style entirely, use their description. These are starting points, not constraints.
+**CRITICAL: If the mode is Information Graphic or Data-led Hybrid, NEVER propose metaphorical scenes, artistic illustrations, or cinematic compositions. Propose layout formats and data structures ONLY. A "hierarchy diagram" is a data structure. A "vast library with glowing books" is a scene. Know the difference.**
 
-### 3.2: Visualization Proposals (5 approaches)
+Propose 5 ways to visualize the chosen concept using the correct proposal type above.
 
-Propose 5 ways to visualize the chosen concept:
-- For Editorial: 5 CINEMATIC SCENES (not layout types). Each with: the scene, emotional register, focal composition, 2-second hit.
-- For Info Graphic: 5 DATA STRUCTURES (not metaphors). Each with: format, data mapping, 1-second takeaway, why this format fits.
-
-Use `AskUserQuestion` with the 5 proposals.
+Use `AskUserQuestion` with the 5 proposals. **Enable `multiSelect: true`** so the user can select multiple approaches at once.
 
 **Never propose fewer than 5.**
 
-### 3.3: Content Mapping
+#### Multi-Select Behavior
 
-After the user picks an approach, map their SPECIFIC content to the chosen structure. Show exactly:
-- What text appears where (exact words)
-- How the visual hierarchy works
-- What the focal point is
+When the user selects multiple approaches:
 
-Confirm with `AskUserQuestion`:
+1. **Generate all selected approaches in parallel.** Run Phase 5 (content mapping, 2-second test, prompt construction, generation) independently for each selected approach. Use parallel tool calls where possible.
+2. **Name versions by approach:** `[topic]-v1a.png`, `[topic]-v1b.png`, `[topic]-v1c.png` etc.
+3. **Display all results** sequentially using Read tool, labeling each: "**Version A** (vertical flow):", "**Version B** (comparison):", etc.
+4. Proceed to Phase 6 multi-image review flow (see below).
 
-```
-question: "Does this content mapping look right?"
-header: "Mapping"
-options:
-  - label: "Yes, looks good"
-    description: "Proceed to the validation check"
-  - label: "Adjust the mapping"
-    description: "I will tell you what to change"
-  - label: "Try a different approach"
-    description: "Go back and pick another visualization"
-```
-
----
-
-## Phase 4: Validation Gate (The 2-Second Gut Check)
-
-```
->>> READ references/quality-checklist.md NOW
-```
-
-**This is a GATE. Do not skip it.**
-
-### 4.1: Write the 2-Second Statement
-
-Before writing any prompt, explicitly answer:
-
-> "A person scrolling LinkedIn sees this image for exactly 2 seconds. What do they GET?"
-
-Write the answer in ONE sentence:
-- For Editorial: "They feel [emotion] and stop scrolling because [reason]."
-- For Info Graphic: "They learn [fact] and think 'I should save this.'"
-
-### 4.2: Validate
-
-**If the statement is clear and specific:** proceed to Phase 6 (or Phase 5 if API key is needed).
-
-**If the statement is vague or unclear:** the concept is not ready. Go back to Phase 3. Do NOT proceed.
-
-Present the 2-second statement to the user for confirmation.
+When the user selects only one approach, the flow remains unchanged (single generation, normal Phase 6 single-image review).
 
 ---
 
 # EXECUTE
 
-## Phase 5: API Key Setup
+## Phase 5: Generate (Zero Confirmations)
 
 ```
->>> READ references/nano-banana-api.md NOW (Section: API Setup)
-```
-
-Only reached if Phase 0 found no API key.
-
-Use `AskUserQuestion`:
-
-```
-question: "I need a Gemini API key to generate the image. How do you want to proceed?"
-header: "API Key"
-options:
-  - label: "Set it up now (Recommended)"
-    description: "I will guide you through getting a free key from Google AI Studio"
-  - label: "I have a key ready"
-    description: "Let me paste it"
-  - label: "Skip for now"
-    description: "Just give me the prompt to use elsewhere"
-```
-
-Follow the paths described in `nano-banana-api.md`:
-- **Set it up now:** Guide through Google AI Studio, save to .env, instruct restart, EXIT SKILL
-- **I have a key:** Save to .env, instruct restart, EXIT SKILL
-- **Skip for now:** Complete all phases normally, save prompt to `.infographic/prompts/` instead of generating
-
-**CRITICAL:** After saving a key, the skill MUST EXIT. Tell the user to restart Claude Code and run the skill again.
-
----
-
-## Phase 6: Prompt Construction + Generation
-
-```
+>>> READ references/quality-checklist.md NOW
 >>> READ references/brand-guidelines.md NOW (for Information Graphics and Hybrid)
 >>> READ references/prompt-engineering.md NOW
 ```
 
-### 6.0: Pre-Prompt Thinking (Required)
+After the user picks an approach (or multiple approaches), do ALL of the following **silently and automatically** for each selected approach:
 
-Before writing a single word of the prompt, answer these questions explicitly.
-The quality of the prompt is determined by the quality of the thinking BEFORE it.
+### 5.1: Content Mapping (internal -- no user confirmation)
+
+Map the user's SPECIFIC content to the chosen structure:
+- What text appears where (exact words)
+- How the visual hierarchy works
+- What the focal point is
+
+Do NOT present this to the user for approval. This is internal quality work.
+
+### 5.2: The 2-Second Test (internal -- no user confirmation)
+
+Before writing any prompt, explicitly answer:
+
+> "A person scrolling sees this image for exactly 2 seconds. What do they GET?"
+
+Write the answer in ONE sentence:
+- For Editorial: "They feel [emotion] and stop scrolling because [reason]."
+- For Info Graphic: "They learn [fact] and think 'I should save this.'"
+
+**If the statement is clear and specific:** proceed to prompt construction.
+**If the statement is vague or unclear:** the concept is not ready. Go back to Phase 4 and ask the user to pick a different approach. Do NOT proceed.
+
+This is an internal quality gate. Do NOT present the statement to the user for approval.
+
+### 5.3: Pre-Prompt Thinking (internal)
+
+Before writing a single word of the prompt, answer these questions:
 
 1. **Text inventory:** List every piece of text that must appear in the image.
    Will use TEXT LINE N: format with CRITICAL exact spelling instruction.
@@ -335,7 +303,6 @@ The quality of the prompt is determined by the quality of the thinking BEFORE it
 
 3. **Style anchor:** What single brand/product reference captures the target aesthetic?
    (e.g., "Stripe.com", "Linear.app", "Notion.so")
-   This controls style more reliably than any amount of CSS specifications.
 
 4. **Layout structure:** How many sections? Will use === SECTION === markers
    with [LARGE GAP] between them for clear visual separation.
@@ -343,11 +310,7 @@ The quality of the prompt is determined by the quality of the thinking BEFORE it
 5. **Aspect ratio:** Confirm ratio appears in BOTH the prompt text AND the
    generate_image parameter.
 
-Document these answers, then proceed to 6.1 using them as the foundation for
-the prompt. The prompt-engineering.md reference file teaches the exact formats
-and assembly order.
-
-### 6.1: Craft the Prompt
+### 5.4: Craft the Prompt (internal)
 
 Use the correct architecture from `prompt-engineering.md`:
 
@@ -357,31 +320,9 @@ Style anchor, emotional register, the scene, spatial composition, texture/materi
 **For Information Graphic:** 8-part structure
 Format declaration, information hierarchy, data visualization, exact text, brand system (from `brand-guidelines.md`), density control, scanability, technical specs.
 
-### 6.2: Show Prompt for Approval
+### 5.5: Generate Immediately
 
-```
-Here's the prompt I will use:
-
----
-[Full prompt text]
----
-```
-
-Use `AskUserQuestion`:
-
-```
-question: "Ready to generate with this prompt?"
-header: "Prompt"
-options:
-  - label: "Yes, generate"
-    description: "Looks good, go ahead"
-  - label: "Tweak the prompt"
-    description: "I want to adjust something before generating"
-  - label: "Start over"
-    description: "Go back to concept selection"
-```
-
-### 6.3: Generate
+Do NOT show the prompt to the user. Do NOT ask for prompt approval.
 
 For the selected platform, use the matching aspect ratio:
 
@@ -393,10 +334,10 @@ For the selected platform, use the matching aspect ratio:
 
 ```
 Call tool: generate_image
-Parameters: { "prompt": "[approved prompt]", "aspectRatio": "[ratio]" }
+Parameters: { "prompt": "[crafted prompt]", "aspectRatio": "[ratio]" }
 ```
 
-### 6.4: Copy and Display
+### 5.6: Copy and Display
 
 ```bash
 mkdir -p .infographic/images
@@ -410,62 +351,41 @@ Read file: .infographic/images/[topic-slug]-v1.png
 
 The user MUST see the image to give feedback.
 
-### If No API Key (Skip Path)
+---
 
-Save the prompt to `.infographic/prompts/[topic]-prompt.md` with manual instructions for Google AI Studio.
+## Phase 6: Review + Iterate
+
+Phase 6 has two flows depending on whether one or multiple images were generated.
 
 ---
 
-## Phase 7: Review + Iterate
+### 6-SINGLE: Single Image Review
 
-```
->>> RE-READ references/quality-checklist.md NOW
-```
+Used when only one approach was selected in Phase 4.
 
-### 7.1: The Diagnostic Question
+#### 6-SINGLE.1: The Diagnostic Question
 
 Use `AskUserQuestion`:
 
 ```
-question: "Looking at this for 2 seconds as a stranger - what do you GET?"
-header: "Reaction"
+question: "How's this?"
+header: "Result"
 options:
-  - label: "The right thing - it hits"
-    description: "The message lands. Maybe small tweaks but the core is right."
-  - label: "Right direction, wrong execution"
-    description: "I get the concept but something about the image isn't working."
-  - label: "The wrong thing"
-    description: "The concept isn't transmitting. Need to rethink the visual."
-  - label: "Nothing - it's not clear"
-    description: "Can't tell what this is saying in 2 seconds."
+  - label: "Done - save it"
+    description: "This is the final version"
+  - label: "Tweak it"
+    description: "Tell me what to adjust"
+  - label: "Concept isn't working"
+    description: "Go back and pick a different approach or concept"
+  - label: "Next concept"
+    description: "Save this and start another from the same content"
 ```
 
-### 7.2: Branch
+#### 6-SINGLE.2: Branch
 
-**"The right thing"** - Ask about specific tweaks, then apply edits.
+**"Done - save it"** - Save as `[topic]-final.png`. Wrap up.
 
-**"Right direction, wrong execution"** - Drill into WHAT isn't working:
-
-```
-question: "What specifically isn't working?"
-header: "Changes"
-multiSelect: true
-options:
-  - label: "Emotional register is off"
-    description: "Doesn't look like pain/joy/etc - the image doesn't FEEL right"
-  - label: "Too cramped / needs whitespace"
-    description: "Elements are too close together, not enough breathing room"
-  - label: "Text issues"
-    description: "Wording, size, placement, readability, typos"
-  - label: "Style is off"
-    description: "The visual language doesn't match what I described"
-```
-
-Get specifics on each selection before editing.
-
-**"The wrong thing" or "Nothing"** - The concept is broken. Go back to Phase 3. Do NOT try to fix with edits.
-
-### 7.3: Apply Edits
+**"Tweak it"** - Let the user describe what to change in **free text** (no multi-select categories). Users know what's wrong. Apply edits based on their description.
 
 **First edit:**
 ```
@@ -485,24 +405,127 @@ Parameters: { "prompt": "[further changes]" }
 After each edit:
 1. Copy from `./generated_imgs/[filename]` to `.infographic/images/[topic]-v[N].png`
 2. Display using Read tool
-3. Ask if changes are correct
+3. Ask "How's this?" again (same 6-SINGLE.1 question)
 
-Repeat until approved. Save final version as `[topic]-final.png`.
+**"Concept isn't working"** - Go back to Phase 4 (Visualization Approach) with the same concept, OR back to Phase 3 (Concept Selection) if the user wants a different concept entirely. Ask which.
+
+**"Next concept"** - Save current as `[topic]-final.png`. Return to Phase 3 with the cached concept list. Skip analysis (already done). Skip platform/style (cached from Phase 2).
 
 ---
 
-## Phase 8: Wrap Up
+### 6-MULTI: Multi-Image Review
+
+Used when multiple approaches were selected in Phase 4. The goal is to let the user compare, keep, discard, and tweak -- all without losing track of which version is which.
+
+#### 6-MULTI.1: Triage
+
+After displaying all generated versions (labeled A, B, C...), ask the user to triage:
 
 ```
-Your infographic is ready!
-
-Saved to: .infographic/images/[topic]-final.png
-
-Want to visualize another concept from your content?
-(I had [N] other suggestions from Phase 2.)
+question: "What do you want to do with these?"
+header: "Triage"
+options:
+  - label: "Pick the best one"
+    description: "Choose one version to keep or tweak, discard the rest"
+  - label: "Keep all - finalize"
+    description: "Save all versions as finals"
+  - label: "Tweak specific versions"
+    description: "Tell me which ones to adjust"
+  - label: "None of these work"
+    description: "Go back and try different approaches"
 ```
 
-If yes: return to Phase 2.5 with the next chosen concept (skip the analysis, go straight to concept selection).
+#### 6-MULTI.2: Branch
+
+**"Pick the best one"** - Ask which version:
+```
+question: "Which version?"
+header: "Pick"
+options:
+  - label: "Version A: [approach name]"
+    description: "[1-line summary]"
+  - label: "Version B: [approach name]"
+    description: "[1-line summary]"
+  [... one option per generated version, max 4]
+```
+After selection, enter the **single-image flow** (6-SINGLE) for that version. Discard the others (delete from `.infographic/images/`). Rename the kept version to `[topic]-v1.png` for clean iteration numbering.
+
+**"Keep all - finalize"** - Save each as `[topic]-a-final.png`, `[topic]-b-final.png`, etc. Wrap up.
+
+**"Tweak specific versions"** - Let the user describe tweaks in **free text**. They should reference versions by letter: "In Version A, make the title bigger. In Version C, change the accent color to blue."
+
+Apply edits to each mentioned version:
+```
+Call tool: edit_image
+Parameters: {
+  "imagePath": ".infographic/images/[topic]-v1a.png",
+  "prompt": "Edit this infographic:\n1. [Changes for this version]\nKeep everything else exactly the same."
+}
+```
+
+For each subsequent version edit, use `edit_image` (not `continue_editing`) since each version is a different base image.
+
+After all edits:
+1. Copy each result to `.infographic/images/[topic]-v2a.png`, `[topic]-v2b.png`, etc. (increment the version number, keep the letter)
+2. Display all updated versions
+3. Return to 6-MULTI.1 (triage again)
+
+**"None of these work"** - Go back to Phase 4 (Visualization Approach) with the same concept, OR back to Phase 3 (Concept Selection). Ask which.
+
+#### 6-MULTI.3: Convergence
+
+At any point in the multi-image flow, if the user is down to one version (either by picking the best or discarding the rest), switch to the **single-image flow** (6-SINGLE) for final tweaks and save. Don't keep asking triage questions when there's only one image left.
+
+---
+
+## Phase 5-ALT: API Key Setup
+
+```
+>>> READ references/nano-banana-api.md NOW (Section: API Setup)
+```
+
+Only reached if Phase 0 found no API key.
+
+Use `AskUserQuestion`:
+
+```
+question: "I need a Gemini API key to generate images. How do you want to proceed?"
+header: "API Key"
+options:
+  - label: "Set it up now (Recommended)"
+    description: "I will guide you through getting a free key from Google AI Studio"
+  - label: "I have a key ready"
+    description: "Let me paste it"
+  - label: "Skip for now"
+    description: "Just give me the prompt to use elsewhere"
+```
+
+Follow the paths described in `nano-banana-api.md`:
+- **Set it up now:** Guide through Google AI Studio, save to .env, instruct restart, EXIT SKILL
+- **I have a key:** Save to .env, instruct restart, EXIT SKILL
+- **Skip for now:** Complete all phases normally, save prompt to `.infographic/prompts/` instead of generating
+
+**CRITICAL:** After saving a key, the skill MUST EXIT. Tell the user to restart Claude Code and run the skill again.
+
+---
+
+## Caching for Series Workflows
+
+After the first image is generated, the following are CACHED for subsequent images from the same content:
+
+- **Four-layer analysis** (don't re-analyze)
+- **Concept list** (all 5+ extracted concepts)
+- **Platform selection** (reuse same platform)
+- **Style selection** (reuse same style)
+- **Output mode** (reuse same mode)
+
+When the user selects "Next concept" in Phase 6:
+1. Present the cached concept list (minus already-visualized concepts)
+2. After selection, go directly to Phase 4 (Visualization Approach)
+3. After approach selection, go directly to Phase 5 (Generate)
+
+**Second image flow: Concept selection -> Visualization approach -> Auto-generate -> Review**
+**Target: 4 interactions for subsequent images.**
 
 ---
 
@@ -532,21 +555,59 @@ If confirmed: append a new numbered rule to the Rules section below.
 | 0 | None | Just checking config |
 | 1 | None | Just collecting content |
 | 2 | `content-analysis.md` | 4-layer framework for analysis |
-| 3 | `visualization-patterns.md` | Layout archetypes + style anchors |
-| 4 | `quality-checklist.md` | 2-second test as validation gate |
-| 5 | `nano-banana-api.md` | API key setup instructions |
-| 6 | `brand-guidelines.md` + `prompt-engineering.md` | Brand specs + prompt vector system |
-| 7 | `quality-checklist.md` (re-read) | Diagnostic framework for iteration |
+| 3 | None | Concepts already extracted in Phase 2 |
+| 4 | `visualization-patterns.md` | Layout archetypes + style anchors |
+| 5 | `quality-checklist.md` + `brand-guidelines.md` + `prompt-engineering.md` | Internal quality gates + prompt construction |
+| 6 | None | Review is user-driven |
+
+---
+
+## Interaction Count Target
+
+### First image from new content: 6 interactions
+1. Paste content (natural language, no AskUserQuestion)
+2. Platform + Style (batched into one AskUserQuestion)
+3. Concept selection
+4. Visualization approach
+5. Post-generation review
+6. Final decision (done/tweak/next)
+
+### Subsequent images from same content: 4 interactions
+1. Concept selection (from cached list)
+2. Visualization approach
+3. Post-generation review
+4. Final decision
+
+### What happens AUTOMATICALLY (no user interaction):
+- Intent detection (auto from layer analysis)
+- Output mode selection (auto from intent)
+- Content mapping (internal quality work)
+- 2-second validation (internal quality gate)
+- Prompt construction (internal)
+- Prompt approval (not needed -- user approved the approach, not the prompt)
 
 ---
 
 ## File Naming
 
+### Single image flow
 | Stage | Pattern | Example |
 |-------|---------|---------|
 | First version | `[topic]-v1.png` | `chosen-pain-v1.png` |
 | After edits | `[topic]-v2.png` | `chosen-pain-v2.png` |
 | Final | `[topic]-final.png` | `chosen-pain-final.png` |
+
+### Multi-image flow
+| Stage | Pattern | Example |
+|-------|---------|---------|
+| First generation | `[topic]-v1a.png`, `[topic]-v1b.png` | `disclosure-v1a.png`, `disclosure-v1b.png` |
+| After edits | `[topic]-v2a.png`, `[topic]-v2b.png` | `disclosure-v2a.png`, `disclosure-v2b.png` |
+| Final (all kept) | `[topic]-a-final.png`, `[topic]-b-final.png` | `disclosure-a-final.png`, `disclosure-b-final.png` |
+| Final (one picked) | `[topic]-final.png` | `disclosure-final.png` |
+
+### Series + Prompts
+| Stage | Pattern | Example |
+|-------|---------|---------|
 | Series | `[topic]-01-v1.png` | `tips-01-v1.png` |
 | Prompts | `[topic]-prompt.md` | `.infographic/prompts/tips-prompt.md` |
 
@@ -572,10 +633,14 @@ If confirmed: append a new numbered rule to the Rules section below.
 1. Never use em dashes (the long dash character)
 2. Always give 5+ suggestions at every decision point (never one-off outputs)
 3. Visualize claims (Layer 3) or information (Layer 4), NEVER narrative or themes
-4. Apply the 2-second test BEFORE designing, not after
+4. Apply the 2-second test BEFORE designing, not after (internal gate, no user confirmation)
 5. Edit don't regenerate (unless the concept itself is broken)
 6. Use style anchors, not abstract descriptors ("Moebius meets Adult Swim" beats "clean modern illustration")
 7. NEVER use black backgrounds
 8. Max 4-5 distinct elements per infographic, one key message rule
 9. Always include footer: "Ben Van Sprundel | Founder @ BenAI"
 10. Instruct clearly in the process when to use each reference file (lazy loading)
+11. Never ask for confirmation of something the AI decided -- state it and let the user override
+12. Batch independent questions into a single AskUserQuestion when possible
+13. Keep the prompt hidden by default -- show only if user explicitly asks
+14. Cache all decisions (platform, style, concepts, analysis) for series workflows
