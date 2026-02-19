@@ -69,6 +69,27 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Commands:** `/youtube` (skill overview)
 
+### SEO (1 skill, 13 sub-commands)
+| Sub-Command | Purpose |
+|-------------|---------|
+| `/seo audit <url>` | Full site audit with 6 parallel subagents |
+| `/seo page <url>` | Deep single-page analysis |
+| `/seo technical <url>` | Technical SEO (crawlability, CWV, JS rendering) |
+| `/seo content <url>` | E-E-A-T content quality analysis |
+| `/seo schema <url>` | Schema detection, validation, generation |
+| `/seo images <url>` | Image optimization analysis |
+| `/seo sitemap <url\|generate>` | Sitemap validation/generation |
+| `/seo geo <url>` | AI Overviews / GEO optimization |
+| `/seo plan <type>` | Strategic planning (SaaS, e-commerce, local, publisher, agency) |
+| `/seo programmatic` | Programmatic SEO at scale |
+| `/seo competitor-pages` | Comparison page generation |
+| `/seo hreflang <url>` | Hreflang/i18n validation |
+| `/seo optimize` | GSC data-driven optimization |
+
+**Commands:** `/seo` (skill overview)
+
+**Agents:** `seo-technical`, `seo-content`, `seo-schema`, `seo-sitemap`, `seo-performance`, `seo-visual`
+
 ## n8n Skill
 
 ### Configuration

@@ -34,8 +34,9 @@ mkdir -p "$ROOT/plugins"
 COMMANDS="$ROOT/commands"
 AGENTS="$ROOT/agents"
 CONNECTORS="$ROOT/connectors"
+SCRIPTS="$ROOT/scripts"
 
-export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS CONNECTORS
+export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS CONNECTORS SCRIPTS
 
 python3 << 'PYEOF'
 import json, os, shutil
@@ -47,6 +48,7 @@ marketplace_path = os.environ.get("MARKETPLACE", "")
 commands_src = os.environ.get("COMMANDS", "")
 agents_src = os.environ.get("AGENTS", "")
 connectors_src = os.environ.get("CONNECTORS", "")
+scripts_src = os.environ.get("SCRIPTS", "")
 
 with open(skills_map_path) as f:
     skills_map = json.load(f)
@@ -111,7 +113,7 @@ for dept_name, dept_config in departments.items():
     os.makedirs(skills_dir, exist_ok=True)
 
     count = 0
-    for skill_id in skills:
+    for skill_id, skill_config in skills.items():
         src = os.path.join(shared, skill_id)
         dst = os.path.join(skills_dir, skill_id)
         if os.path.isdir(src):
@@ -119,6 +121,23 @@ for dept_name, dept_config in departments.items():
             count += 1
         else:
             print(f"  Warning: shared-skills/{skill_id} not found, skipping")
+
+        # Copy global scripts into skill directory if declared
+        script_list = skill_config.get("scripts", []) if isinstance(skill_config, dict) else []
+        if script_list and os.path.isdir(dst):
+            for script_name in script_list:
+                script_src = os.path.join(scripts_src, script_name)
+                if not os.path.isfile(script_src):
+                    print(f"  Warning: scripts/{script_name} not found, skipping")
+                    continue
+                if script_name == "requirements.txt":
+                    # requirements.txt goes in skill root
+                    shutil.copy2(script_src, os.path.join(dst, script_name))
+                else:
+                    # .py files go in scripts/ subdir
+                    script_dst_dir = os.path.join(dst, "scripts")
+                    os.makedirs(script_dst_dir, exist_ok=True)
+                    shutil.copy2(script_src, os.path.join(script_dst_dir, script_name))
 
     print(f"  {dept_name}: {count} skills synced")
 

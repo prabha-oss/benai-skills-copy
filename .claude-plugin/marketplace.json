@@ -111,6 +111,28 @@
         "excalidraw",
         "content"
       ]
+    },
+    {
+      "name": "seo",
+      "source": "./plugins/seo",
+      "description": "Complete SEO toolkit with 13 capabilities via single /seo command. Full site audits with 6 parallel subagents, technical SEO (crawlability, Core Web Vitals, JS rendering), E-E-A-T content quality, schema markup, image optimization, sitemap analysis, AI search / GEO optimization, strategic planning with industry templates, programmatic SEO at scale, competitor comparison pages, hreflang/i18n, and Google Search Console data-driven optimization.",
+      "version": "1.0.0",
+      "author": {
+        "name": "BenAI"
+      },
+      "keywords": [
+        "seo",
+        "audit",
+        "schema",
+        "e-e-a-t",
+        "geo",
+        "programmatic-seo",
+        "hreflang",
+        "gsc",
+        "core-web-vitals",
+        "technical-seo",
+        "content-quality"
+      ]
     }
   ]
 }
