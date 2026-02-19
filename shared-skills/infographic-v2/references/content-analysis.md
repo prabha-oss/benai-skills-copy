@@ -135,9 +135,44 @@ Be honest about which layers are strong and which are weak. Do not force strengt
 where it does not exist. Sometimes content is rich at Layer 4 but empty at Layer 3,
 or vice versa. The analysis reveals which path produces the best visual - trust it.
 
-If Layer 3 and Layer 4 are both strong, consider a hybrid approach. If neither is
-strong, go back to the content and look harder. There is almost always a Layer 3
-claim hiding inside a Layer 1 narrative - you just have to dig for it.
+### Auto-Intent Detection
+
+The layer analysis determines the output mode. Do NOT ask the user to choose
+between "feel something" and "learn something." The content tells you.
+
+| Layer Analysis Result | Auto-Decision | Reasoning |
+|---|---|---|
+| Layer 3 Strong, Layer 4 Weak | Editorial Illustration | Content has claims but no data. Visualize the feeling. |
+| Layer 4 Strong, Layer 3 Weak | Information Graphic | Content has data but no philosophical claims. Visualize the facts. |
+| Both Strong, Layer 4 >= Layer 3 | Data-led Hybrid | Both available. Infographic with an emotional headline. |
+| Both Strong, Layer 3 > Layer 4 | Editorial-led Hybrid | Both available. Scene with a data anchor. |
+| Both Layer 3 and Layer 4 Weak | ASK THE USER | Content is unclear. This is the only case where you ask for intent. |
+
+#### Hybrid Sub-Modes
+
+When both layers are strong, pick the sub-mode based on which is STRONGER:
+
+- **Data-led Hybrid:** Produces an Information Graphic (BenAI brand system, cards,
+  data structures) with a Layer 3 claim as the emotionally resonant headline. The
+  infographic IS the output. The claim provides the hook. This is the DEFAULT when
+  layers are equally strong, because most LinkedIn content benefits more from a
+  clear infographic with a strong headline than from an artistic scene.
+
+- **Editorial-led Hybrid:** Produces an Editorial Illustration (cinematic scene,
+  artistic style) with a small data overlay anchoring the emotion. The scene IS
+  the output. The data provides credibility.
+
+State the decision inline with the analysis, including the sub-mode. Example:
+> "Your content is strong at both layers, but the concrete framework is the real
+> asset. I'll create a data-led hybrid -- a clean infographic with your
+> philosophical claim as the headline."
+
+If the user disagrees, they can override at any point by saying so in free text.
+The auto-decision is a recommendation, not a lock.
+
+If neither layer is strong, go back to the content and look harder. There is
+almost always a Layer 3 claim hiding inside a Layer 1 narrative - you just have
+to dig for it.
 
 ---
 
