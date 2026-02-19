@@ -192,6 +192,75 @@
           "summary": "Generate optimized YouTube video titles"
         }
       }
+    },
+    "seo": {
+      "commands": [
+        "seo"
+      ],
+      "skills": {
+        "seo": {
+          "displayName": "SEO Suite",
+          "summary": "Comprehensive SEO: audits, technical, E-E-A-T, schema, images, sitemaps, GEO, programmatic, competitors, hreflang, GSC optimization"
+        },
+        "seo-page": {
+          "displayName": "SEO Page Analysis",
+          "summary": "Deep single-page SEO analysis covering on-page elements, content quality, schema, and images",
+          "scripts": ["fetch_page.py", "parse_html.py", "requirements.txt"]
+        },
+        "seo-technical": {
+          "displayName": "SEO Technical",
+          "summary": "Technical SEO audit across 8 categories including crawlability, indexability, CWV, and JS rendering",
+          "scripts": ["fetch_page.py", "parse_html.py", "requirements.txt"]
+        },
+        "seo-content": {
+          "displayName": "SEO Content",
+          "summary": "E-E-A-T content quality and AI citation readiness analysis",
+          "scripts": ["fetch_page.py", "parse_html.py", "requirements.txt"]
+        },
+        "seo-schema": {
+          "displayName": "SEO Schema",
+          "summary": "Detect, validate, and generate Schema.org structured data in JSON-LD",
+          "scripts": ["fetch_page.py", "parse_html.py", "requirements.txt"]
+        },
+        "seo-images": {
+          "displayName": "SEO Images",
+          "summary": "Image optimization analysis — alt text, file size, formats, lazy loading, CLS",
+          "scripts": ["fetch_page.py", "parse_html.py", "requirements.txt"]
+        },
+        "seo-sitemap": {
+          "displayName": "SEO Sitemap",
+          "summary": "Analyze existing XML sitemaps or generate new ones with quality gates"
+        },
+        "seo-geo": {
+          "displayName": "SEO GEO",
+          "summary": "AI Overviews / Generative Engine Optimization for AI search visibility",
+          "scripts": ["fetch_page.py", "parse_html.py", "requirements.txt"]
+        },
+        "seo-plan": {
+          "displayName": "SEO Plan",
+          "summary": "Strategic SEO planning with industry templates (SaaS, e-commerce, local, publisher, agency)"
+        },
+        "seo-programmatic": {
+          "displayName": "SEO Programmatic",
+          "summary": "Programmatic SEO at scale with thin content safeguards and quality gates"
+        },
+        "seo-competitor-pages": {
+          "displayName": "SEO Competitor Pages",
+          "summary": "Generate X vs Y comparison and alternatives pages with schema markup"
+        },
+        "seo-hreflang": {
+          "displayName": "SEO Hreflang",
+          "summary": "Hreflang and international SEO audit, validation, and generation"
+        },
+        "seo-optimize": {
+          "displayName": "SEO Optimize",
+          "summary": "GSC data-driven optimization — striking distance, low-CTR, cannibalization, content gaps"
+        },
+        "seo-audit": {
+          "displayName": "SEO Audit",
+          "summary": "Run comprehensive technical SEO audits (16 categories, 148 rules)"
+        }
+      }
     }
   }
 }
