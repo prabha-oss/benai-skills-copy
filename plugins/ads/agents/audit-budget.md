@@ -1,11 +1,7 @@
 ---
 name: audit-budget
-description: >
-  Budget and bidding specialist. Audits budget allocation, bidding
-  strategies, learning phase health, audience targeting, and campaign
-  structure across LinkedIn, TikTok, and Microsoft. Evaluates 24 checks
-  and outputs budget-audit-results.md.
-model: sonnet
+description: Budget and bidding specialist. Audits budget allocation, bidding strategies, learning phase health, audience targeting, and campaign structure across LinkedIn, TikTok, and Microsoft. Evaluates 24 checks and outputs budget-audit-results.md.
+model: haiku
 maxTurns: 20
 tools: ["Read", "Bash", "Write", "Glob", "Grep"]
 ---

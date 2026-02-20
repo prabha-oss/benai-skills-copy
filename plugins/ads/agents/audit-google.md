@@ -1,10 +1,7 @@
 ---
 name: audit-google
-description: >
-  Google Ads audit specialist. Analyzes conversion tracking, wasted spend,
-  account structure, keywords, Quality Score, ad assets, PMax, bidding,
-  and settings. Evaluates 74 checks and outputs google-audit-results.md.
-model: sonnet
+description: Google Ads audit specialist. Analyzes conversion tracking, wasted spend, account structure, keywords, Quality Score, ad assets, PMax, bidding, and settings. Evaluates 74 checks and outputs google-audit-results.md.
+model: haiku
 maxTurns: 20
 tools: ["Read", "Bash", "Write", "Glob", "Grep"]
 ---

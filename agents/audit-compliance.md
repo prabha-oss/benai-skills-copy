@@ -1,11 +1,8 @@
 ---
 name: audit-compliance
-description: >
-  Compliance and performance specialist. Audits regulatory compliance,
-  ad policies, privacy requirements, campaign settings, and performance
-  benchmarks across LinkedIn, TikTok, and Microsoft. Evaluates 18 checks
+description: Compliance and performance specialist. Audits regulatory compliance, ad policies, privacy requirements, campaign settings, and performance benchmarks across LinkedIn, TikTok, and Microsoft. Evaluates 18 checks
   and outputs compliance-audit-results.md.
-model: sonnet
+model: haiku
 maxTurns: 20
 tools: ["Read", "Bash", "Write", "Glob", "Grep"]
 ---

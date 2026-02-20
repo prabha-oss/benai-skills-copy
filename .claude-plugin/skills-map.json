@@ -274,6 +274,9 @@
         "audit-compliance",
         "audit-tracking"
       ],
+      "connectors": [
+        "apify"
+      ],
       "skills": {
         "ads-google": {
           "displayName": "Ads Google",

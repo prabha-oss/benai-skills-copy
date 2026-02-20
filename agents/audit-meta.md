@@ -1,11 +1,7 @@
 ---
 name: audit-meta
-description: >
-  Meta Ads audit specialist. Analyzes Pixel/CAPI health, EMQ scores,
-  creative diversity and fatigue, account structure, learning phase,
-  audience targeting, and Advantage+ campaigns. Evaluates 46 checks
-  and outputs meta-audit-results.md.
-model: sonnet
+description: Meta Ads audit specialist. Analyzes Pixel/CAPI health, EMQ scores, creative diversity and fatigue, account structure, learning phase, audience targeting, and Advantage+ campaigns. Evaluates 46 checks and outputs meta-audit-results.md.
+model: haiku
 maxTurns: 20
 tools: ["Read", "Bash", "Write", "Glob", "Grep"]
 ---

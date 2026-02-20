@@ -1,11 +1,7 @@
 ---
 name: audit-creative
-description: >
-  Creative quality specialist. Audits ad creative across LinkedIn, TikTok,
-  and Microsoft for format diversity, fatigue signals, platform-native
-  content, and spec compliance. Evaluates 21 checks and outputs
-  creative-audit-results.md.
-model: sonnet
+description: Creative quality specialist. Audits ad creative across LinkedIn, TikTok, and Microsoft for format diversity, fatigue signals, platform-native content, and spec compliance. Evaluates 21 checks and outputs creative-audit-results.md.
+model: haiku
 maxTurns: 20
 tools: ["Read", "Bash", "Write", "Glob", "Grep"]
 ---

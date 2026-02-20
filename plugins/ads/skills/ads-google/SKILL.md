@@ -1,11 +1,6 @@
 ---
 name: ads-google
-description: >
-  Google Ads deep analysis covering Search, Performance Max, Display, YouTube,
-  and Demand Gen campaigns. Evaluates 74 checks across conversion tracking,
-  wasted spend, account structure, keywords, ads, and settings. Use when user
-  says "Google Ads", "Google PPC", "search ads", "PMax", "Performance Max",
-  or "Google campaign".
+description: Google Ads deep analysis covering Search, Performance Max, Display, YouTube, and Demand Gen campaigns. Evaluates 74 checks across conversion tracking, wasted spend, account structure, keywords, ads, and settings. Use when user says "Google Ads", "Google PPC", "search ads", "PMax", "Performance Max", or "Google campaign".
 ---
 
 # Google Ads Deep Analysis
