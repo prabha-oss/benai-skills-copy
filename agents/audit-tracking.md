@@ -1,11 +1,7 @@
 ---
 name: audit-tracking
-description: >
-  Conversion tracking specialist. Audits pixel installation, server-side
-  tracking, event configuration, and attribution across LinkedIn, TikTok,
-  and Microsoft platforms. Evaluates 7 checks and outputs
-  tracking-audit-results.md.
-model: sonnet
+description: Conversion tracking specialist. Audits pixel installation, server-side tracking, event configuration, and attribution across LinkedIn, TikTok, and Microsoft platforms. Evaluates 7 checks and outputs tracking-audit-results.md.
+model: haiku
 maxTurns: 20
 tools: ["Read", "Bash", "Write", "Glob", "Grep"]
 ---
