@@ -261,6 +261,69 @@
           "summary": "Run comprehensive technical SEO audits (16 categories, 148 rules)"
         }
       }
+    },
+    "ads": {
+      "commands": [
+        "ads"
+      ],
+      "agents": [
+        "audit-google",
+        "audit-meta",
+        "audit-budget",
+        "audit-creative",
+        "audit-compliance",
+        "audit-tracking"
+      ],
+      "skills": {
+        "ads-google": {
+          "displayName": "Ads Google",
+          "summary": "Google Ads deep analysis — 74 checks across Search, PMax, Display, YouTube, Demand Gen"
+        },
+        "ads-meta": {
+          "displayName": "Ads Meta",
+          "summary": "Meta/Facebook/Instagram Ads — 46 checks covering Pixel/CAPI, creative, structure, audience"
+        },
+        "ads-linkedin": {
+          "displayName": "Ads LinkedIn",
+          "summary": "LinkedIn Ads for B2B — 25 checks including Thought Leader Ads, ABM, lead gen forms"
+        },
+        "ads-tiktok": {
+          "displayName": "Ads TikTok",
+          "summary": "TikTok Ads — 25 checks with creative-first strategy, safe zones, Smart+, TikTok Shop"
+        },
+        "ads-youtube": {
+          "displayName": "Ads YouTube",
+          "summary": "YouTube Ads — skippable, non-skippable, bumper, Shorts, Demand Gen analysis"
+        },
+        "ads-microsoft": {
+          "displayName": "Ads Microsoft",
+          "summary": "Microsoft/Bing Ads — 20 checks with Google import validation, Copilot integration"
+        },
+        "ads-audit": {
+          "displayName": "Ads Audit",
+          "summary": "Full multi-platform audit with 6 parallel subagents and aggregate health score"
+        },
+        "ads-budget": {
+          "displayName": "Ads Budget",
+          "summary": "Budget allocation and bidding strategy — 70/20/10 rule, 3x Kill Rule, scaling assessment"
+        },
+        "ads-creative": {
+          "displayName": "Ads Creative",
+          "summary": "Cross-platform creative quality audit — fatigue detection, format diversity, specs compliance"
+        },
+        "ads-landing": {
+          "displayName": "Ads Landing",
+          "summary": "Landing page optimization for ad campaigns — message match, speed, mobile, forms"
+        },
+        "ads-plan": {
+          "displayName": "Ads Plan",
+          "summary": "Strategic ad planning with 11 industry templates and phased implementation roadmap"
+        },
+        "ads-competitor": {
+          "displayName": "Ads Competitor",
+          "summary": "Competitive ad intelligence — Ad Libraries, keyword gaps, spend estimation"
+        }
+      }
     }
   }
 }
