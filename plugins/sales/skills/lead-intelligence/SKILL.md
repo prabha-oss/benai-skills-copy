@@ -87,9 +87,12 @@ This layer scrapes LinkedIn profiles AND recent posts using two Apify actors. **
    - Input: `{"profileUrls": ["https://www.linkedin.com/in/handle1", ...]}`
    - Returns: full profile data (headline, about, experience, connections, followers, email)
 
-2. **LinkedIn Posts Scraper** (Actor ID: `A3cAPGpwBEG8RJwse`)
-   - Input: `{"profileUrls": ["https://www.linkedin.com/in/handle1", ...], "maxPosts": 2}`
+2. **LinkedIn Posts Scraper** (Actor: `harvestapi/linkedin-profile-posts`)
+   - Input: `{"targetUrls": ["https://www.linkedin.com/in/handle1", ...], "maxPosts": 2, "scrapeReactions": false, "scrapeComments": false, "includeReposts": false}`
    - Returns: recent posts with content, engagement, posting date
+   - Call via: `mcp__Apify__call-actor` with `actor: "harvestapi/linkedin-profile-posts"`, `step: "call"`
+
+**CRITICAL: Do NOT use actor `A3cAPGpwBEG8RJwse` for posts. It is deprecated — sub-agents using it save run metadata instead of actual post items, causing 0 posts to be matched.**
 
 **CRITICAL: Actor `2SyF0bVxmgGr8IVCZ` is for PERSONAL profiles only. Never pass company page URLs.**
 
@@ -99,30 +102,75 @@ This layer scrapes LinkedIn profiles AND recent posts using two Apify actors. **
 
 Splitting into multiple runs is wasteful (more API calls, more complexity, more things that can fail) and was explicitly flagged as unnecessary by the user.
 
+### Mandatory Two-Step `call-actor` Workflow
+
+**The Apify MCP `call-actor` tool enforces a mandatory two-step process. You CANNOT skip step 1.**
+
+1. **Step 1 — Get actor info**: Call `call-actor` with `step: "info"` and the actor name/ID. This returns the actor's input schema and required parameters.
+2. **Step 2 — Execute the actor**: Only after step 1, call `call-actor` with `step: "call"` and the proper input based on the schema from step 1.
+
+If you skip step 1 and go directly to `step: "call"`, the Apify MCP tool will reject the request. Always do info first, call second. That's 4 total `call-actor` calls: info for profiles, call for profiles, info for posts, call for posts.
+
 ### Native Apify Path (Default)
 
 Use the Apify MCP tools directly:
 
-1. Call `call-actor` with `step="call"` for both actors (profiles and posts) with ALL URLs in a single call each
-2. The MCP tool may timeout after 30 seconds — this is expected. The Apify run continues in the background.
-3. If timeout occurs: use `get-actor-run-list` to find the run, then `get-actor-run` to check status
-4. Once the run status is "SUCCEEDED", use `get-dataset-items` to fetch results
-5. For large datasets, use `offset` and `limit` parameters for pagination
+1. Call `call-actor` with `step="info"` for both actors to get their input schemas
+2. Call `call-actor` with `step="call"` for both actors (profiles and posts) with ALL URLs in a single call each
+3. The MCP tool may timeout after 30 seconds — this is expected. The Apify run continues in the background.
+4. If timeout occurs: read the beginning of the partial response — it always contains the runId and datasetId
+5. Wait 60-90 seconds for the run to complete, confirm with `get-actor-run`, then fetch with `get-dataset-items`
+6. For large datasets that exceed the MCP token limit, read the saved overflow file instead of re-fetching (see below)
 
 ### MCP Timeout Handling
 
-The Apify MCP connector has a ~30 second timeout. For large scraping jobs, the actor won't finish in 30 seconds. Handle this:
+The Apify MCP connector has a ~30 second timeout. For large scraping jobs, the actor won't finish in 30 seconds. **This is expected and normal.**
 
-1. Fire `call-actor` — it will likely timeout
-2. Use `get-actor-run-list` to find the running/completed run
-3. Poll `get-actor-run` until status is "SUCCEEDED"
-4. Fetch results with `get-dataset-items`
+### The Partial Response Pattern (CRITICAL)
+
+When `call-actor` times out, the response is cut off — but the **beginning** of the response always contains:
+
+```
+Actor finished with runId: <RUN_ID>, datasetId <DATASET_ID>
+```
+
+**Extract `runId` and `datasetId` from the partial response. Do NOT use `get-actor-run-list` to hunt for the run.** Go straight to `get-dataset-items` with the datasetId once you confirm the run succeeded via `get-actor-run`.
+
+**Fallback:** If the partial response is empty, use `get-dataset-list` with `desc: true` to find the most recently created dataset by timestamp.
 
 ### Make.com Path (Fallback Only)
 
 Only use if the native Apify connector fails. See `references/make-apify-technical.md` for full setup.
 
 **Before creating ~~automation platform scenarios or tools, always check existing ones first using `scenarios_list`. Reuse existing infrastructure; only create new when nothing suitable exists.**
+
+## Oversized Dataset Recovery — Read Saved Files Instead of Re-Fetching
+
+**CRITICAL: When `get-dataset-items` returns an error like "result exceeds maximum allowed tokens", the MCP tool automatically saves the FULL result to a file on disk.** The error message tells you exactly where:
+
+```
+Error: result (100,414 characters) exceeds maximum allowed tokens.
+Output has been saved to /sessions/.../tool-results/mcp-Apify-get-dataset-items-TIMESTAMP.txt
+```
+
+**DO NOT re-fetch the data in smaller batches using offset/limit.** The full dataset is already saved on disk. Instead, write a Python script to read and parse the saved file directly:
+
+```python
+import json
+
+saved_path = "/sessions/.../tool-results/mcp-Apify-get-dataset-items-TIMESTAMP.txt"
+with open(saved_path, 'r') as f:
+    wrapper = json.load(f)
+
+# The file is a JSON array: [{"type": "text", "text": "..."}]
+# The actual data is inside the "text" field as a JSON string
+if isinstance(wrapper, list) and len(wrapper) > 0:
+    data = json.loads(wrapper[0].get('text', ''))
+else:
+    data = wrapper
+```
+
+This is a single file read vs. multiple API round-trips. Always prefer reading the saved file over re-fetching in batches.
 
 ## Data Persistence and Merge
 
@@ -149,11 +197,25 @@ In previous runs, Apify datasets exceeded context limits, causing conversation c
 
 ### Posts Data Specifics
 
-When fetching posts with `get-dataset-items`, use these parameters for efficient retrieval:
-- `flatten`: `"engagement,postedAt,query"` — flattens nested objects to dot-notation
-- `fields`: `"content,query.targetUrl,postedAt.date,engagement.likes,engagement.comments,engagement.shares"` — only fetch needed fields
+The `harvestapi/linkedin-profile-posts` actor returns posts with deeply nested objects (`postedAt`, `engagement`, `query`, `author`). **Do NOT use `fields`/`flatten` parameters** — the dot-notation flattening is unreliable for this actor's schema. Fetch all items raw, then slim them in Python:
 
-Posts match to profiles via `query.targetUrl` which contains the LinkedIn profile URL that was queried.
+```python
+slim_posts = []
+for p in raw_posts:
+    slim_posts.append({
+        'targetUrl': (p.get('query') or {}).get('targetUrl', ''),
+        'authorHandle': (p.get('author') or {}).get('publicIdentifier', ''),
+        'content': (p.get('content') or '')[:300].replace('\n', ' '),
+        'date': str((p.get('postedAt') or {}).get('date', ''))[:10],
+        'likes': (p.get('engagement') or {}).get('likes', 0),
+        'comments': (p.get('engagement') or {}).get('comments', 0),
+        'shares': (p.get('engagement') or {}).get('shares', 0),
+    })
+```
+
+**CRITICAL: Save the `slim_posts` list (a JSON array) to `all_posts.json`. NEVER save a dict like `{"status": "success", "total_posts": N, "dataset_id": "..."}` — that is run metadata, not usable post data.**
+
+Posts match to leads via the `targetUrl` field, which contains the LinkedIn profile URL that was originally queried.
 
 ## Combining the Data
 
