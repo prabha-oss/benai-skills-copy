@@ -23,17 +23,14 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Commands:** `/marketing` (skill overview), `/repurpose` (content repurposing workflow)
 
-### Sales (6 skills)
+### Sales (3 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
-| lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
-| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
-| case-study | `/case-study` | Data-driven case studies |
 | email-personalization | `/email-personalization` | Hyper-personalized email icebreakers |
 | lead-intelligence | `/lead-intelligence` | Deep-research leads via web & LinkedIn |
 | lead-qualification | `/lead-qualification` | Qualify & score leads against ICP |
 
-**Commands:** `/sales` (skill overview), `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline)
+**Commands:** `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline)
 
 **Agents:** `lead-qualifier`, `lead-researcher`, `icebreaker-writer`, `linkedin-scraper`
 
@@ -69,22 +66,23 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Commands:** `/youtube` (skill overview)
 
-### SEO (1 skill, 13 sub-commands)
-| Sub-Command | Purpose |
-|-------------|---------|
-| `/seo audit <url>` | Full site audit with 6 parallel subagents |
-| `/seo page <url>` | Deep single-page analysis |
-| `/seo technical <url>` | Technical SEO (crawlability, CWV, JS rendering) |
-| `/seo content <url>` | E-E-A-T content quality analysis |
-| `/seo schema <url>` | Schema detection, validation, generation |
-| `/seo images <url>` | Image optimization analysis |
-| `/seo sitemap <url\|generate>` | Sitemap validation/generation |
-| `/seo geo <url>` | AI Overviews / GEO optimization |
-| `/seo plan <type>` | Strategic planning (SaaS, e-commerce, local, publisher, agency) |
-| `/seo programmatic` | Programmatic SEO at scale |
-| `/seo competitor-pages` | Comparison page generation |
-| `/seo hreflang <url>` | Hreflang/i18n validation |
-| `/seo optimize` | GSC data-driven optimization |
+### SEO (14 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| seo | `/seo` | Orchestrator — routes to the right SEO sub-skill |
+| seo-page | `/seo page <url>` | Deep single-page analysis |
+| seo-technical | `/seo technical <url>` | Technical SEO (crawlability, CWV, JS rendering) |
+| seo-content | `/seo content <url>` | E-E-A-T content quality analysis |
+| seo-schema | `/seo schema <url>` | Schema detection, validation, generation |
+| seo-images | `/seo images <url>` | Image optimization analysis |
+| seo-sitemap | `/seo sitemap <url\|generate>` | Sitemap validation/generation |
+| seo-geo | `/seo geo <url>` | AI Overviews / GEO optimization |
+| seo-plan | `/seo plan <type>` | Strategic planning (SaaS, e-commerce, local, publisher, agency) |
+| seo-programmatic | `/seo programmatic` | Programmatic SEO at scale |
+| seo-competitor-pages | `/seo competitor-pages` | Comparison page generation |
+| seo-hreflang | `/seo hreflang <url>` | Hreflang/i18n validation |
+| seo-optimize | `/seo optimize` | GSC data-driven optimization |
+| seo-audit | `/seo audit <url>` | Full site audit with 6 parallel subagents |
 
 **Commands:** `/seo` (skill overview)
 
