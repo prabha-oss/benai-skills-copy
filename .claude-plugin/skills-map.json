@@ -61,9 +61,6 @@
       "commands": [
         "outbound-pipeline"
       ],
-      "connectors": [
-        "apify"
-      ],
       "agents": [
         "lead-qualifier",
         "lead-researcher",
