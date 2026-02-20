@@ -90,6 +90,32 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `seo-technical`, `seo-content`, `seo-schema`, `seo-sitemap`, `seo-performance`, `seo-visual`
 
+### Ads (12 skills, 12 sub-commands)
+
+#### Platform Analysis
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| ads-google | `/ads-google` | Google Ads deep analysis (74 checks) |
+| ads-meta | `/ads-meta` | Meta/Facebook/Instagram Ads (46 checks) |
+| ads-linkedin | `/ads-linkedin` | LinkedIn Ads for B2B (25 checks) |
+| ads-tiktok | `/ads-tiktok` | TikTok Ads with creative-first strategy (25 checks) |
+| ads-youtube | `/ads-youtube` | YouTube Ads across all formats |
+| ads-microsoft | `/ads-microsoft` | Microsoft/Bing Ads (20 checks) |
+
+#### Cross-Platform Tools
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| ads-audit | `/ads-audit` | Full multi-platform audit (6 parallel subagents) |
+| ads-budget | `/ads-budget` | Budget allocation & bidding (70/20/10 rule) |
+| ads-creative | `/ads-creative` | Creative quality & fatigue detection |
+| ads-landing | `/ads-landing` | Landing page optimization for ads |
+| ads-plan | `/ads-plan` | Strategic planning (11 industry templates) |
+| ads-competitor | `/ads-competitor` | Competitive intelligence via Ad Libraries |
+
+**Commands:** `/ads` (skill overview)
+
+**Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
+
 ## n8n Skill
 
 ### Configuration
