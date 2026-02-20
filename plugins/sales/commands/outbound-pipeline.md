@@ -23,6 +23,18 @@ If the user provided both already (inline with their request), confirm your unde
 
 ## Phase 1: Lead Qualification
 
+### 1.0 MANDATORY: Read Skill & Agent Files Before Starting
+
+**Before doing ANY work in Phase 1, use the Read tool to read these two files. Do NOT skip this step.**
+
+1. **Skill file:** Use Glob with pattern `**/sales/skills/lead-qualification/SKILL.md` to find the file, then Read it. This contains the full qualification methodology: multi-source web research requirements, handling complex ICPs, sub-agent spawn patterns, time estimation, error handling, and edge cases. The instructions below are a summary — the SKILL.md is the authoritative source for qualification methodology.
+2. **Agent file:** Use Glob with pattern `**/sales/agents/lead-qualifier.md` to find the file, then Read it. This is the system prompt each `sales:lead-qualifier` sub-agent receives. Understanding what the sub-agent already knows helps you avoid redundant instructions and focus your prompts on what the sub-agent does NOT already have (ICP definition, batch data, output path).
+
+**Apply the full methodology from the SKILL.md when orchestrating this phase.** Key rules from the skill that must be enforced:
+- NEVER trust CSV data alone — always require WebSearch verification across multiple sources (2-3 searches per lead)
+- Cross-reference with third-party sources: review sites (G2, Clutch), industry directories, news articles, LinkedIn company pages
+- If borderline, qualify the lead — let the user make the final call on edge cases
+
 ### 1.1 Load and Inspect
 
 ```python
@@ -166,6 +178,21 @@ with open('qualified_leads.json', 'w') as f:
 
 ## Phase 2: Lead Intelligence
 
+### 2.0 MANDATORY: Read Skill & Agent Files Before Starting
+
+**Before doing ANY work in Phase 2, use the Read tool to read these three files. Do NOT skip this step.**
+
+1. **Skill file:** Use Glob with pattern `**/sales/skills/lead-intelligence/SKILL.md` to find the file, then Read it. This contains the full intelligence-gathering methodology: Layer 1 (web research) and Layer 2 (LinkedIn scraping) architecture, parallel execution requirements, Apify actor IDs and input schemas, timeout handling, oversized dataset recovery, data persistence rules, merge script patterns, and LinkedIn profile/posts block format. The instructions below are a summary — the SKILL.md is the authoritative source for intelligence methodology.
+2. **Agent file (researcher):** Use Glob with pattern `**/sales/agents/lead-researcher.md` to find the file, then Read it. This is the system prompt each `sales:lead-researcher` sub-agent receives. It defines the 13-section intelligence report format and web research methodology the sub-agent already knows.
+3. **Agent file (LinkedIn scraper):** Use Glob with pattern `**/sales/agents/linkedin-scraper.md` to find the file, then Read it. This is the system prompt the `sales:linkedin-scraper` sub-agent receives. It defines both Apify actors (profiles + posts), the two-step call-actor workflow, timeout handling, data truncation, and disk persistence rules the sub-agent already knows.
+
+**Apply the full methodology from the SKILL.md when orchestrating this phase.** Key rules from the skill that must be enforced:
+- Layer 1 and Layer 2 MUST launch in parallel (N+1 sub-agents in a single message)
+- BOTH Apify actors must be called (profiles AND posts) — never skip the posts scraper
+- All LinkedIn URLs in a single API call per actor — never split into multiple runs
+- Persist ALL fetched data to disk immediately — context compaction WILL lose data held only in conversation
+- Merge MUST happen via a Python script, never inline in conversation
+
 **Layer 1 (web research) and Layer 2 (LinkedIn scraping) MUST launch in parallel.**
 
 ### 2.1 Prepare Both Layers
@@ -219,9 +246,11 @@ Use the **Task tool** for every agent. ALL calls in ONE message — researchers 
     LinkedIn URLs file: linkedin_urls.json
     Call BOTH Apify actors:
       - Profiles: 2SyF0bVxmgGr8IVCZ
-      - Posts: A3cAPGpwBEG8RJwse
+      - Posts: harvestapi/linkedin-profile-posts (NOT A3cAPGpwBEG8RJwse — that actor is deprecated and returns 0 usable posts)
+    IMPORTANT - Two-step call-actor: You MUST call call-actor with step="info" first for each actor to get the input schema, THEN call with step="call". Skipping step 1 will cause the request to be rejected.
     Save to: all_profiles.json, all_posts.json
-    Handle 30s MCP timeouts by polling get-actor-run.
+    Timeout handling: capture runId + datasetId from partial response, then call get-dataset-items directly. Do NOT poll get-actor-run-list.
+    Oversized dataset handling: If get-dataset-items returns "exceeds maximum allowed tokens", the full result is auto-saved to a .txt file on disk. Read that file via Python instead of re-fetching in batches.
   </parameter>
 </invoke>
 </function_calls>
@@ -235,10 +264,12 @@ Use the **Task tool** for every agent. ALL calls in ONE message — researchers 
 
 **The `linkedin-scraper` receives:**
 - Path to `linkedin_urls.json`
-- Instructions to call BOTH Apify actors (profiles: `2SyF0bVxmgGr8IVCZ`, posts: `A3cAPGpwBEG8RJwse`)
+- Instructions to call BOTH Apify actors (profiles: `2SyF0bVxmgGr8IVCZ`, posts: `harvestapi/linkedin-profile-posts`)
 - ALL URLs in a single API call per actor (never split)
-- Save profiles to `all_profiles.json`, posts to `all_posts.json`
-- Handle MCP timeouts gracefully (30s timeout expected; poll for completion)
+- Save profiles to `all_profiles.json`, posts slim array to `all_posts.json`
+- Two-step `call-actor` requirement: must call with `step="info"` first, then `step="call"` (Apify MCP enforces this)
+- Timeout handling: capture `runId` + `datasetId` from the partial response header, then fetch dataset directly — no polling
+- Oversized dataset handling: if `get-dataset-items` exceeds token limit, read the auto-saved `.txt` file from disk instead of re-fetching in batches
 
 **Intel output schema:**
 ```json
@@ -349,11 +380,23 @@ Lead Intelligence complete.
 
 ## Phase 3: Email Personalization
 
+### 3.0 MANDATORY: Read Skill & Agent Files Before Starting
+
+**Before doing ANY work in Phase 3, use the Read tool to read these two files. Do NOT skip this step.**
+
+1. **Skill file:** Use Glob with pattern `**/sales/skills/email-personalization/SKILL.md` to find the file, then Read it. This contains the full icebreaker writing methodology: the observation-pain-product formula, all 57 reference examples, complete banned words/phrases lists, opening line rules, LinkedIn post referencing rules, quality check code, and the programmatic QC scanning logic. The instructions below are a summary — the SKILL.md is the authoritative source for icebreaker writing rules. **You MUST read this file to get the 57 reference examples — they are critical for calibrating tone and style, both for your own test icebreakers and for passing to sub-agents.**
+2. **Agent file:** Use Glob with pattern `**/sales/agents/icebreaker-writer.md` to find the file, then Read it. This is the system prompt each `sales:icebreaker-writer` sub-agent receives. It already contains core writing rules (tone, banned words, opening line rules, skipping logic). Understanding what the sub-agent already knows helps you focus your prompts on what it does NOT have: the approved examples, product context, and any user-specific feedback.
+
+**Apply the full methodology from the SKILL.md when orchestrating this phase.** Key rules from the skill that must be enforced:
+- Test icebreakers (step 3.1) must follow ALL writing rules from the SKILL.md, including referencing the 57 examples for tone calibration
+- Sub-agent prompts must include the approved test examples and ALL writing rules (from both the SKILL.md and user feedback)
+- Programmatic QC (step 3.6) must use the complete banned starts/words lists from the SKILL.md, not just the abbreviated lists below
+
 ### 3.1 Write 2 Test Icebreakers
 
 Pick 2 leads with rich data (LinkedIn posts, strong intel). Write 2-3 icebreaker VARIATIONS for each. Present all options to the user.
 
-These test icebreakers must already follow all writing rules from the `email-personalization` skill. The goal is to calibrate tone, style, and angle before scaling.
+These test icebreakers must already follow all writing rules from the `email-personalization` SKILL.md you just read. The goal is to calibrate tone, style, and angle before scaling.
 
 ### 3.2 Get Approval
 
@@ -436,7 +479,7 @@ Use the **Task tool** with `subagent_type: sales:icebreaker-writer` for each bat
 
 ### 3.6 Quality Check (Programmatic)
 
-After collecting all icebreakers, run automated violation scanning:
+After collecting all icebreakers, run automated violation scanning. **Use the complete banned starts/words lists from the email-personalization SKILL.md you read in step 3.0** — the lists below are abbreviated examples only:
 
 ```python
 bad_starts = ["saw your post", "saw your recent", "noticed your", "noticed that",
@@ -531,6 +574,22 @@ When posts are fetched with the `flatten` parameter, the profile URL field is `q
 
 ### Persist Everything to Disk
 Never hold large datasets in conversation context. Save all intermediate results as JSON files immediately. Context compaction WILL lose data that only exists in the conversation.
+
+### Apify Two-Step `call-actor` Requirement
+The Apify MCP `call-actor` tool enforces a mandatory two-step workflow. You MUST call with `step="info"` first to get the actor's input schema, THEN call with `step="call"` with proper input. Skipping step 1 causes the request to be rejected. This applies to every actor call (profiles + posts = 4 total `call-actor` invocations: info, call, info, call).
+
+### Oversized Dataset Recovery — Read Saved Files, Don't Re-Fetch
+When `get-dataset-items` returns "result exceeds maximum allowed tokens", the MCP tool auto-saves the FULL result to a `.txt` file on disk and tells you the path. **DO NOT re-fetch the data in smaller batches.** Instead, read the saved file via a Python script:
+
+```python
+import json
+with open(saved_path, 'r') as f:
+    wrapper = json.load(f)
+# File format: [{"type": "text", "text": "<JSON string of actual data>"}]
+data = json.loads(wrapper[0]['text']) if isinstance(wrapper, list) else wrapper
+```
+
+This is a single file read vs. multiple API round-trips. Always prefer the saved file.
 
 ---
 
