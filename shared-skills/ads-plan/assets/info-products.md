@@ -87,6 +87,16 @@ Account — YouTube
 4. **Proof** (45-60s): testimonials, results, credentials
 5. **CTA** (60-75s): clear next step with urgency
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Meta Standard | 5-8 per ad set | UGC testimonials + webinar clips + authority content | Every 10-14 days |
+| YouTube | 3-5 video formats | Long-form authority + short testimonials | Every 4-8 weeks |
+| Google PMax | 15 images, 3 logos, 3 videos | Fill all slots for "Excellent" Ad Strength | Quarterly; swap "Low" assets monthly |
+| TikTok | 6-10 per ad group | Educational hooks, quick-tip format | Every 10-14 days (fatigue onset 3-5 days) |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Meta

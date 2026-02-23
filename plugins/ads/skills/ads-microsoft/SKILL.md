@@ -1,6 +1,11 @@
 ---
 name: ads-microsoft
-description: Microsoft/Bing Ads deep analysis covering search, Performance Max, Audience Network, and Copilot integration. Evaluates 20 checks with focus on Google import validation, unique Microsoft features, and cost advantage assessment. Use when user says "Microsoft Ads", "Bing Ads", "Bing PPC", "Copilot ads", or "Microsoft campaign".
+description: >
+  Microsoft/Bing Ads deep analysis covering search, Performance Max, Audience
+  Network, and Copilot integration. Evaluates 20 checks with focus on Google
+  import validation, unique Microsoft features, and cost advantage assessment.
+  Use when user says "Microsoft Ads", "Bing Ads", "Bing PPC", "Copilot ads",
+  or "Microsoft campaign".
 ---
 
 # Microsoft Ads Deep Analysis
@@ -8,9 +13,9 @@ description: Microsoft/Bing Ads deep analysis covering search, Performance Max, 
 ## Process
 
 1. Collect Microsoft Ads data (account export, UET tag status, import results)
-2. Read `references/microsoft-audit.md` for full 20-check audit
-3. Read `references/benchmarks.md` for Microsoft-specific benchmarks
-4. Read `references/scoring-system.md` for weighted scoring
+2. Read `ads/references/microsoft-audit.md` for full 20-check audit
+3. Read `ads/references/benchmarks.md` for Microsoft-specific benchmarks
+4. Read `ads/references/scoring-system.md` for weighted scoring
 5. Evaluate all applicable checks as PASS, WARNING, or FAIL
 6. Calculate Microsoft Ads Health Score (0-100)
 7. Generate findings report with action plan
@@ -143,13 +148,3 @@ Settings:          XX/100  ████████░░  (15%)
 - Cost advantage analysis (CPC savings vs Google)
 - Microsoft-unique feature adoption checklist
 - Quick Wins sorted by impact
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf MICROSOFT-ADS-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

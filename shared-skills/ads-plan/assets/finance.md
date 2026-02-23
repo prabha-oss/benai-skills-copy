@@ -123,6 +123,16 @@ Account — LinkedIn (B2B Financial Products)
 - **Description**: [Value prop] + [Trust signal] + [Disclosure] + [CTA]
 - **Example**: "Personal Loans from 6.99% APR | No Origination Fees | Check Your Rate in 2 Minutes — No Credit Impact. FDIC Insured. NMLS #123456"
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Google PMax | 15 images, 3 logos, 3 videos | Compliance-approved assets; trust signals | Quarterly; swap "Low" assets monthly |
+| Meta Standard | 5-8 per ad set | Educational content + calculator tools + testimonials | Every 10-14 days |
+| LinkedIn | 4-5 active per campaign | Thought leadership + market insights; TLA for advisors | Every 4-6 weeks |
+| Microsoft | Mirror Google assets | 15 headlines, 3 descriptions, 15 images | Every 8-12 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Google

@@ -148,6 +148,15 @@ Apply across all clients:
 - CTR >50% below benchmark after 1,000 impressions → kill creative
 - Creative running >2x refresh cadence → flag for replacement
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| LinkedIn | 4-5 active per campaign | TLA ≥30% budget; case studies + thought leadership | Every 4-6 weeks |
+| Meta Standard | 5-8 per ad set | Portfolio work + client results + team culture | Every 10-14 days |
+| Google PMax | 15 images, 3 logos, 3 videos | Fill all slots for "Excellent" Ad Strength | Quarterly; swap "Low" assets monthly |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Scaling Client Accounts
 
 ### When to Scale (Green Light)

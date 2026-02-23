@@ -283,20 +283,25 @@
         "audit-tracking"
       ],
       "connectors": [
-        "apify"
+        "apify",
+        "nano-banana"
       ],
       "skills": {
+        "ads": {
+          "displayName": "Ads Suite",
+          "summary": "Comprehensive paid advertising audit and optimization — routes to the right ads sub-skill"
+        },
         "ads-google": {
           "displayName": "Ads Google",
           "summary": "Google Ads deep analysis — 74 checks across Search, PMax, Display, YouTube, Demand Gen"
         },
         "ads-meta": {
           "displayName": "Ads Meta",
-          "summary": "Meta/Facebook/Instagram Ads — 46 checks covering Pixel/CAPI, creative, structure, audience"
+          "summary": "Meta/Facebook/Instagram Ads — 46 checks covering Pixel/CAPI, creative, structure, audience, Advantage+"
         },
         "ads-linkedin": {
           "displayName": "Ads LinkedIn",
-          "summary": "LinkedIn Ads for B2B — 25 checks including Thought Leader Ads, ABM, lead gen forms"
+          "summary": "LinkedIn Ads for B2B — 25 checks including Thought Leader Ads, ABM, lead gen forms, predictive audiences"
         },
         "ads-tiktok": {
           "displayName": "Ads TikTok",
@@ -320,19 +325,29 @@
         },
         "ads-creative": {
           "displayName": "Ads Creative",
-          "summary": "Cross-platform creative quality audit — fatigue detection, format diversity, specs compliance"
+          "summary": "Cross-platform creative audit — brand context setup, fatigue detection, format diversity, ad creative generation via infographic-v2"
         },
         "ads-landing": {
           "displayName": "Ads Landing",
-          "summary": "Landing page optimization for ad campaigns — message match, speed, mobile, forms"
+          "summary": "Landing page optimization for ad campaigns — message match, speed, mobile, forms, trust signals",
+          "scripts": [
+            "analyze_landing.py",
+            "capture_screenshot.py",
+            "fetch_page.py",
+            "requirements.txt"
+          ]
         },
         "ads-plan": {
           "displayName": "Ads Plan",
-          "summary": "Strategic ad planning with 11 industry templates and phased implementation roadmap"
+          "summary": "Strategic ad planning with 15 industry templates and phased implementation roadmap"
         },
         "ads-competitor": {
           "displayName": "Ads Competitor",
-          "summary": "Competitive ad intelligence — Ad Libraries, keyword gaps, spend estimation"
+          "summary": "Competitive ad intelligence — Ad Libraries, keyword gaps, spend estimation, messaging analysis"
+        },
+        "infographic-v2": {
+          "displayName": "Infographic v2",
+          "summary": "Updated infographic generation skill with prompt engineering patterns"
         }
       }
     }

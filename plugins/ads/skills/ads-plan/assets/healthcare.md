@@ -109,6 +109,16 @@ Account — Meta
 - **Description**: [Benefit] + [Trust signal] + [CTA]
 - **Example**: "Board-Certified Orthopedic Surgeons in [City] | Same-Week Appointments | Call Now"
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Google PMax | 15 images, 3 logos, 3 videos | Compliance-reviewed assets; patient stories (with consent) | Quarterly; swap "Low" assets monthly |
+| Meta Standard | 5-8 per ad set | Educational content + provider profiles + patient outcomes | Every 10-14 days |
+| YouTube | 3-5 video formats | Provider introductions, procedure explainers | Every 4-8 weeks |
+| Microsoft | Mirror Google assets | 15 headlines, 3 descriptions, 15 images | Every 8-12 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Google

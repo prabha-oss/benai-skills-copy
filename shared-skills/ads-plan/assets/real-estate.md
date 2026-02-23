@@ -98,6 +98,15 @@ Account — Meta (Special Ad Category: Housing)
 | Investors | ROI data, rental yield | "Cap rate and cash flow analysis" |
 | First-time buyers | Educational, step-by-step | "How to buy your first home" |
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Google PMax | 15 images, 3 logos, 3 videos | Property photos + virtual tours + neighborhood | Quarterly; swap "Low" assets monthly |
+| Meta Standard | 5-8 per ad set | Listing carousels + video tours + testimonials | Every 10-14 days |
+| YouTube | 3-5 video formats | Virtual tours, neighborhood guides | Every 4-8 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Google

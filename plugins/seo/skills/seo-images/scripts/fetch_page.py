@@ -1,26 +1,25 @@
 #!/usr/bin/env python3
 """
-Fetch a web page with proper headers and error handling.
+Fetch a landing page for ad campaign quality analysis.
 
 Usage:
-    python fetch_page.py https://example.com
-    python fetch_page.py https://example.com --output page.html
+    python fetch_page.py https://example.com/landing
+    python fetch_page.py https://example.com/landing --output page.html
 """
 
 import argparse
 import sys
-from typing import Optional
 from urllib.parse import urlparse
 
 try:
     import requests
 except ImportError:
-    print("Error: requests library required. Install with: pip install requests")
+    print("Error: requests library required. Install with: pip install -r requirements.txt")
     sys.exit(1)
 
 
 DEFAULT_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (compatible; ClaudeSEO/1.0; +https://github.com/AgriciDaniel/claude-seo)",
+    "User-Agent": "Mozilla/5.0 (compatible; ClaudeAds/1.1; +https://github.com/AgriciDaniel/claude-ads)",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5",
     "Accept-Encoding": "gzip, deflate",
@@ -35,22 +34,10 @@ def fetch_page(
     max_redirects: int = 5,
 ) -> dict:
     """
-    Fetch a web page and return response details.
-
-    Args:
-        url: The URL to fetch
-        timeout: Request timeout in seconds
-        follow_redirects: Whether to follow redirects
-        max_redirects: Maximum number of redirects to follow
+    Fetch a landing page and return response details relevant to ad quality checks.
 
     Returns:
-        Dictionary with:
-            - url: Final URL after redirects
-            - status_code: HTTP status code
-            - content: Response body
-            - headers: Response headers
-            - redirect_chain: List of redirect URLs
-            - error: Error message if failed
+        Dictionary with url, status_code, content, headers, redirect_chain, error
     """
     result = {
         "url": url,
@@ -61,7 +48,6 @@ def fetch_page(
         "error": None,
     }
 
-    # Validate URL
     parsed = urlparse(url)
     if not parsed.scheme:
         url = f"https://{url}"
@@ -87,7 +73,6 @@ def fetch_page(
         result["content"] = response.text
         result["headers"] = dict(response.headers)
 
-        # Track redirect chain
         if response.history:
             result["redirect_chain"] = [r.url for r in response.history]
 
@@ -106,7 +91,7 @@ def fetch_page(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Fetch a web page for SEO analysis")
+    parser = argparse.ArgumentParser(description="Fetch a landing page for ad quality analysis")
     parser.add_argument("url", help="URL to fetch")
     parser.add_argument("--output", "-o", help="Output file path")
     parser.add_argument("--timeout", "-t", type=int, default=30, help="Timeout in seconds")
@@ -131,7 +116,6 @@ def main():
     else:
         print(result["content"])
 
-    # Print metadata to stderr
     print(f"\nURL: {result['url']}", file=sys.stderr)
     print(f"Status: {result['status_code']}", file=sys.stderr)
     if result["redirect_chain"]:

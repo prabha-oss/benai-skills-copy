@@ -93,6 +93,16 @@ Account — TikTok
 - Custom Store Listings (Google Play) for different campaigns
 - App preview video on store listing should match ad creative themes
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Meta Standard | 5-8 per ad set | App demo + UGC + social proof mix | Every 10-14 days |
+| Meta ASC | 50-150 per campaign | Conceptually diverse app install creatives | Every 10-14 days |
+| TikTok | 6-10 per ad group | Native screen recordings, creator demos | Every 10-14 days (fatigue onset 3-5 days) |
+| Google App Campaigns | 10 images, 10 videos, 5 HTML5 | Multiple orientations (portrait + landscape) | Monthly; swap underperformers |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Meta

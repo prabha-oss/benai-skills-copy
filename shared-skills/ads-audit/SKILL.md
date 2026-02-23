@@ -1,6 +1,11 @@
 ---
 name: ads-audit
-description: Full multi-platform paid advertising audit with parallel subagent delegation. Analyzes Google Ads, Meta Ads, LinkedIn Ads, TikTok Ads, and Microsoft Ads accounts. Generates health score per platform and aggregate score. Use when user says "audit", "full ad check", "analyze my ads", "account health check", or "PPC audit".
+description: >
+  Full multi-platform paid advertising audit with parallel subagent delegation.
+  Analyzes Google Ads, Meta Ads, LinkedIn Ads, TikTok Ads, and Microsoft Ads
+  accounts. Generates health score per platform and aggregate score. Use when
+  user says "audit", "full ad check", "analyze my ads", "account health check",
+  or "PPC audit".
 ---
 
 # Full Multi-Platform Ads Audit
@@ -33,7 +38,7 @@ If no exports available, audit from screenshots or manual data entry.
 
 ## Scoring
 
-Read `references/scoring-system.md` for full algorithm.
+Read `ads/references/scoring-system.md` for full algorithm.
 
 ### Per-Platform Weights
 
@@ -102,15 +107,3 @@ AND estimated_fix_time < 15 minutes
 THEN flag as Quick Win
 SORT BY (severity_multiplier x estimated_impact) DESC
 ```
-
-## PDF Report Generation
-
-After writing all markdown deliverables, generate styled PDF versions:
-
-```bash
-npx --yes md-to-pdf ADS-AUDIT-REPORT.md
-npx --yes md-to-pdf ADS-ACTION-PLAN.md
-npx --yes md-to-pdf ADS-QUICK-WINS.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

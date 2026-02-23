@@ -1,6 +1,11 @@
 ---
 name: ads-tiktok
-description: TikTok Ads deep analysis covering creative quality, tracking, bidding, campaign structure, and TikTok Shop. Evaluates 25 checks with emphasis on creative-first strategy, safe zone compliance, and Smart+ campaigns. Use when user says "TikTok Ads", "TikTok marketing", "TikTok Shop", "Spark Ads", "Smart+", or "TikTok campaign".
+description: >
+  TikTok Ads deep analysis covering creative quality, tracking, bidding,
+  campaign structure, and TikTok Shop. Evaluates 25 checks with emphasis on
+  creative-first strategy, safe zone compliance, and Smart+ campaigns. Use
+  when user says "TikTok Ads", "TikTok marketing", "TikTok Shop", "Spark Ads",
+  "Smart+", or "TikTok campaign".
 ---
 
 # TikTok Ads Deep Analysis
@@ -8,10 +13,10 @@ description: TikTok Ads deep analysis covering creative quality, tracking, biddi
 ## Process
 
 1. Collect TikTok Ads data (Ads Manager export, Pixel/Events API status)
-2. Read `references/tiktok-audit.md` for full 25-check audit
-3. Read `references/benchmarks.md` for TikTok-specific benchmarks
-4. Read `references/platform-specs.md` for creative specifications
-5. Read `references/scoring-system.md` for weighted scoring algorithm
+2. Read `ads/references/tiktok-audit.md` for full 25-check audit
+3. Read `ads/references/benchmarks.md` for TikTok-specific benchmarks
+4. Read `ads/references/platform-specs.md` for creative specifications
+5. Read `ads/references/scoring-system.md` for weighted scoring algorithm
 6. Evaluate all applicable checks as PASS, WARNING, or FAIL
 7. Calculate TikTok Ads Health Score (0-100)
 8. Generate findings report with action plan
@@ -155,13 +160,3 @@ Performance:       XX/100  ████████░░  (10%)
 - Smart+ vs manual performance comparison
 - TikTok Shop readiness assessment (if e-commerce)
 - Quick Wins sorted by impact
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf TIKTOK-ADS-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

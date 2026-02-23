@@ -80,6 +80,16 @@ Account — Google
 - Role-specific messaging (IT vs Finance vs Operations)
 - Stage-specific offers (awareness: report → consideration: demo → decision: pilot)
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| LinkedIn | 4-5 active per campaign | TLA ≥30% budget; 80/20 winners/testing split | Every 4-6 weeks |
+| Google PMax | 15 images, 3 logos, 3 videos | Fill all slots for "Excellent" Ad Strength | Quarterly; swap "Low" assets monthly |
+| Meta Standard | 5-8 per ad set | Conceptually diverse; case study + thought leadership mix | Every 10-14 days |
+| YouTube | 3-5 video formats | Case study videos, product demos in 16:9 + 9:16 | Every 4-8 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### LinkedIn (Primary)
