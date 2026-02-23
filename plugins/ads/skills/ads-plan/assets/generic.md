@@ -69,6 +69,18 @@ Every ad should include:
 - **Location extension**: if physical location exists
 - **Image extension**: product or service visuals
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Meta Standard | 5-8 per ad set | Conceptually diverse (Andromeda clusters similar) | Every 10-14 days |
+| Meta ASC | 50-150 per campaign | Only for e-commerce with product catalog | Every 10-14 days |
+| Google PMax | 15 images, 3 logos, 3 videos | Fill all slots for "Excellent" Ad Strength | Quarterly; swap "Low" assets monthly |
+| TikTok | 6-10 per ad group | Native-looking, creator-style content | Every 10-14 days (fatigue onset 3-5 days) |
+| LinkedIn | 4-5 active per campaign | 80/20 winners/testing split | Every 4-6 weeks |
+| Microsoft PMax | Mirror Google assets | 15 headlines, 3 descriptions, 15 images | Every 8-12 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Universal Targeting Principles
 
 ### Start Narrow, Then Expand

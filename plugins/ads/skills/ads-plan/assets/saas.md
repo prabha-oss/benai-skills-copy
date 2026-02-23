@@ -62,6 +62,16 @@ Account
 | Decision | Testimonial, case study | Specific results, social proof |
 | Retention | Feature update, tips | Drive adoption, reduce churn |
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Google PMax | 15 images, 3 logos, 3 videos | Fill all slots (20/5/5) for "Excellent" Ad Strength | Quarterly; swap "Low" assets monthly |
+| LinkedIn | 4-5 active per campaign | 80/20 winners/testing split; TLA ≥30% budget | Every 4-6 weeks |
+| Meta Standard | 5-8 per ad set | Conceptually diverse (Andromeda clusters similar) | Every 10-14 days |
+| YouTube | 3-5 video formats | 16:9, 1:1, 9:16 for full coverage | Every 4-8 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Google Keywords

@@ -1,6 +1,11 @@
 ---
 name: ads-linkedin
-description: LinkedIn Ads deep analysis for B2B advertising. Evaluates 25 checks across technical setup, audience targeting, creative quality, lead gen forms, and bidding strategy. Includes Thought Leader Ads, ABM, and predictive audiences. Use when user says "LinkedIn Ads", "B2B ads", "sponsored content", "lead gen forms", "InMail", or "LinkedIn campaign".
+description: >
+  LinkedIn Ads deep analysis for B2B advertising. Evaluates 25 checks across
+  technical setup, audience targeting, creative quality, lead gen forms, and
+  bidding strategy. Includes Thought Leader Ads, ABM, and predictive audiences.
+  Use when user says "LinkedIn Ads", "B2B ads", "sponsored content", "lead gen
+  forms", "InMail", or "LinkedIn campaign".
 ---
 
 # LinkedIn Ads Deep Analysis
@@ -8,9 +13,9 @@ description: LinkedIn Ads deep analysis for B2B advertising. Evaluates 25 checks
 ## Process
 
 1. Collect LinkedIn Ads data (Campaign Manager export, Insight Tag status)
-2. Read `references/linkedin-audit.md` for full 25-check audit
-3. Read `references/benchmarks.md` for LinkedIn-specific benchmarks
-4. Read `references/scoring-system.md` for weighted scoring
+2. Read `ads/references/linkedin-audit.md` for full 25-check audit
+3. Read `ads/references/benchmarks.md` for LinkedIn-specific benchmarks
+4. Read `ads/references/scoring-system.md` for weighted scoring
 5. Evaluate all applicable checks as PASS, WARNING, or FAIL
 6. Calculate LinkedIn Ads Health Score (0-100)
 7. Generate findings report with action plan
@@ -116,13 +121,3 @@ Budget & Bidding:  XX/100  ████████░░  (15%)
 - ABM strategy recommendations (for B2B)
 - Lead Gen Form optimization priorities
 - Quick Wins sorted by impact
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf LINKEDIN-ADS-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

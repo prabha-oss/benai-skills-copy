@@ -1,6 +1,11 @@
 ---
 name: ads-landing
-description: Landing page quality assessment for paid advertising campaigns. Evaluates message match, page speed, mobile experience, trust signals, form optimization, and conversion rate potential. Use when user says "landing page", "post-click experience", "landing page audit", "conversion rate", or "landing page optimization".
+description: >
+  Landing page quality assessment for paid advertising campaigns. Evaluates
+  message match, page speed, mobile experience, trust signals, form
+  optimization, and conversion rate potential. Use when user says "landing
+  page", "post-click experience", "landing page audit", "conversion rate",
+  or "landing page optimization".
 ---
 
 # Landing Page Quality for Ad Campaigns
@@ -8,8 +13,8 @@ description: Landing page quality assessment for paid advertising campaigns. Eva
 ## Process
 
 1. Collect landing page URLs from active ad campaigns
-2. Read `references/benchmarks.md` for conversion rate benchmarks
-3. Read `references/conversion-tracking.md` for pixel/tag verification
+2. Read `ads/references/benchmarks.md` for conversion rate benchmarks
+3. Read `ads/references/conversion-tracking.md` for pixel/tag verification
 4. Assess each landing page for ad-specific quality factors
 5. Score landing pages and identify improvement opportunities
 6. Generate recommendations prioritized by conversion impact
@@ -152,13 +157,3 @@ Form Quality:     ████████░░  XX/100
 - Mobile experience fixes
 - Form optimization recommendations
 - Quick Wins sorted by conversion impact
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf LANDING-PAGE-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

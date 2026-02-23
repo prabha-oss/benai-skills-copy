@@ -1,6 +1,11 @@
 ---
 name: ads-google
-description: Google Ads deep analysis covering Search, Performance Max, Display, YouTube, and Demand Gen campaigns. Evaluates 74 checks across conversion tracking, wasted spend, account structure, keywords, ads, and settings. Use when user says "Google Ads", "Google PPC", "search ads", "PMax", "Performance Max", or "Google campaign".
+description: >
+  Google Ads deep analysis covering Search, Performance Max, Display, YouTube,
+  and Demand Gen campaigns. Evaluates 74 checks across conversion tracking,
+  wasted spend, account structure, keywords, ads, and settings. Use when user
+  says "Google Ads", "Google PPC", "search ads", "PMax", "Performance Max",
+  or "Google campaign".
 ---
 
 # Google Ads Deep Analysis
@@ -8,9 +13,9 @@ description: Google Ads deep analysis covering Search, Performance Max, Display,
 ## Process
 
 1. Collect Google Ads account data (export, Change History, Search Terms Report)
-2. Read `references/google-audit.md` for full 74-check audit
-3. Read `references/benchmarks.md` for Google-specific benchmarks
-4. Read `references/scoring-system.md` for weighted scoring
+2. Read `ads/references/google-audit.md` for full 74-check audit
+3. Read `ads/references/benchmarks.md` for Google-specific benchmarks
+4. Read `ads/references/scoring-system.md` for weighted scoring
 5. Evaluate all applicable checks as PASS, WARNING, or FAIL
 6. Calculate Google Ads Health Score (0-100)
 7. Generate findings report with action plan
@@ -120,13 +125,3 @@ Settings:            XX/100  ██████████  (10%)
 - Quick Wins sorted by impact
 - PMax-specific recommendations (if applicable)
 - Keyword health matrix with QS, CTR, CVR per keyword group
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf GOOGLE-ADS-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

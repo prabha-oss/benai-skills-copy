@@ -1,6 +1,11 @@
 ---
 name: ads-youtube
-description: YouTube Ads specific analysis covering campaign types, creative quality, audience targeting, and measurement. Evaluates video ad performance across skippable, non-skippable, bumper, Shorts, and Demand Gen formats. Use when user says "YouTube Ads", "video ads", "pre-roll", "bumper ads", "YouTube campaign", or "Shorts ads".
+description: >
+  YouTube Ads specific analysis covering campaign types, creative quality,
+  audience targeting, and measurement. Evaluates video ad performance across
+  skippable, non-skippable, bumper, Shorts, and Demand Gen formats. Use when
+  user says "YouTube Ads", "video ads", "pre-roll", "bumper ads", "YouTube
+  campaign", or "Shorts ads".
 ---
 
 # YouTube Ads Analysis
@@ -8,10 +13,10 @@ description: YouTube Ads specific analysis covering campaign types, creative qua
 ## Process
 
 1. Collect YouTube Ads data (Google Ads export filtered to Video campaigns)
-2. Read `references/google-audit.md` for YouTube-relevant checks
-3. Read `references/platform-specs.md` for video specifications
-4. Read `references/benchmarks.md` for YouTube benchmarks
-5. Read `references/scoring-system.md` for health score algorithm
+2. Read `ads/references/google-audit.md` for YouTube-relevant checks
+3. Read `ads/references/platform-specs.md` for video specifications
+4. Read `ads/references/benchmarks.md` for YouTube benchmarks
+5. Read `ads/references/scoring-system.md` for health score algorithm
 6. Evaluate campaign setup, creative quality, targeting, and measurement
 7. Generate YouTube-specific findings report with health score
 
@@ -106,7 +111,7 @@ description: YouTube Ads specific analysis covering campaign types, creative qua
 
 ### YouTube Ads Health Score (0-100)
 
-Weighted assessment from `references/scoring-system.md`:
+Weighted assessment from `ads/references/scoring-system.md`:
 
 ```
 Category Weights:
@@ -137,13 +142,3 @@ Measurement:        █████░░░░░  Attribution and tracking
 - Audience strategy recommendations
 - Measurement gap analysis
 - Quick Wins for immediate improvement
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf YOUTUBE-ADS-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

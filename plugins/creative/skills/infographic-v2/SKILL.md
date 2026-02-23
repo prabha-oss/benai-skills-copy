@@ -56,13 +56,19 @@ fi
 
 ### 0.3: Check for Brand Config
 
+Check these locations in order (first found wins):
+
 ```bash
-if [ -f .infographic/brand.md ]; then
+if [ -f ./branding.md ]; then
+  cat ./branding.md
+elif [ -f .infographic/brand.md ]; then
   cat .infographic/brand.md
 fi
 ```
 
-If brand config exists, acknowledge briefly: "I found your saved settings. Ready to create your infographic!"
+If brand config exists, acknowledge briefly: "I found your brand context. Ready to create your infographic!"
+
+**How branding.md gets created:** The `/ads-creative` skill collects brand info (colors, fonts, voice, audience) and writes `./branding.md` in the project root. If the user has run an ads creative audit, this file will already exist. The infographic skill uses it for on-brand color palettes, typography, and style anchors.
 
 ---
 

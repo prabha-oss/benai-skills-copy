@@ -88,7 +88,12 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `seo-technical`, `seo-content`, `seo-schema`, `seo-sitemap`, `seo-performance`, `seo-visual`
 
-### Ads (12 skills, 12 sub-commands)
+### Ads (14 skills, 12 sub-commands)
+
+#### Orchestrator
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| ads | `/ads` | Orchestrator — routes to the right ads sub-skill |
 
 #### Platform Analysis
 | Skill | Command | Purpose |
@@ -105,10 +110,11 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 |-------|---------|---------|
 | ads-audit | `/ads-audit` | Full multi-platform audit (6 parallel subagents) |
 | ads-budget | `/ads-budget` | Budget allocation & bidding (70/20/10 rule) |
-| ads-creative | `/ads-creative` | Creative quality & fatigue detection |
+| ads-creative | `/ads-creative` | Creative audit + brand context setup + ad creative generation via infographic-v2 |
 | ads-landing | `/ads-landing` | Landing page optimization for ads |
-| ads-plan | `/ads-plan` | Strategic planning (11 industry templates) |
+| ads-plan | `/ads-plan` | Strategic planning (15 industry templates) |
 | ads-competitor | `/ads-competitor` | Competitive intelligence via Ad Libraries |
+| infographic-v2 | `/infographic-v2` | Branded infographics for ad campaigns |
 
 **Commands:** `/ads` (skill overview)
 

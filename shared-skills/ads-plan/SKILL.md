@@ -1,11 +1,22 @@
 ---
 name: ads-plan
-description: Strategic paid advertising planning with industry-specific templates. Covers platform selection, campaign architecture, budget planning, creative strategy, and phased implementation roadmap. Use when user says "ad plan", "ad strategy", "campaign planning", "media plan", "PPC strategy", or "advertising plan".
+description: >
+  Strategic paid advertising planning with industry-specific templates.
+  Covers platform selection, campaign architecture, budget planning,
+  creative strategy, and phased implementation roadmap. Use when user says
+  "ad plan", "ad strategy", "campaign planning", "media plan", "PPC strategy",
+  or "advertising plan".
 ---
 
 # Strategic Paid Advertising Plan
 
 ## Process
+
+### 0. Brand Context (if available)
+- Check for `./branding.md` in the project root
+- If found: load brand identity, voice, audience, visual guidelines, competitor positioning
+- If not found: display note — "No branding.md detected. Run `/ads-creative` first to set up brand context for personalized creative briefs."
+- Brand context feeds into Creative Strategy (step 6) and CREATIVE-BRIEF.md output
 
 ### 1. Discovery
 - Business type, products/services, target audience
@@ -25,8 +36,8 @@ description: Strategic paid advertising planning with industry-specific template
 ### 3. Platform Selection
 - Load industry template from `assets/` directory
 - Match business type to recommended platform mix
-- Read `references/budget-allocation.md` for platform selection matrix
-- Read `references/conversion-tracking.md` for tracking setup requirements
+- Read `ads/references/budget-allocation.md` for platform selection matrix
+- Read `ads/references/conversion-tracking.md` for tracking setup requirements
 - Assess platform fit based on:
   - Target audience demographics per platform
   - Product/service type suitability
@@ -67,7 +78,7 @@ Account
 ### 5. Budget Planning
 
 #### Monthly Budget Distribution
-Read `references/budget-allocation.md` for the 70/20/10 framework.
+Read `ads/references/budget-allocation.md` for the 70/20/10 framework.
 
 | Tier | Allocation | Purpose |
 |------|-----------|---------|
@@ -98,6 +109,17 @@ Read `references/budget-allocation.md` for the 70/20/10 framework.
 | P3 | Carousel/collection | Meta, LinkedIn | 3-5 |
 | P4 | UGC/testimonial video | TikTok, Meta | 3-5 |
 | P5 | Long-form video (1-3 min) | YouTube | 2-3 |
+
+#### Brand-Aware Creative Production
+If `branding.md` is available, personalize CREATIVE-BRIEF.md with:
+- Ad copy written in brand voice (tone dimensions from Brand Voice section)
+- Visual descriptions referencing brand colors (hex values) and typography
+- CTAs pulled from approved CTA list (Ad-Specific Guidelines)
+- Headlines using brand words; avoiding forbidden words
+- Audience messaging mapped to primary/secondary persona pain points
+- Competitor differentiation woven into positioning
+
+Read `ads/references/creative-volume.md` for per-platform volume requirements.
 
 ### 7. Tracking Setup Plan
 
@@ -152,6 +174,10 @@ Load from `assets/` directory based on detected or specified business type:
 - `healthcare.md` — Healthcare
 - `finance.md` — Financial services
 - `agency.md` — Marketing agencies
+- `hybrid.md` — Multi-model businesses (product + service, B2B + B2C)
+- `seasonal.md` — Seasonal businesses (holiday, summer, event-driven)
+- `nonprofit.md` — 501(c)(3) organizations, Google Ad Grants compliance
+- `government.md` — Public sector, WCAG accessibility, government compliance
 - `generic.md` — General business template
 
 ## Output
@@ -160,7 +186,7 @@ Load from `assets/` directory based on detected or specified business type:
 - `ADS-STRATEGY.md` — Complete strategic advertising plan
 - `CAMPAIGN-ARCHITECTURE.md` — Campaign structure with naming conventions
 - `BUDGET-PLAN.md` — Budget allocation with monthly pacing
-- `CREATIVE-BRIEF.md` — Creative production plan with specifications
+- `CREATIVE-BRIEF.md` — Creative production plan (brand-personalized if branding.md exists)
 - `TRACKING-SETUP.md` — Tracking implementation checklist
 - `IMPLEMENTATION-ROADMAP.md` — Phased rollout timeline
 
@@ -172,18 +198,3 @@ Load from `assets/` directory based on detected or specified business type:
 | CVR | Baseline | +10% | +20% | +30% |
 | CTR | Baseline | +15% | +25% | +30% |
 | Budget | Testing | Optimizing | Scaling | Maintaining |
-
-### PDF Report
-
-After writing all markdown deliverables, generate styled PDF versions:
-
-```bash
-npx --yes md-to-pdf ADS-STRATEGY.md
-npx --yes md-to-pdf CAMPAIGN-ARCHITECTURE.md
-npx --yes md-to-pdf BUDGET-PLAN.md
-npx --yes md-to-pdf CREATIVE-BRIEF.md
-npx --yes md-to-pdf TRACKING-SETUP.md
-npx --yes md-to-pdf IMPLEMENTATION-ROADMAP.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

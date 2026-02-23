@@ -1,6 +1,11 @@
 ---
 name: ads-meta
-description: Meta Ads deep analysis covering Facebook and Instagram advertising. Evaluates 46 checks across Pixel/CAPI health, creative diversity and fatigue, account structure, and audience targeting. Includes Advantage+ assessment. Use when user says "Meta Ads", "Facebook Ads", "Instagram Ads", "Advantage+", or "Meta campaign".
+description: >
+  Meta Ads deep analysis covering Facebook and Instagram advertising.
+  Evaluates 46 checks across Pixel/CAPI health, creative diversity and fatigue,
+  account structure, and audience targeting. Includes Advantage+ assessment.
+  Use when user says "Meta Ads", "Facebook Ads", "Instagram Ads", "Advantage+",
+  or "Meta campaign".
 ---
 
 # Meta Ads Deep Analysis
@@ -8,9 +13,9 @@ description: Meta Ads deep analysis covering Facebook and Instagram advertising.
 ## Process
 
 1. Collect Meta Ads data (Ads Manager export, Events Manager screenshot, EMQ scores)
-2. Read `references/meta-audit.md` for full 46-check audit
-3. Read `references/benchmarks.md` for Meta-specific benchmarks
-4. Read `references/scoring-system.md` for weighted scoring
+2. Read `ads/references/meta-audit.md` for full 46-check audit
+3. Read `ads/references/benchmarks.md` for Meta-specific benchmarks
+4. Read `ads/references/scoring-system.md` for weighted scoring
 5. Evaluate all applicable checks as PASS, WARNING, or FAIL
 6. Calculate Meta Ads Health Score (0-100)
 7. Generate findings report with action plan
@@ -74,7 +79,7 @@ If ads are in restricted categories:
 - Special Ad Category declared before campaign creation
 - Targeting restrictions verified (no ZIP, age 18-65+ only, no Lookalike)
 - Creative compliance with category-specific policies
-- Read `references/compliance.md` for full requirements
+- Read `ads/references/compliance.md` for full requirements
 
 ## EMQ Optimization Guide
 
@@ -123,13 +128,3 @@ Audience:            XX/100  █████░░░░░  (20%)
 - Creative fatigue alerts (any creative with CTR declining >20%)
 - Quick Wins sorted by impact
 - Advantage+ adoption recommendations
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf META-ADS-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

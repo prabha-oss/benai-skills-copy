@@ -76,6 +76,15 @@ Account — Meta
 - **Callout**: licensed, insured, free estimates, X years experience
 - **Structured snippets**: service types offered
 
+### Creative Volume Requirements
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Google PMax | 15 images, 3 logos, 3 videos | Fill all slots; local imagery + team photos | Quarterly; swap "Low" assets monthly |
+| Meta Standard | 5-8 per ad set | Local testimonials, before/after, team content | Every 10-14 days |
+| Microsoft | Mirror Google assets | 15 headlines, 3 descriptions, 15 images | Every 8-12 weeks |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
+
 ## Targeting Strategy
 
 ### Google

@@ -1,6 +1,11 @@
 ---
 name: ads-budget
-description: Budget allocation and bidding strategy review across all ad platforms. Evaluates spend distribution, bidding strategy appropriateness, scaling readiness, and identifies campaigns to kill or scale. Uses 70/20/10 rule, 3x Kill Rule, and 20% scaling rule. Use when user says "budget allocation", "bidding strategy", "ad spend", "ROAS target", "media budget", or "scaling".
+description: >
+  Budget allocation and bidding strategy review across all ad platforms.
+  Evaluates spend distribution, bidding strategy appropriateness, scaling
+  readiness, and identifies campaigns to kill or scale. Uses 70/20/10 rule,
+  3x Kill Rule, and 20% scaling rule. Use when user says "budget allocation",
+  "bidding strategy", "ad spend", "ROAS target", "media budget", or "scaling".
 ---
 
 # Budget Allocation & Bidding Strategy
@@ -8,10 +13,10 @@ description: Budget allocation and bidding strategy review across all ad platfor
 ## Process
 
 1. Collect budget and performance data across all active platforms
-2. Read `references/budget-allocation.md` for allocation framework
-3. Read `references/bidding-strategies.md` for strategy decision trees
-4. Read `references/benchmarks.md` for CPC/CPA benchmarks
-5. Read `references/scoring-system.md` for health score algorithm
+2. Read `ads/references/budget-allocation.md` for allocation framework
+3. Read `ads/references/bidding-strategies.md` for strategy decision trees
+4. Read `ads/references/benchmarks.md` for CPC/CPA benchmarks
+5. Read `ads/references/scoring-system.md` for health score algorithm
 6. Evaluate budget allocation, bidding strategy, and scaling readiness
 7. Generate recommendations with kill list and scale list
 
@@ -161,13 +166,3 @@ Budget Sufficiency:   █████░░░░░  XX/100
 - Kill list: campaigns/ad groups to pause immediately
 - MER analysis and trend
 - Quick Wins for immediate budget optimization
-
-### PDF Report
-
-After writing all markdown deliverables, generate a styled PDF version:
-
-```bash
-npx --yes md-to-pdf BUDGET-STRATEGY-REPORT.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

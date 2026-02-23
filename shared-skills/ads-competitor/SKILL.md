@@ -1,6 +1,11 @@
 ---
 name: ads-competitor
-description: Competitor ad intelligence analysis across Google, Meta, LinkedIn, TikTok, and Microsoft. Analyzes competitor ad copy, creative strategy, keyword targeting, estimated spend, and identifies competitive gaps and opportunities. Use when user says "competitor ads", "ad spy", "competitive analysis", "competitor PPC", or "ad intelligence".
+description: >
+  Competitor ad intelligence analysis across Google, Meta, LinkedIn, TikTok,
+  and Microsoft. Analyzes competitor ad copy, creative strategy, keyword
+  targeting, estimated spend, and identifies competitive gaps and opportunities.
+  Use when user says "competitor ads", "ad spy", "competitive analysis",
+  "competitor PPC", or "ad intelligence".
 ---
 
 # Competitor Ad Intelligence
@@ -8,7 +13,7 @@ description: Competitor ad intelligence analysis across Google, Meta, LinkedIn, 
 ## Process
 
 1. Identify target competitors (from user input or industry analysis)
-2. Read `references/benchmarks.md` for industry CPC/CTR/CVR baselines
+2. Read `ads/references/benchmarks.md` for industry CPC/CTR/CVR baselines
 3. Research competitor ad presence across platforms
 4. Analyze ad copy, creative, and messaging themes
 5. Estimate competitor spend and keyword strategy
@@ -78,11 +83,11 @@ For each competitor, document:
 Categorize competitor messaging into themes:
 | Theme | Competitor A | Competitor B | Your Brand |
 |-------|-------------|-------------|------------|
-| Price/Value | Primary | Secondary | ? |
-| Quality/Premium | No | Primary | ? |
-| Speed/Convenience | Secondary | No | ? |
-| Trust/Authority | Primary | Primary | ? |
-| Innovation | No | Secondary | ? |
+| Price/Value | ✅ Primary | ⚠️ Secondary | ? |
+| Quality/Premium | ❌ | ✅ Primary | ? |
+| Speed/Convenience | ⚠️ Secondary | ❌ | ? |
+| Trust/Authority | ✅ Primary | ✅ Primary | ? |
+| Innovation | ❌ | ⚠️ Secondary | ? |
 
 ### 4. Keyword Intelligence (Google/Microsoft)
 - Brand keyword bidding: are competitors bidding on your brand?
@@ -96,9 +101,9 @@ Categorize competitor messaging into themes:
 - Third-party tools (SEMrush, SpyFu) for more precise estimates
 - Manual estimation formula:
   ```
-  Estimated Monthly Spend = Impressions x CPM / 1000
+  Estimated Monthly Spend = Impressions × CPM / 1000
   or
-  Estimated Monthly Spend = Clicks x Estimated CPC
+  Estimated Monthly Spend = Clicks × Estimated CPC
   ```
 
 ## Gap & Opportunity Identification
@@ -154,14 +159,3 @@ Categorize competitor messaging into themes:
   - Creative format opportunities
 - Strategic recommendations for competitive positioning
 - Priority actions to gain competitive advantage
-
-### PDF Report
-
-After writing all markdown deliverables, generate styled PDF versions:
-
-```bash
-npx --yes md-to-pdf COMPETITOR-INTELLIGENCE-REPORT.md
-npx --yes md-to-pdf COMPETITIVE-GAPS.md
-```
-
-Always produce both formats — markdown for editing, PDF for sharing with stakeholders.

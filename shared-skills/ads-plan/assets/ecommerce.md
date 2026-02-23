@@ -67,12 +67,14 @@ Account — TikTok
 - **Lifestyle imagery**: product in context, aspirational
 
 ### Creative Volume Requirements
-| Platform | Min Active Creatives | Refresh Cadence |
-|----------|---------------------|-----------------|
-| Meta ASC | 150+ in campaign | 2-4 weeks |
-| Meta Standard | 5+ per ad set | 2-4 weeks |
-| TikTok | 6+ per ad group | 5-7 days |
-| Google PMax | Text + 20 images + 5 videos per asset group | 4-8 weeks |
+| Platform | Min Active Creatives | Recommended | Refresh Cadence |
+|----------|---------------------|-------------|-----------------|
+| Meta ASC | 50-150 in campaign (conceptually diverse) | Conceptually diverse; mix of image, video, UGC | Every 10-14 days |
+| Meta Standard | 5-8 per ad set (conceptually diverse) | UGC unboxing + product demos + lifestyle mix | Every 10-14 days |
+| TikTok | 6-10 per ad group | Native UGC, Spark Ads, product demos | Every 10-14 days (fatigue onset 3-5 days) |
+| Google PMax | 15-20 images, 3-5 logos, 3-5 videos per asset group | Fill all slots for "Excellent" Ad Strength | Quarterly (swap 'Low' assets monthly) |
+
+See `ads/references/creative-volume.md` for detailed per-platform production benchmarks.
 
 ### Seasonal Creative Calendar
 - **Q1**: New year deals, resolution products
