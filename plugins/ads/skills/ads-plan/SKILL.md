@@ -12,14 +12,98 @@ description: >
 
 ## Process
 
-### 0. Brand Context (if available)
-- Check for `./branding.md` in the project root
-- If found: load brand identity, voice, audience, visual guidelines, competitor positioning
-- If not found: display note — "No branding.md detected. Run `/ads-creative` first to set up brand context for personalized creative briefs."
-- Brand context feeds into Creative Strategy (step 6) and CREATIVE-BRIEF.md output
+### 0. Brand Context Setup
+
+Check for `./branding.md` in the project root.
+
+**If found:** Load brand identity, voice, audience, visual guidelines, competitor positioning. Confirm with the user: "I found your brand context (branding.md). Using it for this plan." Skip to step 1.
+
+**If not found:** Collect brand context before proceeding. This information shapes every downstream step — platform selection, creative strategy, audience targeting, and budget allocation.
+
+> "Before building your ad strategy, I need to understand your brand. Let me ask a few questions."
+
+#### 0.1 — Brand Identity (required)
+Ask:
+- What is your brand name?
+- What industry are you in?
+- What is your website URL?
+- Do you have a tagline or slogan?
+- What is your business model? (SaaS, e-commerce, service, B2B, B2C, hybrid)
+
+If the user provides a website URL, use WebFetch to pre-fill what you can (company name, tagline, colors, fonts, value proposition) before asking remaining questions.
+
+#### 0.2 — Visual Identity
+Ask:
+- What are your brand colors? (primary, secondary, accent — hex codes if known)
+- What fonts do you use for headlines and body text?
+- How would you describe your visual style? (clean/minimal, bold/colorful, professional, playful)
+
+If the user doesn't know hex codes, offer to extract from their website.
+
+#### 0.3 — Brand Voice
+Ask:
+- On a scale of 1-10, how formal vs casual is your brand? (1=very formal, 10=very casual)
+- Is your tone more serious or playful?
+- Technical language or plain/simple?
+- Are there specific words or phrases you always use?
+- Any words or phrases you never use in marketing?
+
+#### 0.4 — Target Audience
+Ask:
+- Who is your primary customer? (job title/role, age range, key characteristics)
+- What are their biggest pain points that your product/service solves?
+- What motivates them to buy? (triggers, goals)
+- Where do they spend time online? (LinkedIn, Instagram, TikTok, YouTube, etc.)
+- Is there a secondary audience?
+
+#### 0.5 — Value Proposition
+Ask:
+- In one sentence, what makes you different from competitors?
+- What are your top 3 benefits? (with proof points if possible)
+- Do you have social proof you'd like to highlight? (testimonials, metrics, awards)
+
+#### 0.6 — Competitor Positioning (optional)
+Ask:
+- Who are your top 2-3 competitors?
+- How do they position themselves?
+- How are you different from each?
+
+If the user skips this, note it as "To be completed — run `/ads-competitor` for analysis."
+
+#### 0.7 — Ad-Specific Guidelines (optional)
+Ask:
+- What CTAs do you prefer? (e.g., "Start Free Trial", "Book a Demo", "Shop Now")
+- Do you show pricing in ads?
+- Are there any required elements? (trust badges, ratings, certifications)
+- Anything forbidden in your ads? (competitor mentions, specific claims, certain imagery)
+
+#### 0.8 — Save branding.md
+
+Write `./branding.md` in the project root using the canonical format from `ads/references/brand-context.md`. Validate before writing:
+- Brand name is not empty
+- At least one color is specified (or extracted from URL)
+- At least one audience description exists
+- Business model is identified
+
+Display summary:
+
+```
+Brand context saved: ./branding.md
+
+  Brand: [name]
+  Industry: [industry]
+  Voice: [tone summary]
+  Audience: [persona summary]
+  USP: [one-line value prop]
+  Colors: [primary] [secondary] [accent]
+
+Now building your ad strategy...
+```
+
+**Note:** Many of these answers feed directly into step 1 (Discovery) — do not re-ask questions the user already answered. Carry forward business type, audience, goals, and budget context.
 
 ### 1. Discovery
-- Business type, products/services, target audience
+- Carry forward from step 0: business type, target audience, value proposition
 - Current advertising status (active platforms, spend, performance)
 - Goals: brand awareness, lead generation, e-commerce sales, app installs
 - Budget range (monthly/quarterly)
@@ -182,13 +266,111 @@ Load from `assets/` directory based on detected or specified business type:
 
 ## Output
 
-### Deliverables
-- `ADS-STRATEGY.md` — Complete strategic advertising plan
-- `CAMPAIGN-ARCHITECTURE.md` — Campaign structure with naming conventions
-- `BUDGET-PLAN.md` — Budget allocation with monthly pacing
-- `CREATIVE-BRIEF.md` — Creative production plan (brand-personalized if branding.md exists)
-- `TRACKING-SETUP.md` — Tracking implementation checklist
-- `IMPLEMENTATION-ROADMAP.md` — Phased rollout timeline
+### Deliverables (Markdown + PDF)
+
+Every deliverable is written as markdown first, then converted to a brand-styled PDF.
+
+| Markdown | PDF | Contents |
+|----------|-----|----------|
+| `ADS-STRATEGY.md` | `ADS-STRATEGY.pdf` | Complete strategic advertising plan |
+| `CAMPAIGN-ARCHITECTURE.md` | `CAMPAIGN-ARCHITECTURE.pdf` | Campaign structure with naming conventions |
+| `BUDGET-PLAN.md` | `BUDGET-PLAN.pdf` | Budget allocation with monthly pacing |
+| `CREATIVE-BRIEF.md` | `CREATIVE-BRIEF.pdf` | Creative production plan (brand-personalized) |
+| `TRACKING-SETUP.md` | `TRACKING-SETUP.pdf` | Tracking implementation checklist |
+| `IMPLEMENTATION-ROADMAP.md` | `IMPLEMENTATION-ROADMAP.pdf` | Phased rollout timeline |
+
+### PDF Generation
+
+After writing all markdown deliverables, generate branded PDFs using `md-to-pdf`.
+The stylesheet is **not a template** — it is generated from scratch every time by reading
+`./branding.md` and translating the brand's full identity into CSS.
+
+#### Step 1: Read branding.md and generate a stylesheet
+
+Read `./branding.md` in full. Extract everything relevant to visual presentation:
+
+- **Colors:** primary, secondary, accent hex values. Derive tints (lighten for backgrounds,
+  hover states) and shades (darken for borders, emphasis) from those base colors.
+- **Typography:** heading and body font families. If Google Fonts, add an `@import` rule.
+  If the fonts are not web-available, pick the closest system font match.
+- **Visual style:** the described style (clean/minimal, bold/colorful, professional, playful,
+  premium) drives the overall design personality:
+  - **Clean/minimal** — generous whitespace, thin borders, light backgrounds, subtle accents
+  - **Bold/colorful** — saturated colors, strong contrasts, colored section backgrounds
+  - **Professional** — muted palette, structured grid feel, heavier typography
+  - **Playful** — rounded corners, warmer tones, lighter font weights
+  - **Premium** — dark accents, generous padding, restrained color use, serif headings
+- **Brand voice:** formal vs casual tone influences typographic choices — formal brands
+  get tighter letter-spacing and traditional headings; casual brands get looser, friendlier type.
+- **Industry:** tailor the aesthetic — finance/healthcare lean conservative, SaaS/tech lean
+  modern, e-commerce leans vibrant.
+
+Write a complete CSS file to `_brand-pdf.css` that covers:
+
+```
+@page setup          — A4, margins, page numbers in brand font/color
+Body                 — Brand body font, size, line-height, text color
+Headings (h1-h4)     — Brand heading font, h1 in primary color with a styled underline
+                       (solid, gradient, or accent-colored depending on visual style)
+Tables               — thead background in primary color (white text), striped rows
+                       using a light tint of the primary, borders in a derived border color
+Blockquotes          — Left border in accent color, light tint background
+Code blocks          — Light background, left border in primary, brand monospace stack
+Links                — Primary color
+Lists                — Appropriate spacing and markers
+Horizontal rules     — Styled with brand colors
+Print helpers        — page-break-after: avoid on headings, page-break-inside: avoid
+                       on tables/code/blockquotes
+```
+
+**Every color in the CSS must trace back to branding.md.** Do not use any hardcoded
+colors that don't derive from the brand palette. Derive light backgrounds, border colors,
+and muted text from the primary/secondary using opacity or HSL manipulation.
+
+**Example derivation for a brand with primary #2563eb:**
+- Light background: `#2563eb0a` (primary at 4% opacity) or manually lighten to `#eff6ff`
+- Border: `#2563eb20` (primary at 12% opacity) or manually lighten to `#dbeafe`
+- Muted text: secondary color, or primary darkened
+
+#### Step 2: Convert each deliverable
+
+```bash
+npx md-to-pdf --stylesheet _brand-pdf.css ADS-STRATEGY.md
+npx md-to-pdf --stylesheet _brand-pdf.css CAMPAIGN-ARCHITECTURE.md
+npx md-to-pdf --stylesheet _brand-pdf.css BUDGET-PLAN.md
+npx md-to-pdf --stylesheet _brand-pdf.css CREATIVE-BRIEF.md
+npx md-to-pdf --stylesheet _brand-pdf.css TRACKING-SETUP.md
+npx md-to-pdf --stylesheet _brand-pdf.css IMPLEMENTATION-ROADMAP.md
+```
+
+Each command produces a `.pdf` alongside the `.md`.
+
+#### Step 3: Clean up
+
+```bash
+rm _brand-pdf.css
+```
+
+#### Step 4: Confirm
+
+```
+PDFs generated with [Brand Name] styling:
+  ADS-STRATEGY.pdf
+  CAMPAIGN-ARCHITECTURE.pdf
+  BUDGET-PLAN.pdf
+  CREATIVE-BRIEF.pdf
+  TRACKING-SETUP.pdf
+  IMPLEMENTATION-ROADMAP.pdf
+
+Brand applied:
+  Colors: [primary] [secondary] [accent]
+  Fonts: [heading font] / [body font]
+  Style: [visual style description]
+```
+
+**If `npx md-to-pdf` fails** (Node.js not installed, network error, Puppeteer issue),
+inform the user and suggest `npm install -g md-to-pdf` then retry. The markdown files
+are always the primary deliverables — PDFs are supplementary.
 
 ### KPI Targets
 | Metric | Month 1 | Month 3 | Month 6 | Month 12 |
