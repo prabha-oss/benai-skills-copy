@@ -20,68 +20,171 @@ Check for `./branding.md` in the project root.
 
 **If not found:** Collect brand context before proceeding. This information shapes every downstream step — platform selection, creative strategy, audience targeting, and budget allocation.
 
-> "Before building your ad strategy, I need to understand your brand. Let me ask a few questions."
+> "Before building your ad strategy, I need to understand your brand. What's your brand name and website URL?"
 
-#### 0.1 — Brand Identity (required)
-Ask:
-- What is your brand name?
-- What industry are you in?
-- What is your website URL?
-- Do you have a tagline or slogan?
-- What is your business model? (SaaS, e-commerce, service, B2B, B2C, hybrid)
+#### 0.1 — Brand Identity + Website (required)
 
-If the user provides a website URL, use WebFetch to pre-fill what you can (company name, tagline, colors, fonts, value proposition) before asking remaining questions.
+Ask for the brand name and website URL first. If the user provides a URL, immediately
+run the full website extraction (step 0.2) before asking any further questions. Everything
+that can be extracted from the website should be extracted — never ask the user for
+information that's already on their site.
 
-#### 0.2 — Visual Identity
-Ask:
-- What are your brand colors? (primary, secondary, accent — hex codes if known)
-- What fonts do you use for headlines and body text?
-- How would you describe your visual style? (clean/minimal, bold/colorful, professional, playful)
+Also collect (if not already clear from the website):
+- Industry
+- Business model (SaaS, e-commerce, service, B2B, B2C, hybrid)
 
-If the user doesn't know hex codes, offer to extract from their website.
+#### 0.2 — Website Extraction (when URL provided)
 
-#### 0.3 — Brand Voice
-Ask:
-- On a scale of 1-10, how formal vs casual is your brand? (1=very formal, 10=very casual)
-- Is your tone more serious or playful?
-- Technical language or plain/simple?
-- Are there specific words or phrases you always use?
-- Any words or phrases you never use in marketing?
+This is the most important part of brand context setup. **Do not guess or assume anything.**
+Extract the actual values the business uses on their live website.
 
-#### 0.4 — Target Audience
-Ask:
-- Who is your primary customer? (job title/role, age range, key characteristics)
-- What are their biggest pain points that your product/service solves?
-- What motivates them to buy? (triggers, goals)
-- Where do they spend time online? (LinkedIn, Instagram, TikTok, YouTube, etc.)
-- Is there a secondary audience?
+##### 0.2a — Fetch the homepage
 
-#### 0.5 — Value Proposition
-Ask:
-- In one sentence, what makes you different from competitors?
-- What are your top 3 benefits? (with proof points if possible)
-- Do you have social proof you'd like to highlight? (testimonials, metrics, awards)
+Use WebFetch on the homepage URL. Instruct it to extract ALL of the following:
 
-#### 0.6 — Competitor Positioning (optional)
-Ask:
+**Visual identity:**
+- All colors used prominently: backgrounds, buttons, headers, links, text, borders,
+  footer. Report exact hex values. Identify which is primary (most prominent brand color,
+  usually on CTAs and headers), secondary, accent, background, and text color.
+- Font families: read the actual `font-family` declarations used on headings and body text.
+  Look in CSS, `<link>` tags for Google Fonts / Typekit / custom font URLs, and inline styles.
+  Report the exact font names (e.g., "Plus Jakarta Sans", "DM Sans", "Geist"), not generic
+  fallbacks like "sans-serif".
+- Logo: describe the logo from the header/nav. Note if it's text-based, icon-based, or both.
+- Visual style: describe what you observe — is it minimal with lots of whitespace? Bold with
+  saturated colors? Dark mode? Gradient-heavy? Illustration-driven? Corporate?
+- Button styles: rounded, square, pill-shaped? What color? What text color on buttons?
+- Spacing and density: tight and information-dense, or airy and spacious?
+
+**Copy and messaging:**
+- Tagline / slogan: extract from the hero section
+- Hero headline: the main H1 or hero text
+- Value proposition: what the homepage says they do and why it matters
+- Key benefits: any benefit sections, feature highlights, or selling points
+- Social proof: testimonials, customer logos, metrics ("10,000+ customers"), awards,
+  trust badges, star ratings
+- CTAs: every call-to-action button text on the page (e.g., "Get Started Free",
+  "Book a Demo", "See Pricing")
+- Navigation items: main nav labels reveal product/service categories and priorities
+
+**Brand voice signals:**
+- Tone of the copy: formal or casual? Technical or plain? Playful or serious?
+- Person: first person ("We help...") or second person ("You can...") or third?
+- Specific words/phrases: any repeated brand language, trademarked terms
+
+##### 0.2b — Fetch additional pages (if needed)
+
+If the homepage alone doesn't give a complete picture, also fetch:
+- `/about` or `/about-us` — for company story, mission, team info, more voice signals
+- `/pricing` — for pricing model (free trial, freemium, contact-us, subscription tiers)
+
+Only fetch these if there are genuine gaps after the homepage. Don't fetch for the sake of it.
+
+##### 0.2c — Present extraction to user
+
+Show the user everything extracted, organized clearly:
+
+```
+Here's what I found on [website]:
+
+  Brand: [name]
+  Tagline: "[extracted tagline]"
+  Industry: [detected industry]
+  Business model: [detected model]
+
+  Colors:
+    Primary:    [name] #[hex] — used on [CTAs, headers, etc.]
+    Secondary:  [name] #[hex] — used on [subheadings, etc.]
+    Accent:     [name] #[hex] — used on [highlights, badges, etc.]
+    Background: #[hex]
+    Text:       #[hex]
+
+  Fonts:
+    Headings: [exact font name]
+    Body:     [exact font name]
+
+  Visual style: [description of what you observed]
+  Button style: [pill/rounded/square], [color], [hover behavior if visible]
+
+  Voice: [formal/casual], [serious/playful], [technical/simple]
+  Hero: "[exact hero headline]"
+  Value prop: "[extracted value proposition]"
+  CTAs found: "[CTA 1]", "[CTA 2]", "[CTA 3]"
+  Social proof: [what's shown — logos, metrics, testimonials]
+
+Does this look right? Anything to correct or add?
+```
+
+The user confirms or corrects. Only after confirmation, proceed with remaining questions.
+
+#### 0.3 — Fill gaps with questions
+
+After the website extraction, only ask about things that **could not** be determined from
+the website. Skip any section where the website gave a clear answer.
+
+**Likely still needed (websites rarely cover these):**
+
+Target audience specifics:
+- Who is your primary customer? (job title/role, age range)
+- What are their biggest pain points?
+- What motivates them to buy?
+- Where do they spend time online?
+- Secondary audience?
+
+Competitor positioning:
 - Who are your top 2-3 competitors?
-- How do they position themselves?
 - How are you different from each?
+(If skipped, note: "To be completed — run `/ads-competitor` for analysis.")
 
-If the user skips this, note it as "To be completed — run `/ads-competitor` for analysis."
+Ad-specific guidelines:
+- Preferred CTAs (pre-fill from extracted CTAs, ask user to confirm/adjust)
+- Show pricing in ads?
+- Required elements? (trust badges, ratings, certifications)
+- Anything forbidden in ads?
 
-#### 0.7 — Ad-Specific Guidelines (optional)
-Ask:
-- What CTAs do you prefer? (e.g., "Start Free Trial", "Book a Demo", "Shop Now")
-- Do you show pricing in ads?
-- Are there any required elements? (trust badges, ratings, certifications)
-- Anything forbidden in your ads? (competitor mentions, specific claims, certain imagery)
+Brand voice refinement (if the website extraction was ambiguous):
+- Words or phrases you always use?
+- Words or phrases you never use?
 
-#### 0.8 — Save branding.md
+**Do NOT ask about colors, fonts, tagline, visual style, or value proposition if the
+website extraction already captured them.** Only ask if the extraction was inconclusive.
 
-Write `./branding.md` in the project root using the canonical format from `ads/references/brand-context.md`. Validate before writing:
+#### 0.4 — No-URL fallback
+
+If the user does not provide a website URL, fall back to asking all questions manually:
+
+Visual identity:
+- Brand colors (primary, secondary, accent — hex codes)
+- Headline and body fonts
+- Visual style description
+- Logo description
+
+Copy and messaging:
+- Tagline or slogan
+- One-sentence value proposition
+- Top 3 benefits with proof points
+- Social proof highlights
+
+Brand voice:
+- Formal vs casual (1-10)
+- Serious vs playful
+- Technical vs simple
+- Brand words (always use)
+- Forbidden words (never use)
+
+Target audience, competitor positioning, and ad guidelines — same as step 0.3.
+
+#### 0.5 — Save branding.md
+
+Write `./branding.md` in the project root using the canonical format from `ads/references/brand-context.md`.
+
+**Every value in branding.md must come from the website extraction or the user's direct
+answers. Never fill in defaults or placeholders.** If a field has no data, leave it blank
+or omit the section entirely.
+
+Validate before writing:
 - Brand name is not empty
-- At least one color is specified (or extracted from URL)
+- At least one color with hex value exists
 - At least one audience description exists
 - Business model is identified
 
@@ -95,7 +198,8 @@ Brand context saved: ./branding.md
   Voice: [tone summary]
   Audience: [persona summary]
   USP: [one-line value prop]
-  Colors: [primary] [secondary] [accent]
+  Colors: [primary hex] [secondary hex] [accent hex]
+  Fonts: [heading font] / [body font]
 
 Now building your ad strategy...
 ```
