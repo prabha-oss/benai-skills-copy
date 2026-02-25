@@ -5,36 +5,11 @@
         "marketing",
         "repurpose"
       ],
-      "mcpServers": {
-        "webflow": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "mcp-remote",
-            "https://mcp.webflow.com/mcp"
-          ]
-        },
-        "nano-banana": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "nano-banana-mcp"
-          ],
-          "env": {
-            "GEMINI_API_KEY": "${GEMINI_API_KEY}"
-          }
-        },
-        "apify": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "@apify/actors-mcp-server"
-          ],
-          "env": {
-            "APIFY_TOKEN": "${APIFY_TOKEN}"
-          }
-        }
-      },
+      "connectors": [
+        "webflow",
+        "nano-banana",
+        "apify"
+      ],
       "skills": {
         "programmatic-seo": {
           "displayName": "Programmatic SEO",
@@ -88,24 +63,26 @@
     },
     "sales": {
       "commands": [
-        "sales"
+        "outbound-pipeline"
+      ],
+      "agents": [
+        "lead-qualifier",
+        "lead-researcher",
+        "icebreaker-writer",
+        "linkedin-scraper"
       ],
       "skills": {
-        "lead-research-assistant": {
-          "displayName": "Lead Research Assistant",
-          "summary": "B2B lead generation — research companies, discover LinkedIn contacts, score leads"
+        "email-personalization": {
+          "displayName": "Email Personalization",
+          "summary": "Generate hyper-personalized email icebreakers using lead intelligence"
         },
-        "email-sequence": {
-          "displayName": "Email Sequence",
-          "summary": "Create email sequences, drip campaigns, and lifecycle email programs"
+        "lead-intelligence": {
+          "displayName": "Lead Intelligence",
+          "summary": "Deep-research leads with web scraping and LinkedIn analysis"
         },
-        "case-study": {
-          "displayName": "Case Study",
-          "summary": "Build data-driven case studies from interviews and raw data"
-        },
-        "n8n-prd-generator": {
-          "displayName": "n8n Blueprint Generator",
-          "summary": "Convert discovery call transcripts into automation blueprints"
+        "lead-qualification": {
+          "displayName": "Lead Qualification",
+          "summary": "Qualify and score leads against an Ideal Customer Profile"
         }
       }
     },
@@ -128,18 +105,9 @@
       "commands": [
         "creative"
       ],
-      "mcpServers": {
-        "nano-banana": {
-          "command": "npx",
-          "args": [
-            "-y",
-            "nano-banana-mcp"
-          ],
-          "env": {
-            "GEMINI_API_KEY": "${GEMINI_API_KEY}"
-          }
-        }
-      },
+      "connectors": [
+        "nano-banana"
+      ],
       "skills": {
         "video": {
           "displayName": "Video Editing",
@@ -152,6 +120,14 @@
         "infographic": {
           "displayName": "Infographic",
           "summary": "Generate professional infographics using Gemini AI"
+        },
+        "infographic-old": {
+          "displayName": "Infographic (Legacy)",
+          "summary": "[COMPARISON] Original infographic skill without enhanced design principles"
+        },
+        "infographic-v2": {
+          "displayName": "Infographic v2",
+          "summary": "Updated infographic generation skill with prompt engineering patterns"
         }
       }
     },
@@ -202,6 +178,180 @@
         "title-generation": {
           "displayName": "Title Generation",
           "summary": "Generate optimized YouTube video titles"
+        }
+      }
+    },
+    "seo": {
+      "commands": [
+        "seo"
+      ],
+      "skills": {
+        "seo": {
+          "displayName": "SEO Suite",
+          "summary": "Comprehensive SEO: audits, technical, E-E-A-T, schema, images, sitemaps, GEO, programmatic, competitors, hreflang, GSC optimization"
+        },
+        "seo-page": {
+          "displayName": "SEO Page Analysis",
+          "summary": "Deep single-page SEO analysis covering on-page elements, content quality, schema, and images",
+          "scripts": [
+            "fetch_page.py",
+            "parse_html.py",
+            "requirements.txt"
+          ]
+        },
+        "seo-technical": {
+          "displayName": "SEO Technical",
+          "summary": "Technical SEO audit across 8 categories including crawlability, indexability, CWV, and JS rendering",
+          "scripts": [
+            "fetch_page.py",
+            "parse_html.py",
+            "requirements.txt"
+          ]
+        },
+        "seo-content": {
+          "displayName": "SEO Content",
+          "summary": "E-E-A-T content quality and AI citation readiness analysis",
+          "scripts": [
+            "fetch_page.py",
+            "parse_html.py",
+            "requirements.txt"
+          ]
+        },
+        "seo-schema": {
+          "displayName": "SEO Schema",
+          "summary": "Detect, validate, and generate Schema.org structured data in JSON-LD",
+          "scripts": [
+            "fetch_page.py",
+            "parse_html.py",
+            "requirements.txt"
+          ]
+        },
+        "seo-images": {
+          "displayName": "SEO Images",
+          "summary": "Image optimization analysis — alt text, file size, formats, lazy loading, CLS",
+          "scripts": [
+            "fetch_page.py",
+            "parse_html.py",
+            "requirements.txt"
+          ]
+        },
+        "seo-sitemap": {
+          "displayName": "SEO Sitemap",
+          "summary": "Analyze existing XML sitemaps or generate new ones with quality gates"
+        },
+        "seo-geo": {
+          "displayName": "SEO GEO",
+          "summary": "AI Overviews / Generative Engine Optimization for AI search visibility",
+          "scripts": [
+            "fetch_page.py",
+            "parse_html.py",
+            "requirements.txt"
+          ]
+        },
+        "seo-plan": {
+          "displayName": "SEO Plan",
+          "summary": "Strategic SEO planning with industry templates (SaaS, e-commerce, local, publisher, agency)"
+        },
+        "seo-programmatic": {
+          "displayName": "SEO Programmatic",
+          "summary": "Programmatic SEO at scale with thin content safeguards and quality gates"
+        },
+        "seo-competitor-pages": {
+          "displayName": "SEO Competitor Pages",
+          "summary": "Generate X vs Y comparison and alternatives pages with schema markup"
+        },
+        "seo-hreflang": {
+          "displayName": "SEO Hreflang",
+          "summary": "Hreflang and international SEO audit, validation, and generation"
+        },
+        "seo-optimize": {
+          "displayName": "SEO Optimize",
+          "summary": "GSC data-driven optimization — striking distance, low-CTR, cannibalization, content gaps"
+        },
+        "seo-audit": {
+          "displayName": "SEO Audit",
+          "summary": "Run comprehensive technical SEO audits (16 categories, 148 rules)"
+        }
+      }
+    },
+    "ads": {
+      "commands": [
+        "ads"
+      ],
+      "agents": [
+        "audit-google",
+        "audit-meta",
+        "audit-budget",
+        "audit-creative",
+        "audit-compliance",
+        "audit-tracking"
+      ],
+      "connectors": [
+        "apify",
+        "nano-banana"
+      ],
+      "skills": {
+        "ads": {
+          "displayName": "Ads Suite",
+          "summary": "Comprehensive paid advertising audit and optimization — routes to the right ads sub-skill"
+        },
+        "ads-google": {
+          "displayName": "Ads Google",
+          "summary": "Google Ads deep analysis — 74 checks across Search, PMax, Display, YouTube, Demand Gen"
+        },
+        "ads-meta": {
+          "displayName": "Ads Meta",
+          "summary": "Meta/Facebook/Instagram Ads — 46 checks covering Pixel/CAPI, creative, structure, audience, Advantage+"
+        },
+        "ads-linkedin": {
+          "displayName": "Ads LinkedIn",
+          "summary": "LinkedIn Ads for B2B — 25 checks including Thought Leader Ads, ABM, lead gen forms, predictive audiences"
+        },
+        "ads-tiktok": {
+          "displayName": "Ads TikTok",
+          "summary": "TikTok Ads — 25 checks with creative-first strategy, safe zones, Smart+, TikTok Shop"
+        },
+        "ads-youtube": {
+          "displayName": "Ads YouTube",
+          "summary": "YouTube Ads — skippable, non-skippable, bumper, Shorts, Demand Gen analysis"
+        },
+        "ads-microsoft": {
+          "displayName": "Ads Microsoft",
+          "summary": "Microsoft/Bing Ads — 20 checks with Google import validation, Copilot integration"
+        },
+        "ads-audit": {
+          "displayName": "Ads Audit",
+          "summary": "Full multi-platform audit with 6 parallel subagents and aggregate health score"
+        },
+        "ads-budget": {
+          "displayName": "Ads Budget",
+          "summary": "Budget allocation and bidding strategy — 70/20/10 rule, 3x Kill Rule, scaling assessment"
+        },
+        "ads-creative": {
+          "displayName": "Ads Creative",
+          "summary": "Cross-platform creative audit — brand context setup, fatigue detection, format diversity, ad creative generation via infographic-v2"
+        },
+        "ads-landing": {
+          "displayName": "Ads Landing",
+          "summary": "Landing page optimization for ad campaigns — message match, speed, mobile, forms, trust signals",
+          "scripts": [
+            "analyze_landing.py",
+            "capture_screenshot.py",
+            "fetch_page.py",
+            "requirements.txt"
+          ]
+        },
+        "ads-plan": {
+          "displayName": "Ads Plan",
+          "summary": "Strategic ad planning with 15 industry templates and phased implementation roadmap"
+        },
+        "ads-competitor": {
+          "displayName": "Ads Competitor",
+          "summary": "Competitive ad intelligence — Ad Libraries, keyword gaps, spend estimation, messaging analysis"
+        },
+        "infographic-v2": {
+          "displayName": "Infographic v2",
+          "summary": "Updated infographic generation skill with prompt engineering patterns"
         }
       }
     }

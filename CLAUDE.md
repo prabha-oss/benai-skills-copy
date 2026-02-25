@@ -15,21 +15,24 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | email-sequence | `/email-sequence` | Email sequences & drip campaigns |
 | case-study | `/case-study` | Data-driven case studies |
 | infographic | `/infographic` | AI-generated infographics |
-| linkedin | `/linkedin` | LinkedIn posts & carousels from content |
-| newsletter | `/newsletter` | Newsletter editions from content |
+| linkedin-writer | `/linkedin-writer` | LinkedIn posts & carousels from content |
+| newsletter-writer | `/newsletter-writer` | Newsletter editions from content |
 | title-generation | `/title-generation` | Optimized YouTube video titles |
 | gif-creator | `/gif-creator` | GIFs from video clips |
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 
 **Commands:** `/marketing` (skill overview), `/repurpose` (content repurposing workflow)
 
-### Sales (4 skills)
+### Sales (3 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
-| lead-research-assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
-| email-sequence | `/email-sequence` | Email sequences & drip campaigns |
-| case-study | `/case-study` | Data-driven case studies |
-| n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+| email-personalization | `/email-personalization` | Hyper-personalized email icebreakers |
+| lead-intelligence | `/lead-intelligence` | Deep-research leads via web & LinkedIn |
+| lead-qualification | `/lead-qualification` | Qualify & score leads against ICP |
+
+**Commands:** `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline)
+
+**Agents:** `lead-qualifier`, `lead-researcher`, `icebreaker-writer`, `linkedin-scraper`
 
 ### Operations (2 skills)
 | Skill | Command | Purpose |
@@ -62,6 +65,60 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | title-generation | `/title-generation` | Optimized YouTube video titles |
 
 **Commands:** `/youtube` (skill overview)
+
+### SEO (14 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| seo | `/seo` | Orchestrator — routes to the right SEO sub-skill |
+| seo-page | `/seo page <url>` | Deep single-page analysis |
+| seo-technical | `/seo technical <url>` | Technical SEO (crawlability, CWV, JS rendering) |
+| seo-content | `/seo content <url>` | E-E-A-T content quality analysis |
+| seo-schema | `/seo schema <url>` | Schema detection, validation, generation |
+| seo-images | `/seo images <url>` | Image optimization analysis |
+| seo-sitemap | `/seo sitemap <url\|generate>` | Sitemap validation/generation |
+| seo-geo | `/seo geo <url>` | AI Overviews / GEO optimization |
+| seo-plan | `/seo plan <type>` | Strategic planning (SaaS, e-commerce, local, publisher, agency) |
+| seo-programmatic | `/seo programmatic` | Programmatic SEO at scale |
+| seo-competitor-pages | `/seo competitor-pages` | Comparison page generation |
+| seo-hreflang | `/seo hreflang <url>` | Hreflang/i18n validation |
+| seo-optimize | `/seo optimize` | GSC data-driven optimization |
+| seo-audit | `/seo audit <url>` | Full site audit with 6 parallel subagents |
+
+**Commands:** `/seo` (skill overview)
+
+**Agents:** `seo-technical`, `seo-content`, `seo-schema`, `seo-sitemap`, `seo-performance`, `seo-visual`
+
+### Ads (14 skills, 12 sub-commands)
+
+#### Orchestrator
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| ads | `/ads` | Orchestrator — routes to the right ads sub-skill |
+
+#### Platform Analysis
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| ads-google | `/ads-google` | Google Ads deep analysis (74 checks) |
+| ads-meta | `/ads-meta` | Meta/Facebook/Instagram Ads (46 checks) |
+| ads-linkedin | `/ads-linkedin` | LinkedIn Ads for B2B (25 checks) |
+| ads-tiktok | `/ads-tiktok` | TikTok Ads with creative-first strategy (25 checks) |
+| ads-youtube | `/ads-youtube` | YouTube Ads across all formats |
+| ads-microsoft | `/ads-microsoft` | Microsoft/Bing Ads (20 checks) |
+
+#### Cross-Platform Tools
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| ads-audit | `/ads-audit` | Full multi-platform audit (6 parallel subagents) |
+| ads-budget | `/ads-budget` | Budget allocation & bidding (70/20/10 rule) |
+| ads-creative | `/ads-creative` | Creative audit + brand context setup + ad creative generation via infographic-v2 |
+| ads-landing | `/ads-landing` | Landing page optimization for ads |
+| ads-plan | `/ads-plan` | Strategic planning (15 industry templates) |
+| ads-competitor | `/ads-competitor` | Competitive intelligence via Ad Libraries |
+| infographic-v2 | `/infographic-v2` | Branded infographics for ad campaigns |
+
+**Commands:** `/ads` (skill overview)
+
+**Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
 
 ## n8n Skill
 

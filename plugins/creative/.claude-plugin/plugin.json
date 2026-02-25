@@ -4,17 +4,5 @@
   "version": "1.0.0",
   "author": {
     "name": "BenAI"
-  },
-  "mcpServers": {
-    "nano-banana": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "nano-banana-mcp"
-      ],
-      "env": {
-        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
-      }
-    }
   }
 }
