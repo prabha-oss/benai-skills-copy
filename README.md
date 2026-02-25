@@ -14,12 +14,35 @@ Expert automation skills for Claude Code, organized by department.
 /plugin install operations@benai-skills
 /plugin install creative@benai-skills
 /plugin install product@benai-skills
-/plugin install repurposing@benai-skills
+/plugin install youtube@benai-skills
 ```
+
+## Setup
+
+Some skills require API keys. Create a `.env` file in your project directory:
+
+```bash
+# Quick setup
+curl -O https://raw.githubusercontent.com/naveedharri/benai-skills/main/.env.example
+mv .env.example .env
+# Edit .env and add your API keys
+```
+
+Or copy from this repo's `.env.example` and fill in your keys.
+
+### Required API Keys by Plugin
+
+| Plugin | Required Keys | Get Keys | Used By |
+|--------|---------------|----------|---------|
+| **Marketing** | `GEMINI_API_KEY`<br>`APIFY_TOKEN` | [Gemini](https://aistudio.google.com/apikey)<br>[Apify](https://console.apify.com) | `/infographic`<br>`/seo-audit`, `/programmatic-seo` |
+| **Creative** | `GEMINI_API_KEY` | [Gemini](https://aistudio.google.com/apikey) | `/infographic` |
+| **Operations** | `N8N_API_URL`<br>`N8N_API_KEY` | Your n8n instance | `/n8n` |
+
+**Important:** Add `.env` to your `.gitignore` to keep your API keys secure.
 
 ## Available Departments
 
-### Marketing (6 skills)
+### Marketing (11 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | Programmatic SEO | `/programmatic-seo` | SEO-optimized pages at scale |
@@ -28,20 +51,35 @@ Expert automation skills for Claude Code, organized by department.
 | Email Sequence | `/email-sequence` | Email sequences & drip campaigns |
 | Case Study | `/case-study` | Data-driven case studies |
 | Infographic | `/infographic` | AI-generated infographics |
+| LinkedIn Writer | `/linkedin-writer` | LinkedIn posts & carousels from content |
+| Newsletter Writer | `/newsletter-writer` | Newsletter editions from content |
+| Title Generation | `/title-generation` | Optimized YouTube video titles |
+| GIF Creator | `/gif-creator` | GIFs from video clips |
+| Excalidraw | `/excalidraw` | Presentations & diagrams |
 
-### Sales (4 skills)
+**Commands:** `/marketing` (skill overview), `/repurpose` (content repurposing workflow)
+
+### Sales (6 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | Lead Research Assistant | `/lead-research-assistant` | B2B lead generation & ICP scoring |
 | Email Sequence | `/email-sequence` | Email sequences & drip campaigns |
 | Case Study | `/case-study` | Data-driven case studies |
-| n8n Blueprint Generator | `/n8n-prd-generator` | Automation blueprints from calls |
+| Email Personalization | `/email-personalization` | Hyper-personalized email icebreakers |
+| Lead Intelligence | `/lead-intelligence` | Deep-research leads via web & LinkedIn |
+| Lead Qualification | `/lead-qualification` | Qualify & score leads against ICP |
+
+**Commands:** `/sales` (skill overview), `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline)
+
+**Agents:** `lead-qualifier`, `lead-researcher`, `icebreaker-writer`, `linkedin-scraper`
 
 ### Operations (2 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | n8n Automation | `/n8n` | n8n workflow automation |
 | n8n Blueprint Generator | `/n8n-prd-generator` | Automation blueprints from calls |
+
+**Commands:** `/operations` (skill overview)
 
 ### Creative (3 skills)
 | Skill | Command | Purpose |
@@ -50,20 +88,28 @@ Expert automation skills for Claude Code, organized by department.
 | Excalidraw | `/excalidraw` | Presentations & diagrams |
 | Infographic | `/infographic` | AI-generated infographics |
 
+**Commands:** `/creative` (skill overview)
+
 ### Product (2 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | Excalidraw | `/excalidraw` | Presentations & diagrams |
 | n8n Blueprint Generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
-### Repurposing (5 skills)
+**Commands:** `/product` (skill overview)
+
+### YouTube (7 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
-| LinkedIn | `/linkedin` | LinkedIn posts & carousels from content |
-| Newsletter | `/newsletter` | Newsletter editions from content |
+| YouTube Brief | `/youtube-brief` | Structured video briefs |
+| YouTube Ideation | `/youtube-ideation` | Video topic generation |
+| YouTube Packaging | `/youtube-packaging` | Titles & thumbnails for CTR |
+| YouTube Outline | `/youtube-outline` | Video structure & visual planning |
+| YouTube Scripting | `/youtube-scripting` | Scripts & bullet points for filming |
+| YouTube Excalidraw | `/youtube-excalidraw` | On-screen excalidraw visuals |
 | Title Generation | `/title-generation` | Optimized YouTube video titles |
-| GIF Creator | `/gif-creator` | GIFs from video clips |
-| Excalidraw | `/excalidraw` | Presentations & diagrams |
+
+**Commands:** `/youtube` (skill overview)
 
 ---
 
@@ -71,12 +117,7 @@ Expert automation skills for Claude Code, organized by department.
 
 Build, test, and deploy n8n workflows via REST API with incremental testing. Includes node references for 40+ common nodes, JavaScript/Python Code node patterns, expression syntax, and credential management. Also includes the **n8n Blueprint Generator** (`/n8n-prd-generator`) for converting discovery call transcripts into n8n automation blueprints.
 
-**Setup:** Create `.env` in your working directory:
-```bash
-N8N_API_URL=https://your-n8n.app.n8n.cloud
-N8N_API_KEY=your-api-key
-N8N_CREDENTIALS_TEMPLATE_URL=https://your-n8n.app.n8n.cloud/workflow/template-id
-```
+**Requires:** `N8N_API_URL`, `N8N_API_KEY`, and `N8N_CREDENTIALS_TEMPLATE_URL` in your `.env` file (see Setup section above).
 
 ### Video Editing
 
@@ -113,9 +154,13 @@ Three complementary SEO plugins:
 
 Generate professional infographics and visual content using Gemini AI image generation. Supports visual metaphors, brand guidelines, series creation, and iterative refinement.
 
-### Repurposing
+### Content Repurposing
 
-Repurpose YouTube content into multiple formats. **LinkedIn** (`/linkedin`) creates posts and carousels from existing content. **Newsletter** (`/newsletter`) transforms content into engaging newsletter editions. **Title Generation** (`/title-generation`) generates optimized YouTube video titles using proven CTR formulas. **GIF Creator** (`/gif-creator`) extracts and optimizes GIFs from video clips for social media sharing.
+Repurpose content into multiple formats via the `/repurpose` command in the Marketing plugin. **LinkedIn Writer** (`/linkedin-writer`) creates posts and carousels from existing content. **Newsletter Writer** (`/newsletter-writer`) transforms content into engaging newsletter editions. **Title Generation** (`/title-generation`) generates optimized YouTube video titles using proven CTR formulas. **GIF Creator** (`/gif-creator`) extracts and optimizes GIFs from video clips for social media sharing.
+
+### Outbound Pipeline
+
+The Sales plugin includes a full B2B outbound pipeline (`/outbound-pipeline`) that orchestrates four sub-agents in parallel: **lead-qualifier** scores leads against your ICP, **lead-researcher** gathers deep company intelligence, **linkedin-scraper** pulls LinkedIn profiles and posts via Apify, and **icebreaker-writer** generates hyper-personalized email openers from the collected intelligence.
 
 ## Project Structure
 
@@ -132,14 +177,22 @@ benai-skills/
 │   ├── case-study/
 │   ├── infographic/
 │   ├── lead-research-assistant/
+│   ├── email-personalization/
+│   ├── lead-intelligence/
+│   ├── lead-qualification/
 │   ├── n8n-prd-generator/
 │   ├── n8n/
 │   ├── video/
 │   ├── excalidraw/
-│   ├── linkedin/
-│   ├── newsletter/
+│   ├── linkedin-writer/
+│   ├── newsletter-writer/
 │   ├── title-generation/
 │   └── gif-creator/
+├── agents/                      # Sub-agent definitions for orchestrated pipelines
+│   ├── lead-qualifier.md
+│   ├── lead-researcher.md
+│   ├── icebreaker-writer.md
+│   └── linkedin-scraper.md
 ├── commands/                    # Static command .md files mapped in skills-map.json
 │   ├── marketing.md
 │   ├── sales.md
@@ -147,14 +200,15 @@ benai-skills/
 │   ├── creative.md
 │   ├── product.md
 │   ├── repurpose.md
-│   └── core-yt.md
+│   ├── outbound-pipeline.md
+│   └── youtube.md
 ├── plugins/                     # Generated by sync-skills.sh — do not edit directly
 │   ├── marketing/
 │   ├── sales/
 │   ├── operations/
 │   ├── creative/
 │   ├── product/
-│   └── repurposing/
+│   └── youtube/
 ├── sync-skills.sh               # Generates plugins/ from shared-skills/ + skills-map.json
 ├── build-zips.sh                # Builds distributable zips (runs sync first)
 ├── CLAUDE.md

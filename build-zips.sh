@@ -7,8 +7,8 @@
 #     ├── <department>.zip               One department per zip (marketplace format)
 #     └── benai-skills-marketplace.zip   All departments in one zip
 #
-#   dist/claude/                         Claude Console (platform.claude.com)
-#     └── <department>.zip               Flat skill zips (SKILL.md + references)
+#   dist/desktop/                        Claude Desktop (upload local plugin)
+#     └── <department>.zip               Single plugin zips (plugin.json at root)
 #
 # Usage: ./build-zips.sh
 
@@ -38,7 +38,7 @@ fi
 
 # Clean and create dist directories
 rm -rf "$DIST"
-mkdir -p "$DIST/extension" "$DIST/claude"
+mkdir -p "$DIST/extension" "$DIST/desktop"
 
 # Read all plugins from marketplace.json
 PLUGINS_JSON=$(python3 -c "
@@ -70,6 +70,9 @@ echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
   # Copy the department plugin directory
   cp -R "$ROOT/$source" "$staging/$source"
 
+  # Copy .env.example
+  cp "$ROOT/.env.example" "$staging/.env.example" 2>/dev/null || true
+
   # Generate a marketplace.json with this department
   python3 -c "
 import json
@@ -98,48 +101,35 @@ with open('$staging/.claude-plugin/marketplace.json', 'w') as f:
 done
 
 # Full marketplace zip
-(cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ -x "*/\.*" > /dev/null 2>&1)
+(cd "$ROOT" && zip -r "$DIST/extension/benai-skills-marketplace.zip" .claude-plugin/marketplace.json plugins/ .env.example -x "*/\.*" > /dev/null 2>&1)
 SIZE=$(du -h "$DIST/extension/benai-skills-marketplace.zip" | cut -f1 | xargs)
 echo "  Created extension/benai-skills-marketplace.zip ($SIZE)"
 
 # =============================================================
-# CLAUDE CONSOLE ZIPS (platform.claude.com)
-# Structure: flat — each skill as top-level folder (SKILL.md + references)
+# DESKTOP ZIPS (Claude Desktop — upload local plugin)
+# Structure: .claude-plugin/plugin.json + .mcp.json at zip root
 # =============================================================
 echo ""
-echo "--- Building Claude Console zips ---"
+echo "--- Building Desktop zips ---"
 
 echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
-  staging="$TMP/claude-$name"
+  staging="$TMP/desktop-$name"
   rm -rf "$staging"
   mkdir -p "$staging"
 
-  SKILLS_DIR="$ROOT/$source/skills"
+  # Copy the plugin contents directly to root (no nesting)
+  cp -R "$ROOT/$source"/* "$staging/" 2>/dev/null || true
+  cp -R "$ROOT/$source"/.[!.]* "$staging/" 2>/dev/null || true
 
-  if [ ! -d "$SKILLS_DIR" ]; then
-    echo "  Skipping $name (no skills/ directory)"
-    continue
-  fi
+  # Remove .gitkeep files and empty directories
+  find "$staging" -name ".gitkeep" -delete 2>/dev/null || true
+  find "$staging" -type d -empty -delete 2>/dev/null || true
 
-  # Copy each skill as a top-level folder
-  for skill_dir in "$SKILLS_DIR"/*/; do
-    skill_name=$(basename "$skill_dir")
-    if [ -f "$skill_dir/SKILL.md" ]; then
-      mkdir -p "$staging/$skill_name"
-      cp -R "$skill_dir"/* "$staging/$skill_name/" 2>/dev/null || true
-      cp -R "$skill_dir"/.[!.]* "$staging/$skill_name/" 2>/dev/null || true
-
-      # Remove .gitkeep files and empty directories
-      find "$staging/$skill_name" -name ".gitkeep" -delete 2>/dev/null || true
-      find "$staging/$skill_name" -type d -empty -delete 2>/dev/null || true
-    fi
-  done
-
-  # Create zip with skill folders as top-level entries
-  (cd "$staging" && zip -r "$DIST/claude/$name.zip" . > /dev/null 2>&1)
-  SIZE=$(du -h "$DIST/claude/$name.zip" | cut -f1 | xargs)
-  SKILL_COUNT=$(find "$staging" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | xargs)
-  echo "  Created claude/$name.zip ($SIZE) — $SKILL_COUNT skills"
+  # Create zip
+  (cd "$staging" && zip -r "$DIST/desktop/$name.zip" . > /dev/null 2>&1)
+  SIZE=$(du -h "$DIST/desktop/$name.zip" | cut -f1 | xargs)
+  SKILL_COUNT=$(find "$staging/skills" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | xargs)
+  echo "  Created desktop/$name.zip ($SIZE) — $SKILL_COUNT skills"
 
   rm -rf "$staging"
 done
@@ -147,4 +137,4 @@ done
 echo ""
 echo "Done. All zips in $DIST/"
 echo "  extension/   — for Claude Code, Cursor, VS Code"
-echo "  claude/      — for Claude Console (platform.claude.com)"
+echo "  desktop/     — for Claude Desktop (upload local plugin)"
