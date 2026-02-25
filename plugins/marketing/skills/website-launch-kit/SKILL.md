@@ -56,8 +56,8 @@ PHASE 4: Section Planning      -> Propose page structure
 PHASE 5: Copywriting           -> Write content using formulas
 PHASE 6: Copy Review           -> Show 3 options per element
 PHASE 7: Development           -> Build with Next.js + Tailwind
-PHASE 8: Preview               -> Run dev server
-PHASE 9: Iteration             -> Make edits based on feedback
+PHASE 8: Preview               -> Embedded preview in Claude app
+PHASE 9: Iteration             -> Make edits with element selector
 PHASE 10: Deploy               -> Ship to Vercel
 ```
 
@@ -65,16 +65,16 @@ PHASE 10: Deploy               -> Ship to Vercel
 
 ## PHASE 1: Business Intake
 
-**Goal:** Understand the business deeply. Ask ONE question at a time using AskUserQuestion.
+**Goal:** Determine the path (Custom vs. Clone) and understand the business. Ask ONE question at a time using AskUserQuestion.
 
-**Reference:** Read `references/01-intake.md` for the complete question bank with branching logic.
+**Reference:** Read `references/01-intake.md` for the complete question bank with branching logic. If the user chooses Clone Mode, refer to `references/06-clone-mode.md`.
 
 ### Starting Message
 
 ```
 I'll help you create a landing page that actually converts.
 
-This isn't a template -- we'll build something custom based on your business.
+We can build something custom based on your business, or we can precisely clone an existing design you love.
 
 Let's start with one question at a time.
 ```
@@ -82,6 +82,24 @@ Let's start with one question at a time.
 ### Question Flow
 
 Ask each question using `AskUserQuestion()`. Wait for the answer before asking the next question. Follow the branching logic in the reference file.
+
+#### Q0: Project Approach
+
+Ask this question first to determine the overall workflow:
+
+```text
+AskUserQuestion(
+  question: "Do you want to build a custom site inspired by a URL, or do you want to clone a URL exactly?",
+  options: [
+    { label: "Custom Site", description: "Build a unique site tailored to my business" },
+    { label: "Clone URL", description: "Perfectly replicate an existing website design" }
+  ]
+)
+```
+
+**CRITICAL ROUTING:**
+- If the user chooses "Clone URL", STOP the Phase 1 questionnaire here and immediately switch to the workflow defined in `references/06-clone-mode.md`.
+- If the user chooses "Custom Site", proceed to the Business Foundation questions below.
 
 #### Business Foundation
 
@@ -718,6 +736,27 @@ Install dependencies:
 npm install clsx tailwind-merge lucide-react framer-motion
 ```
 
+### Step 1.5: Configure Preview Mode
+
+Create `.claude/launch.json` in the project root to enable the embedded preview panel:
+
+```json
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "website-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}
+```
+
+This allows Claude to start the dev server and render the site in the embedded browser — no need for the user to open a separate browser window.
+
 ### Step 2: Set Up Design System
 
 Create CSS variables in `globals.css` using colors extracted from the inspiration site (Phase 3). Configure Tailwind with custom theme tokens. Set up fonts from the design brief.
@@ -779,55 +818,82 @@ Key checks:
 
 ---
 
-## PHASE 8: Preview
+## PHASE 8: Preview (Embedded Preview Mode)
 
-**Goal:** Run the dev server and get user feedback.
+**Goal:** Launch the site inside the Claude app's embedded preview panel and get user feedback.
 
 **Reference:** Read `references/05-development-guide.md` for preview setup and checklist.
 
-### Start Dev Server
+### Start Preview
 
-```bash
-npm run dev
-```
+Open the preview from the **Preview dropdown** in the session toolbar. Claude will automatically start the dev server using the `.claude/launch.json` config created in Phase 7.
+
+The site renders directly inside the Claude app — no need to switch to an external browser.
+
+### Auto-Verify
+
+Claude automatically verifies the build by:
+- Taking screenshots of each section
+- Inspecting the DOM for errors
+- Clicking interactive elements (buttons, links)
+- Filling out form inputs
+- Identifying and fixing issues it finds
+
+Review the auto-verify results before presenting to the user.
 
 ### Tell the User
 
 ```
-Your site is now running locally!
+Your site is live in the preview panel!
 
-Open this URL in your browser:
--> http://localhost:3000
+You can see it right here in the app — no need to open a browser.
 
-What you'll see:
-- The full landing page with all sections
-- Interactive elements (buttons, forms, animations)
-- Responsive design (resize your browser to see mobile view)
+Try these:
+- Toggle between DESKTOP and MOBILE views using the device toggle
+- Click the ELEMENT SELECTOR to tap any component and tell me what to change
+- Scroll through all sections to see the full page
 
-Take a look and let me know:
+I've already auto-verified the build — all sections render, forms work, and animations play.
+
+Let me know:
 1. What do you like?
 2. What should change?
-3. Any sections need work?
+3. Tap any element and tell me what's off!
 ```
 
-### Preview Checklist (verify before showing)
+### Preview Checklist (auto-verify handles most)
 
-- All sections render without errors
-- Typography and fonts display correctly
+- All sections render without errors *(auto-verified)*
+- Typography and fonts display correctly *(auto-verified)*
 - Colors match the design system
-- Animations play on scroll
-- Mobile responsive (test at 375px, 768px, 1024px, 1440px)
-- No console errors
-- CTAs have correct links
-- Form inputs are interactive
+- Animations play on scroll *(auto-verified)*
+- Mobile responsive — toggle device view to check *(auto-verified)*
+- No console errors *(auto-verified)*
+- CTAs have correct links *(auto-verified)*
+- Form inputs are interactive *(auto-verified)*
 
 ---
 
-## PHASE 9: Iteration
+## PHASE 9: Iteration (with Preview Mode)
 
-**Goal:** Make edits based on user feedback until they're satisfied.
+**Goal:** Make edits based on user feedback until they're satisfied. Use the embedded preview for instant verification.
 
 **Reference:** Read `references/10-iteration-guide.md` for handling different types of edit requests.
+
+### Element Selector Workflow
+
+The most powerful iteration tool: the user taps the **element selector** in the preview panel, clicks any component, and describes what to change.
+
+```
+Flow:
+1. User clicks element selector icon in preview toolbar
+2. User taps the component they want to change (e.g., a headline, button, card)
+3. User describes the change: "Make this bigger" / "Change color" / "Rewrite this text"
+4. Claude edits the code
+5. Hot-reload updates the preview automatically
+6. Claude auto-verifies the change (screenshot + DOM check)
+7. Repeat until satisfied
+```
 
 ### Handling Feedback
 
@@ -842,7 +908,7 @@ Got it. Making these changes:
 
 For #3: [Ask clarifying question]
 
-I'll refresh your preview when ready.
+The preview will update automatically after each change.
 ```
 
 ### Types of Edits
@@ -854,12 +920,17 @@ I'll refresh your preview when ready.
 | **Layout changes** | Reorder components, confirm structure |
 | **Section add/remove** | Confirm scope, build or remove |
 | **Animation changes** | Adjust Framer Motion config |
+| **Element-specific** | User taps element in preview, Claude edits targeted component |
 
 ### Small edits: Do immediately
-Text changes, color tweaks, spacing adjustments, single component fixes.
+Text changes, color tweaks, spacing adjustments, single component fixes. Hot-reload shows changes instantly in the preview panel.
 
 ### Larger edits: Confirm first
 New sections, major layout restructure, design system changes, feature additions.
+
+### Device Testing During Iteration
+
+After each round of changes, toggle the preview between **desktop** and **mobile** views to catch responsive issues early. Don't wait until the final review.
 
 ### Final Review
 
@@ -872,10 +943,10 @@ SECTIONS: [list all sections]
 DESIGN: [summary of look and feel]
 KEY CHANGES MADE: [list of iterations]
 
-Before we wrap up:
-1. View the full page one more time
-2. Check on mobile
-3. Test the form/CTA
+Before we deploy:
+1. I'll toggle through mobile and desktop one more time
+2. Auto-verify all interactive elements
+3. Confirm the form/CTA works end to end
 
 Is this ready to deploy, or any final tweaks?
 ```
@@ -914,6 +985,8 @@ Your landing page is live!
 
 URL: [production-url]
 
+I'll do a final visual check on the production URL in the preview panel to make sure everything deployed correctly.
+
 Next steps:
 1. Test the live site on desktop and mobile
 2. Submit to Google Search Console
@@ -922,6 +995,14 @@ Next steps:
 
 Want to set up a custom domain or analytics?
 ```
+
+### Post-Deploy Preview Check
+
+Use the preview panel to load the production URL and verify:
+- All sections render correctly in production
+- Images load (no broken paths)
+- Forms submit to the correct endpoint
+- SSL certificate is active (https)
 
 ---
 
@@ -950,4 +1031,5 @@ All reference files are located in `shared-skills/website-launch-kit/references/
 | `02-research-strategy.md` | Phases 2-4 | Research guide, design extraction, section blueprints |
 | `03-copy-content.md` | Phases 5-6 | Copywriting formulas, tone guide, review format |
 | `04-design-assets.md` | Phase 7 | Design system, visual assets, UI guidelines |
-| `05-development-guide.md` | Phases 7-10 | Code patterns, local preview, iteration, deployment |
+| `05-development-guide.md` | Phases 7-10 | Code patterns, preview mode setup, iteration with element selector, deployment |
+| `06-clone-mode.md` | Clone Path | Alternative workflow for perfectly cloning an existing URL |
