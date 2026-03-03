@@ -23,14 +23,19 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Commands:** `/marketing` (skill overview), `/repurpose` (content repurposing workflow)
 
-### Sales (3 skills)
+### Sales (8 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | email-personalization | `/email-personalization` | Hyper-personalized email icebreakers |
 | lead-intelligence | `/lead-intelligence` | Deep-research leads via web & LinkedIn |
 | lead-qualification | `/lead-qualification` | Qualify & score leads against ICP |
+| crm-prospect-mining | `/crm-prospect-mining` | Mine prospects from CRM lost/stalled stages |
+| linkedin-post-engagers | `/linkedin-post-engagers` | Scrape LinkedIn post commenters/reactors |
+| pipeline-review | `/pipeline-review` | Review active deals with action items |
+| sales-rep-analyzer | `/sales-rep-analyzer` | Grade sales call performance |
+| win-loss-analysis | `/win-loss-analysis` | Analyze won vs lost deal patterns |
 
-**Commands:** `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline)
+**Commands:** `/outbound-pipeline` (B2B lead qualification + research + personalization pipeline), `/post-engagers-outbound-pipeline` (LinkedIn engagers to outbound pipeline)
 
 **Agents:** `lead-qualifier`, `lead-researcher`, `icebreaker-writer`, `linkedin-scraper`
 
