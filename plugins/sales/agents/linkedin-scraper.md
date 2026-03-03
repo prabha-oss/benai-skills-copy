@@ -208,6 +208,3 @@ Report:
 - Total posts fetched
 - Any errors or timeouts encountered
 
-## Fallback: Make.com Path
-
-Only use Make.com scenarios if the native Apify connector is not working (e.g., API key issues, connector not installed). The native path is always preferred. If you must fall back, note this clearly in your output so the orchestrator knows.

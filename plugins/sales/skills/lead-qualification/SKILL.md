@@ -6,7 +6,6 @@ description: Qualify B2B leads against a user-defined Ideal Customer Profile (IC
   when the user says "qualify leads", "filter my leads", "which leads match my ICP", "score these leads",
   "segment this list", "clean up my lead list", or "find the best leads". This skill handles lead lists of
   any size by automatically batching work across parallel sub-agents.
-allowed-tools: WebSearch
 ---
 
 # Lead Qualification

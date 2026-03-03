@@ -63,7 +63,8 @@
     },
     "sales": {
       "commands": [
-        "outbound-pipeline"
+        "outbound-pipeline",
+        "post-engagers-outbound-pipeline"
       ],
       "agents": [
         "lead-qualifier",
@@ -83,6 +84,26 @@
         "lead-qualification": {
           "displayName": "Lead Qualification",
           "summary": "Qualify and score leads against an Ideal Customer Profile"
+        },
+        "crm-prospect-mining": {
+          "displayName": "CRM Prospect Mining",
+          "summary": "Mine prospects from CRM lost/stalled deal stages for re-engagement"
+        },
+        "linkedin-post-engagers": {
+          "displayName": "LinkedIn Post Engagers",
+          "summary": "Scrape LinkedIn post commenters and reactors for targeted outreach"
+        },
+        "pipeline-review": {
+          "displayName": "Pipeline Review",
+          "summary": "Review active deals with risk flags and recommended action items"
+        },
+        "sales-rep-analyzer": {
+          "displayName": "Sales Rep Analyzer",
+          "summary": "Grade and analyze sales call performance with scoring frameworks"
+        },
+        "win-loss-analysis": {
+          "displayName": "Win/Loss Analysis",
+          "summary": "Analyze won vs lost deal patterns across CRM data"
         }
       }
     },

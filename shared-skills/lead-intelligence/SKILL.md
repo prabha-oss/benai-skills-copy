@@ -6,8 +6,7 @@ description: Deep-research lead intelligence gathering for B2B qualified leads. 
   "get intel on my leads", "lead intelligence", "lead enrichment", "enrich my leads", "deep research leads",
   "find out about these companies", "LinkedIn scraping", "scrape LinkedIn profiles", or has a qualified lead
   list and wants to gather intelligence before outreach. Also trigger when the user mentions Apify actors,
-  Make.com scenarios for lead research, or wants to combine web + LinkedIn research on leads.
-allowed-tools: WebSearch
+  or wants to combine web + LinkedIn research on leads.
 ---
 
 # Lead Intelligence
@@ -21,16 +20,11 @@ Collect from the user:
 1. **A qualified lead list** with at minimum: name, company, website, LinkedIn URL
 2. **Context on what they're selling** so research focuses on relevant signals
 
-## LinkedIn Scraping Path: Native Apify First
+## LinkedIn Scraping Path: Apify
 
-**The default and preferred path is using the native ~~web scraper (Apify) connector directly.** This is simpler, faster, and avoids unnecessary complexity.
+**Use the Apify MCP connector directly** (`call-actor`, `get-dataset-items`, etc.). This is the only supported path.
 
-**Path priority:**
-1. **Native ~~web scraper connector (DEFAULT)**: Use Apify MCP tools (`call-actor`, `get-dataset-items`, etc.) directly. This is the primary path. Always try this first.
-2. **~~automation platform + ~~web scraper (FALLBACK ONLY)**: Only use Make.com if the native Apify connector is not working (e.g., API key issues, connector not installed). See `references/make-apify-technical.md` for setup.
-3. **No LinkedIn**: Only Layer 1 (web research). Use when LinkedIn URLs aren't available.
-
-Do NOT ask the user which path to use. Default to native Apify. Only fall back to Make.com if Apify fails.
+If LinkedIn URLs aren't available, skip Layer 2 and run only Layer 1 (web research).
 
 ## Critical Rule: Parallel Execution of Both Layers
 
@@ -43,7 +37,7 @@ When both layers are being used, spawn everything at the same time in a single m
 
 **In practice: N+1 sub-agents spawned in a single message:**
 - N `lead-researcher` sub-agents for Layer 1 (N = ceil(total_leads / 5))
-- 1 `linkedin-scraper` sub-agent for Layer 2 (handles BOTH ~~web scraper actors: profiles AND posts)
+- 1 `linkedin-scraper` sub-agent for Layer 2 (handles BOTH Apify actors: profiles AND posts)
 
 All spawn simultaneously. Do NOT wait for one layer to finish before starting the other.
 
@@ -137,12 +131,6 @@ Actor finished with runId: <RUN_ID>, datasetId <DATASET_ID>
 **Extract `runId` and `datasetId` from the partial response. Do NOT use `get-actor-run-list` to hunt for the run.** Go straight to `get-dataset-items` with the datasetId once you confirm the run succeeded via `get-actor-run`.
 
 **Fallback:** If the partial response is empty, use `get-dataset-list` with `desc: true` to find the most recently created dataset by timestamp.
-
-### Make.com Path (Fallback Only)
-
-Only use if the native Apify connector fails. See `references/make-apify-technical.md` for full setup.
-
-**Before creating ~~automation platform scenarios or tools, always check existing ones first using `scenarios_list`. Reuse existing infrastructure; only create new when nothing suitable exists.**
 
 ## Oversized Dataset Recovery — Read Saved Files Instead of Re-Fetching
 
