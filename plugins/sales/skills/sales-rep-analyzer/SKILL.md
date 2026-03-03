@@ -1,7 +1,6 @@
 ---
 name: sales-rep-analyzer
-description: >
-  Sales rep performance analyzer and grader. Pulls meeting transcripts from Fireflies, Fathom, or any
+description: Sales rep performance analyzer and grader. Pulls meeting transcripts from Fireflies, Fathom, or any
   transcription tool, cross-references with CRM data (Attio, HubSpot, Salesforce, Pipedrive, etc.), and
   produces a comprehensive .docx performance report with per-prospect journey mapping, evidence-backed grades,
   and coaching recommendations. MANDATORY TRIGGERS: "sales rep analysis", "grade my sales calls",
