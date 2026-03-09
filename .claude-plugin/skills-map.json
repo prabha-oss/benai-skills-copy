@@ -375,6 +375,52 @@
           "summary": "Updated infographic generation skill with prompt engineering patterns"
         }
       }
+    },
+    "personal-os": {
+      "commands": ["personal-os"],
+      "hooks": ["load-context", "memory-reminder", "verify-memory-stop"],
+      "skills": {
+        "personal-os": {
+          "displayName": "Personal OS Hub",
+          "summary": "Hub for all Personal Assistant OS commands — routes to setup, resume, compress, and more"
+        },
+        "personal-os-setup": {
+          "displayName": "Personal OS Setup",
+          "summary": "Bootstrap vault structure and run personalized onboarding interview"
+        },
+        "personal-os-resume": {
+          "displayName": "Personal OS Resume",
+          "summary": "Load memory, session logs, and tasks to start a new session"
+        },
+        "personal-os-compress": {
+          "displayName": "Personal OS Compress",
+          "summary": "Save session context, create session log, update memory before ending"
+        },
+        "personal-os-preserve": {
+          "displayName": "Personal OS Preserve",
+          "summary": "Save permanent learnings and preferences to memory files"
+        },
+        "personal-os-daily-review": {
+          "displayName": "Personal OS Daily Review",
+          "summary": "Morning check-in, evening reflection, or weekly review routines"
+        },
+        "personal-os-meetings": {
+          "displayName": "Personal OS Meetings",
+          "summary": "Process meeting transcripts, extract action items, create tasks"
+        },
+        "personal-os-tasknotes": {
+          "displayName": "Personal OS TaskNotes",
+          "summary": "Full task management via TaskNotes Obsidian plugin HTTP API"
+        },
+        "personal-os-fireflies": {
+          "displayName": "Personal OS Fireflies",
+          "summary": "Sync meeting transcripts from Fireflies.ai (manual export or MCP)"
+        },
+        "personal-os-output-styles": {
+          "displayName": "Personal OS Output Styles",
+          "summary": "List, switch, and create custom output styles for different content types"
+        }
+      }
     }
   }
 }

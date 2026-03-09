@@ -35,8 +35,9 @@ COMMANDS="$ROOT/commands"
 AGENTS="$ROOT/agents"
 CONNECTORS="$ROOT/connectors"
 SCRIPTS="$ROOT/scripts"
+HOOKS="$ROOT/hooks"
 
-export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS CONNECTORS SCRIPTS
+export ROOT SHARED SKILLS_MAP MARKETPLACE COMMANDS AGENTS CONNECTORS SCRIPTS HOOKS
 
 python3 << 'PYEOF'
 import json, os, shutil
@@ -49,6 +50,7 @@ commands_src = os.environ.get("COMMANDS", "")
 agents_src = os.environ.get("AGENTS", "")
 connectors_src = os.environ.get("CONNECTORS", "")
 scripts_src = os.environ.get("SCRIPTS", "")
+hooks_src = os.environ.get("HOOKS", "")
 
 with open(skills_map_path) as f:
     skills_map = json.load(f)
@@ -155,6 +157,21 @@ for dept_name, dept_config in departments.items():
             else:
                 print(f"  Warning: agents/{agent_id}.md not found, skipping")
         print(f"  {dept_name}: {agent_count} agents synced")
+
+    # --- hooks/ ---
+    hook_list = dept_config.get("hooks", [])
+    if hook_list:
+        hooks_dir = os.path.join(dept_dir, "hooks")
+        os.makedirs(hooks_dir, exist_ok=True)
+        hook_count = 0
+        for hook_id in hook_list:
+            src = os.path.join(hooks_src, f"{hook_id}.sh")
+            if os.path.isfile(src):
+                shutil.copy2(src, os.path.join(hooks_dir, f"{hook_id}.sh"))
+                hook_count += 1
+            else:
+                print(f"  Warning: hooks/{hook_id}.sh not found, skipping")
+        print(f"  {dept_name}: {hook_count} hooks synced")
 
 PYEOF
 

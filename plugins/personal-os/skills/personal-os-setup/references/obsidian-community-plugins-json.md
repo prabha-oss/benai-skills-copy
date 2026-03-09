@@ -1,0 +1,5 @@
+[
+  "dataview",
+  "tasknotes",
+  "calendar"
+]
