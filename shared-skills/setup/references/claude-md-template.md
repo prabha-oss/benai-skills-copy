@@ -22,9 +22,28 @@ Your memory and context live in Obsidian folders — the same notes the user see
 - **Identity & Preferences** (`Context/me.md`) — Who the user is, how they work, their tools and style.
 - **Strategy & Goals** (`Context/strategy.md`) — Vision, yearly goals, monthly focus.
 - **Business Context** (`Context/business.md`) — Company, products, audience (if applicable).
+- **Team** (`Context/team.md`) — Team members, roles, working agreements (if applicable).
+- **Brand & Voice** (`Context/brand.md`) — Tone, style guidelines, messaging (if applicable).
 - **Decisions** (`Intelligence/decisions/`) — Decision records with reasoning.
+- **Competitive Intel** (`Intelligence/competitors/`) — Competitor profiles and analysis.
+- **Market Intel** (`Intelligence/market/`) — Market research, trends, customer insights.
 - **Projects** (`Projects/`) — Deep context per project. Each project has a `README.md`. Only load when relevant.
 - **Session History** (`Daily/`) — Daily notes track session progress. Used by `/assistant` to reconstruct context.
+
+### Knowledge Routing
+
+There is no catch-all file. Every piece of information has a home. When meaningful info comes up, route it automatically:
+
+| Type | Route to |
+|------|----------|
+| User preferences, style, habits | `Context/me.md` |
+| Strategy and goals | `Context/strategy.md` |
+| Business insight | `Context/business.md` |
+| Project info | Route to the right file in `Projects/{name}/` (see Project Intelligence below) |
+| Competitive insight | `Intelligence/competitors/{name}.md` |
+| Market insight | `Intelligence/market/{topic}.md` |
+| Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
+| Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 ### Output Styles (How You Communicate)
 
@@ -50,6 +69,28 @@ Skills are installed as benai-skills plugins. Each skill defines when and how to
 ### Custom Skills
 
 User-created skills live in `Skills/`. Each skill has a `skill.md` with trigger words and steps. The assistant auto-discovers them by globbing `Skills/*/skill.md` and matching `trigger` frontmatter against user input.
+
+### Project Intelligence
+
+Projects are not flat README-only folders. They are living, structured directories that grow as information accumulates.
+
+**Routing project info** — when the user mentions something about a project, analyze it and route to the right place:
+
+| Content type | Route to |
+|---|---|
+| Status update, overview, deadline | `Projects/{name}/README.md` |
+| Research finding, competitor analysis | `Projects/{name}/research/{topic}.md` |
+| Spec, requirement, brief | `Projects/{name}/specs/{name}.md` |
+| Draft, script, written content | `Projects/{name}/drafts/{name}.md` |
+| Idea, brainstorm | `Projects/{name}/ideas/{name}.md` |
+| Working notes, scratchpad | `Projects/{name}/notes/{name}.md` |
+| Feedback, review comments | `Projects/{name}/feedback/{name}.md` |
+
+**Subdirs on the fly** — don't pre-create empty directories. When content arrives that needs a subdir, create it and write the file. Update README.md to reference the new content.
+
+**README as index** — the README.md is the entry point with overview, status, next steps, and links to subdir content. Don't duplicate subdir content in it.
+
+**Lifecycle**: New project = just a README.md → subdirs appear as content types emerge → completed projects move to `Intelligence/archive/{name}/`.
 
 ### Commands
 
@@ -154,6 +195,10 @@ Create `.base` files to query and filter vault notes by properties. Bases replac
 
 Tag once. Query everywhere. Never manually link.
 
+### Auto-Save Rule
+
+**Never ask the user for permission to save.** When meaningful information comes up — preferences, project updates, corrections, action items, decisions — save it to the right vault file immediately (see Knowledge Routing above). After saving, briefly report what was saved and where. The user should never have to say "yes, save that."
+
 ### Teaching Loop (How You Improve)
 
 When the user corrects you:
@@ -185,5 +230,21 @@ Every correction becomes a rule. Every repeated explanation becomes documentatio
 17. Use `==highlights==` sparingly for critical info. Use `%%comments%%` for internal processing notes hidden in preview.
 18. When extracting web content, prefer `defuddle parse <url> --md` over raw web fetch — more token-efficient.
 19. Check `Skills/*/skill.md` when the user's request might match a custom skill.
+20. Never ask permission to save — auto-save meaningful info to the right vault file and report what was saved (see Auto-Save Rule).
+21. Route project info to the right subdir — don't cram everything into README.md (see Project Intelligence).
+22. Route all knowledge to the right file — there is no catch-all (see Knowledge Routing).
+
+### Anti-Patterns
+
+Do NOT:
+- Ask "should I save this?" or "would you like me to remember that?" — just save it
+- Write project names, people, or note references as plain text — ALWAYS use `[[wikilinks]]`
+- Use `[markdown](links)` for internal vault notes — always use `[[wikilinks]]`
+- Put a `# Title` heading that duplicates the filename — Obsidian shows the filename as title
+- Create orphan notes — always link new notes from at least one existing note
+- Read entire files when scanning many — use `grep` for frontmatter or `obsidian search`
+- Update vault files on casual chat — only when there's something worth recording
+- Create tasks as plain text in notes — use the TaskNotes API or Obsidian CLI so they're queryable
+- Cram all project info into README.md — route to subdirs based on content type
 
 <!-- USER CORRECTIONS: Add new rules below as the user teaches you -->
