@@ -1,6 +1,6 @@
 ---
-name: personal-os
-description: Personal AI assistant operating system — orchestrates vault management, memory, task tracking, meeting processing, daily routines, and output styles. Use when user says "personal os", "assistant", "vault", or any /personal-os-* command.
+name: personal-os-hub
+description: Personal OS hub — orchestrates vault management, memory, task tracking, meeting processing, daily routines, and output styles. Routes to the right sub-skill based on user intent.
 ---
 
 # Personal OS — Hub / Orchestrator
