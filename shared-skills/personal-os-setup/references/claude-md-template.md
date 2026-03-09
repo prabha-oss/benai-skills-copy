@@ -41,19 +41,15 @@ When the user says "write this as a YouTube script" or "draft an email", load th
 
 Skills are installed as benai-skills plugins. Each skill defines when and how to use it:
 
-- **tasknotes** — HTTP API-based task management using the TaskNotes Obsidian plugin (primary task system)
-- **meetings** — Process meeting transcripts, extract action items, create summaries
-- **fireflies** — Sync transcripts from Fireflies.ai (requires MCP setup)
-- **daily-review** — Morning check-in, evening reflection, weekly review
-- **vault-setup** — Interactive onboarding: builds the vault structure based on user's needs
+- **setup** — Interactive onboarding: builds the vault structure based on user's needs
+- **assistant** — Sessions, daily routines, tasks, memory, output styles — the main skill you use daily
+- **meetings** — Process meeting transcripts, sync Fireflies, extract action items
 
 ### Commands
 
 - `/personal-os-setup` — Run the interactive onboarding to personalize this vault
-- `/personal-os-resume` — Start a session by loading recent context and pending tasks
-- `/personal-os-compress` — Save current session before ending (creates searchable session log)
-- `/personal-os-preserve` — Save permanent learnings to memory (with auto-archive)
-- `/personal-os-daily-review` — Start your morning, evening, or weekly routine
+- `/personal-os-assistant` — Resume/compress sessions, daily reviews, tasks, memory, output styles
+- `/personal-os-meetings` — Process transcripts, sync Fireflies, extract action items
 
 ### Vault Structure
 

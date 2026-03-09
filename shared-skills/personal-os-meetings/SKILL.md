@@ -1,16 +1,15 @@
 ---
 name: personal-os-meetings
-description: Process meeting transcripts — extract action items, create summaries, file in correct meeting type folder. Use when user pastes a transcript, says "summarize meeting", "action items", "meeting notes", or runs /personal-os-meetings.
+description: Process meeting transcripts and sync from Fireflies.ai — extract decisions, action items, create summaries, and file in the right folder. Use when user pastes a transcript, mentions meetings, or wants to sync Fireflies.
 ---
 
 # Meeting Intelligence
 
 USE WHEN the user:
-- Pastes a meeting transcript
-- Asks to summarize a meeting
-- Wants action items from a meeting
+- Pastes a meeting transcript or drops a transcript file
+- Asks to summarize a meeting or extract action items
 - Asks about past meetings or meeting patterns
-- Drops a transcript file into `Meetings/`
+- Mentions Fireflies, asks to sync or pull transcripts
 - Runs `/personal-os-meetings`
 
 ## Pre-flight Check
@@ -20,40 +19,35 @@ USE WHEN the user:
    - Tell the user: "This vault hasn't been set up yet. Run `/personal-os-setup` to bootstrap your personal assistant OS."
    - Stop here
 
-## Meeting Note Template
-
-The meeting note template is in `references/template-meeting-note.md`. Read it before creating meeting notes.
-
-## How Meeting Processing Works
+## Processing a Transcript
 
 ### Step 1: Identify Meeting Type
 
-Ask the user or infer from context:
+Ask or infer from context:
 
-| Meeting Type | Save to |
-|---|---|
-| Team standup | `Meetings/team-standups/` |
-| Client call | `Meetings/client-calls/` |
-| One-on-one | `Meetings/one-on-ones/` |
-| General | `Meetings/general/` |
-| Custom type | `Meetings/[custom-folder]/` |
+| Meeting Type | Save to | Focus |
+|---|---|---|
+| Team standup | `Meetings/team-standups/` | What each person did, doing today, blockers. Keep brief. |
+| Client call | `Meetings/client-calls/` | Client requests, decisions, next steps. Check folder for history. |
+| One-on-one | `Meetings/one-on-ones/` | Development, feedback, goals. More personal tone. |
+| General | `Meetings/general/` | Full meeting summary structure. |
+| Custom type | `Meetings/[custom-folder]/` | As appropriate. |
 
-### Step 2: Load the Meeting Summary Output Style
+### Step 2: Load Output Style
 
-Read `.claude/output-styles/meeting-summary.md` and follow its format exactly. If the file doesn't exist, use the built-in format below.
+Read `.claude/output-styles/meeting-summary.md` and follow its format exactly. If the file doesn't exist, use the template at `references/template-meeting-note.md`. Read the template before creating any meeting note.
 
-### Step 3: Process the Transcript
+### Step 3: Extract from Transcript
 
-From the transcript, extract:
 1. **Key decisions** -- What was agreed upon?
 2. **Action items** -- Who is doing what, by when?
-3. **Discussion summary** -- Brief recap of each topic covered
+3. **Discussion summary** -- Brief recap of each topic
 4. **Open questions** -- What was left unresolved?
 5. **Follow-up** -- Next meeting, items to prepare
 
 ### Step 4: Create the Meeting Note
 
-Save as `Meetings/[type]/YYYY-MM-DD Meeting Title.md` using this frontmatter:
+Save as `Meetings/[type]/YYYY-MM-DD Meeting Title.md` with frontmatter:
 
 ```yaml
 ---
@@ -68,7 +62,7 @@ status: processed
 ---
 ```
 
-Meeting note body structure:
+Body structure:
 
 ```markdown
 # Meeting: [Title] -- YYYY-MM-DD
@@ -81,22 +75,16 @@ Meeting note body structure:
 
 ## Key Decisions
 - [Decision 1]
-- [Decision 2]
 
 ## Action Items
-- [ ] [Person] — [Task] (by [date])
 - [ ] [Person] — [Task] (by [date])
 
 ## Discussion Notes
 ### [Topic 1]
 [Summary of discussion]
 
-### [Topic 2]
-[Summary of discussion]
-
 ## Open Questions
 - [Unresolved item 1]
-- [Unresolved item 2]
 
 ## Follow-up
 - Next meeting: [date/time if mentioned]
@@ -113,37 +101,60 @@ For each action item extracted:
      -H "Content-Type: application/json" \
      -d '{"title": "Action item", "status": "open", "due": "YYYY-MM-DD", "tags": ["meeting"]}'
    ```
-3. Include the due date and tag it with the meeting type
-
-If the TaskNotes API is unavailable, list the action items and suggest creating them later.
+3. If the API is unavailable, list action items and suggest creating them later.
 
 ### Step 6: Link to Projects
 
-If the meeting relates to a known project (check `Projects/*/README.md` files):
-- Add `project: [Project Name]` to the frontmatter
+If the meeting relates to a known project (check `Projects/*/README.md`):
+- Add `project: [Project Name]` to frontmatter
 - Add a [[wiki link]] to the project in the meeting note
-- Update the project file with a reference to this meeting
 
-## Meeting Type Focus Areas
+## Fireflies Sync
 
-### Team Standup
-Focus on: what each person did yesterday, what they're doing today, blockers.
-Keep summary very brief -- standups are short.
+### Approach 1: MCP Server (Business Plan)
 
-### Client Call
-Focus on: client requests, decisions made, next steps, relationship notes.
-Check if client exists in `Meetings/client-calls/` for historical context.
+Check `.claude/settings.json` for a `fireflies` entry under `mcpServers`. If configured:
 
-### One-on-One
-Focus on: personal development, feedback, goals, action items.
-More personal tone -- capture the spirit, not just the facts.
+1. **List recent transcripts** using `fireflies_list_transcripts`
+2. **For each unsynced transcript:**
+   - Check if a file already exists in `Meetings/` with the same date and title
+   - Fetch full transcript via `fireflies_get_transcript`
+   - Process through Steps 1-6 above
+3. **Report:** how many synced, new action items found, offer to create tasks
 
-### General
-Default format. Full meeting summary structure.
+MCP setup (for reference):
+```json
+{
+  "mcpServers": {
+    "fireflies": {
+      "command": "npx",
+      "args": ["-y", "fireflies-mcp-server"],
+      "env": { "FIREFLIES_API_KEY": "your-api-key-here" }
+    }
+  }
+}
+```
+
+API key from: https://app.fireflies.ai/integrations/custom/fireflies
+
+Also available: `fireflies_search` for keyword search across transcripts.
+
+### Approach 2: Manual Export (Free Plan)
+
+If no API access:
+1. Have user export from app.fireflies.ai (Download > JSON or DOCX)
+2. Paste content or drop file into `Meetings/`
+3. Process through Steps 1-6 above
+
+Free plan limits: no API, no webhooks, 800 min storage, manual export only (DOCX, PDF, SRT, VTT, JSON -- no native Markdown).
+
+### Alternative: Claude Connector
+
+Users with Claude Pro/Max and Fireflies Business can connect via Claude Settings > Connectors, bypassing MCP setup.
 
 ## Querying Past Meetings
 
-When the user asks about past meetings, search the vault:
+Search the vault by person, topic, or metadata:
 
 ```bash
 # Find meetings with a specific person
@@ -156,16 +167,15 @@ grep -rl "topic keyword" Meetings/
 ls -lt Meetings/*/
 ```
 
-You can also query by frontmatter fields:
-- `participants` -- who was in the meeting
-- `project` -- which project it relates to
-- `date` -- when it happened
-- `subtype` -- what kind of meeting
+Query by frontmatter: `participants`, `project`, `date`, `subtype`, `source`.
 
 ## Guidelines
 
-- Always ask for meeting type if it's not obvious from the transcript
+- Always ask for meeting type if not obvious from transcript
 - Extract ALL action items -- don't miss any
 - Use the user's name for action items assigned to them
-- For recurring meetings, check for previous notes to track patterns
-- Keep summaries concise but complete -- someone who wasn't in the meeting should understand what happened
+- For recurring meetings, check previous notes to track patterns
+- Keep summaries concise but complete -- someone absent should understand what happened
+- Always check MCP availability before falling back to manual export
+- Tag all Fireflies-sourced notes with `source: fireflies` in frontmatter
+- When syncing multiple meetings, process one at a time and confirm with user

@@ -9,17 +9,11 @@ You have the following Personal Assistant OS skills available. These skills turn
 | Skill | Command | What it does |
 |-------|---------|-------------|
 | Setup | `/personal-os-setup` | Bootstrap vault structure + personalized onboarding interview |
-| Resume | `/personal-os-resume` | Load memory, session logs, and tasks — start a session |
-| Compress | `/personal-os-compress` | Save session context before ending |
-| Preserve | `/personal-os-preserve` | Save permanent learnings to memory |
-| Daily Review | `/personal-os-daily-review` | Morning check-in, evening reflection, or weekly review |
-| Meetings | `/personal-os-meetings` | Process meeting transcripts, extract action items |
-| TaskNotes | `/personal-os-tasknotes` | Manage tasks via TaskNotes HTTP API |
-| Fireflies | `/personal-os-fireflies` | Sync transcripts from Fireflies.ai |
-| Output Styles | `/personal-os-output-styles` | List, switch, or create output styles |
+| Assistant | `/personal-os-assistant` | Sessions, daily routines, tasks, memory, and output styles |
+| Meetings | `/personal-os-meetings` | Process transcripts, sync Fireflies, extract action items |
 
 **Getting started:** If the vault hasn't been set up yet (no CLAUDE.md in the root), start with `/personal-os-setup` to bootstrap the folder structure and run the onboarding interview.
 
-**Typical workflow:** Setup → Resume (start session) → work with tasks, meetings, reviews → Compress (end session)
+**Typical workflow:** Setup → Assistant (resume session) → work with tasks, meetings, reviews → Assistant (compress session)
 
 Ask the user which skill they want to use, then invoke that skill's slash command.
