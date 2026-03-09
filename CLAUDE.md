@@ -139,7 +139,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 ```
 claude.md               — Brain file (operating instructions)
 Context/                — Who you are: me.md, business.md, strategy.md, team.md, brand.md
-Projects/               — What you're working on: {project}/README.md
+Projects/               — What you're working on: intelligently structured per project
 Intelligence/           — What you know: meetings/, competitors/, decisions/, learnings.md
 Daily/                  — What happened: YYYY-MM-DD.md journals
 Skills/                 — Custom user-created skills: {skill}/skill.md
@@ -166,6 +166,16 @@ The assistant never asks permission to save. When meaningful information comes u
 | `Context/business.md` | User mentions company or products |
 | `Context/team.md` | User mentions team members |
 | `Context/brand.md` | User mentions voice, tone, or brand |
+
+#### Project Intelligence
+
+Projects are not flat README-only folders. The assistant intelligently structures each project based on its content:
+
+- **Starts simple** — new project = just a `README.md`
+- **Grows organically** — subdirs (`research/`, `specs/`, `drafts/`, `notes/`, `ideas/`) are created on the fly when content arrives
+- **Routes info to the right file** — research goes to `research/{topic}.md`, specs to `specs/`, drafts to `drafts/` — not crammed into README
+- **README stays the index** — overview, status, next steps, links to subdir contents
+- **Completed projects** — moved to `Intelligence/archive/`
 
 #### Custom Skills (`Skills/`)
 

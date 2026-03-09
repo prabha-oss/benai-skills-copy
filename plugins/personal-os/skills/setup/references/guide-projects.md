@@ -5,21 +5,46 @@ folder: Projects
 
 # Projects
 
-Active project folders. Each project gets its own subfolder.
+Active project folders. Each project gets its own subfolder with a structure that matches the project's needs.
 
-## What Goes Here
-- A folder per active project
-- Each folder has a `README.md` with project overview
-- Supporting files: research, notes, drafts, assets
+## How It Works
 
-## Folder Structure Per Project
+Projects are **intelligently structured** — not every project gets the same flat README. The assistant analyzes what a project involves and creates the right subdirectories and files automatically.
+
+## Example Structures
+
+A software project:
 ```
-Projects/
-└── project-name/
-    ├── README.md          # Project overview, status, key details
-    ├── research/          # Research and reference material
-    ├── notes/             # Working notes
-    └── drafts/            # Draft content (if applicable)
+Projects/my-app/
+├── README.md              # Overview, status, architecture decisions
+├── specs/                 # Feature specs, requirements
+├── research/              # Competitor analysis, tech evaluations
+└── notes/                 # Working notes, meeting takeaways
+```
+
+A content project:
+```
+Projects/youtube-channel/
+├── README.md              # Channel strategy, audience, metrics
+├── ideas/                 # Video ideas and briefs
+├── scripts/               # Draft scripts
+└── assets/                # Thumbnails, descriptions, metadata
+```
+
+A client project:
+```
+Projects/acme-redesign/
+├── README.md              # Scope, timeline, contacts, deliverables
+├── briefs/                # Client briefs and requirements
+├── deliverables/          # Work product
+├── feedback/              # Client feedback rounds
+└── meetings/              # Project-specific meeting notes
+```
+
+A simple project:
+```
+Projects/home-renovation/
+├── README.md              # What, when, budget, contractor info
 ```
 
 ## README.md Template
@@ -31,8 +56,6 @@ status: active | planning | on-hold | completed
 priority: high | medium | low
 deadline: YYYY-MM-DD
 ---
-
-# Project Name
 
 ## Overview
 What is this project and why does it matter?
@@ -46,6 +69,13 @@ What's happening now?
 ## Next Steps
 What needs to happen next?
 ```
+
+## How the Assistant Manages Projects
+
+- **Creates subdirs on the fly** — when research comes in, a `research/` folder appears. When specs are written, `specs/` appears. No empty folders created upfront.
+- **Routes info to the right file** — a research finding goes to `research/topic.md`, not crammed into the README. A decision goes to a decision note or the README's status section, depending on scope.
+- **Keeps README as the index** — the README always has the current status, overview, and links to subdirectory contents. It's the entry point, not the dumping ground.
+- **Grows with the project** — a new project starts as just a README. As information accumulates, the structure evolves.
 
 ## Tips
 - Move completed projects to `Intelligence/archive/`
