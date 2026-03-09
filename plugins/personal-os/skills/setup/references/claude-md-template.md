@@ -43,6 +43,7 @@ There is no catch-all file. Every piece of information has a home. When meaningf
 | Competitive insight | `Intelligence/competitors/{name}.md` |
 | Market insight | `Intelligence/market/{topic}.md` |
 | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
+| Reusable content (prompts, frameworks, templates) | `Resources/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 ### Output Styles (How You Communicate)
@@ -66,9 +67,9 @@ Skills are installed as benai-skills plugins. Each skill defines when and how to
 - **assistant** — Sessions, daily routines, tasks, memory, output styles — the main skill you use daily
 - **meetings** — Process meeting transcripts, sync Fireflies, extract action items
 
-### Custom Skills
+### Resources (`Resources/`)
 
-User-created skills live in `Skills/`. Each skill has a `skill.md` with trigger words and steps. The assistant auto-discovers them by globbing `Skills/*/skill.md` and matching `trigger` frontmatter against user input.
+Your personal library for swipe files, prompts, frameworks, templates, and reference material. Organize however feels natural — flat or lightly nested (e.g., `Resources/prompts/`, `Resources/frameworks/`, `Resources/swipe/`). Use `[[wikilinks]]` to reference resources from project notes or daily notes.
 
 ### Project Intelligence
 
@@ -114,7 +115,7 @@ Intelligence/ — What you know: meetings, competitors, market, decisions
   ├── decisions/
   └── archive/
 Daily/        — What happened: daily journals and check-ins
-Skills/       — Custom skills you create
+Resources/    — Your library: prompts, frameworks, swipe files, templates
 ```
 
 ### System Folders (Hidden from Obsidian)
@@ -229,7 +230,7 @@ Every correction becomes a rule. Every repeated explanation becomes documentatio
 16. During weekly reviews, flag goals in `Context/strategy.md` that have no active project.
 17. Use `==highlights==` sparingly for critical info. Use `%%comments%%` for internal processing notes hidden in preview.
 18. When extracting web content, prefer `defuddle parse <url> --md` over raw web fetch — more token-efficient.
-19. Check `Skills/*/skill.md` when the user's request might match a custom skill.
+19. When the user shares reusable content (prompts, frameworks, templates), save to `Resources/` with descriptive filenames.
 20. Never ask permission to save — auto-save meaningful info to the right vault file and report what was saved (see Auto-Save Rule).
 21. Route project info to the right subdir — don't cram everything into README.md (see Project Intelligence).
 22. Route all knowledge to the right file — there is no catch-all (see Knowledge Routing).

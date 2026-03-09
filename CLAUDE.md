@@ -138,7 +138,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | setup | `/setup` | Bootstrap vault structure + 2-question onboarding |
-| assistant | `/assistant` | Sessions, daily routines, tasks, memory, custom skills, output styles |
+| assistant | `/assistant` | Sessions, daily routines, tasks, memory, resources, output styles |
 | meetings | `/meetings` | Process transcripts, sync Fireflies, extract action items |
 
 **Commands:** `/personal-os` (skill overview)
@@ -151,7 +151,7 @@ Context/                — Who you are: me.md, business.md, strategy.md, team.m
 Projects/               — What you're working on: intelligently structured per project
 Intelligence/           — What you know: meetings/, competitors/, market/, decisions/
 Daily/                  — What happened: YYYY-MM-DD.md journals
-Skills/                 — Custom user-created skills: {skill}/skill.md
+Resources/              — Your library: prompts, frameworks, swipe files, templates
 ```
 
 #### Onboarding
@@ -186,9 +186,9 @@ Projects are not flat README-only folders. The assistant intelligently structure
 - **README stays the index** — overview, status, next steps, links to subdir contents
 - **Completed projects** — moved to `Intelligence/archive/`
 
-#### Custom Skills (`Skills/`)
+#### Resources (`Resources/`)
 
-Users create reusable skills as `Skills/{name}/skill.md` with trigger words and steps. The assistant auto-discovers them by globbing `Skills/*/skill.md`.
+Personal library for swipe files, prompts, frameworks, templates, and reference material. Organized flat or lightly nested (e.g., `Resources/prompts/`, `Resources/frameworks/`).
 
 #### Key Integrations
 

@@ -1,6 +1,6 @@
 ---
 name: assistant
-description: Personal OS assistant — manages sessions, daily routines, tasks, memory, and output styles. Handles resume, compress, preserve, daily review, task management, and style switching. Use when user says "resume", "compress", "morning review", "tasks", "output style", or runs /assistant.
+description: Personal OS assistant — manages sessions, daily routines, tasks, memory, resources, and output styles. Handles resume, compress, preserve, daily review, task management, resources, and style switching. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", or runs /assistant.
 ---
 
 # Personal OS Assistant
@@ -23,8 +23,7 @@ Match the user's intent to the right section:
 | "morning", "evening", "daily review", "weekly review" | [Daily Review](#daily-review) |
 | "task", "to-do", "create task", "check tasks" | [Task Management](#task-management) |
 | "output style", "writing style", "switch style" | [Output Styles](#output-styles) |
-
-If the user's request matches a custom skill in `Skills/`, route to [Custom Skills](#custom-skills) instead.
+| "save this prompt", "swipe file", "framework", "template", "resources" | [Resources](#resources) |
 
 If unclear, show this table and ask what they need.
 
@@ -77,7 +76,7 @@ Intelligence/competitors/     -- Competitive intelligence
 Intelligence/decisions/       -- Decision records
 Intelligence/archive/         -- Archived content
 Daily/                        -- Daily journals and session logs
-Skills/*/skill.md             -- User-created custom skills
+Resources/                      -- Prompts, frameworks, swipe files, templates
 TaskNotes/Tasks/                -- Task files (managed by TaskNotes plugin)
 ```
 
@@ -184,6 +183,7 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
    | Competitive insight | `Intelligence/competitors/{name}.md` |
    | Market insight | `Intelligence/market/{topic}.md` |
    | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
+   | Reusable content (prompts, frameworks, templates) | `Resources/` |
    | Rules for assistant behavior | Root `claude.md` (Rules section) |
 3. **Auto-archive check** -- If `Context/me.md` exceeds 100 lines, archive older entries to `Intelligence/archive/`. Never archive core identity or active preferences.
 4. **Report** -- After saving, tell the user what was saved and where.
@@ -337,41 +337,29 @@ User voice from `Context/me.md` is applied ON TOP of the active style. Style fil
 
 ---
 
-## Custom Skills
+## Resources
 
-User-created skills live in `Skills/`. Each skill has a `skill.md` file with frontmatter triggers and step-by-step instructions.
+`Resources/` is the user's personal library — swipe files, prompts, frameworks, templates, and reference material.
 
-### Discovery
+### Saving Resources
 
-When the user's request doesn't clearly match the routing table above, check for custom skills:
+When the user shares reusable content (a great prompt, a framework, a template, reference material):
+1. Save to `Resources/` with a descriptive filename
+2. Use light nesting if a category is obvious (e.g., `Resources/prompts/`, `Resources/frameworks/`, `Resources/swipe/`)
+3. Add `tags:` in frontmatter so resources surface in Bases queries
+4. Report what was saved and where
 
-```bash
-# Find all custom skills
-ls Skills/*/skill.md 2>/dev/null
-```
+### Finding Resources
 
-Read matching `skill.md` files and check if the `trigger` frontmatter matches the user's request.
-
-### Invocation
-
-When a custom skill matches:
-1. Read the `skill.md` file completely
-2. Follow its Steps section exactly
-3. Use vault paths referenced in the steps
-4. Present output in the format the skill specifies
-
-### Creating New Skills
-
-When the user says "create a skill" or "I want a shortcut for...":
-1. Ask what it should do and when to trigger it
-2. Create `Skills/{skill-name}/skill.md` using the template from `Skills/_guide.md`
-3. Confirm the skill was created and how to invoke it
+When the user asks for a saved prompt, framework, or template:
+1. List files in `Resources/`: `ls Resources/`
+2. Search by keyword: `grep -rl "keyword" Resources/`
+3. Read and present the matching resource
 
 ### Guidelines
-- Skills are lightweight — a single markdown file per skill
-- Trigger matching is fuzzy — match any keyword in the trigger array
-- Skills can reference any vault path
-- If no skill matches, fall back to normal routing
+- Keep resources standalone — each file should be useful on its own
+- Don't overthink organization — flat with good filenames beats elaborate hierarchy
+- Use `[[wikilinks]]` to reference resources from project notes or daily notes
 
 ---
 
