@@ -388,9 +388,9 @@
         ]
       },
       "skills": {
-        "personal-os": {
+        "personal-os-hub": {
           "displayName": "Personal OS Hub",
-          "summary": "Hub for all Personal Assistant OS commands — routes to setup, resume, compress, and more"
+          "summary": "Hub for all Personal OS commands — routes to setup, resume, compress, and more"
         },
         "personal-os-setup": {
           "displayName": "Personal OS Setup",
