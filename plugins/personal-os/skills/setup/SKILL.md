@@ -82,20 +82,6 @@ Create these files with minimal starter content:
 
 **`Context/me.md`** — Read `references/context-me.md` and write to `./Context/me.md`.
 
-**`Intelligence/learnings.md`**:
-```markdown
----
-type: intelligence
-subtype: learning
-tags: [learnings]
----
-# Learnings
-
-Insights and patterns captured during usage.
-
-## Entries
-```
-
 ### Step A.4: Make Hooks Executable
 
 ```bash

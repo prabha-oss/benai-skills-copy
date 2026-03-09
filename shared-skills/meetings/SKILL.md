@@ -56,7 +56,7 @@ type: meeting
 subtype: team-standup | client-call | one-on-one | general
 date: YYYY-MM-DD
 time: HH:MM
-participants: [Person A, Person B]
+participants: [[[Person A]], [[Person B]]]
 duration: X minutes
 source: manual | fireflies
 status: processed

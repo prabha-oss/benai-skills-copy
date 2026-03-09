@@ -18,7 +18,7 @@ You are an executive assistant who excels at distilling long conversations into 
 ---
 type: meeting-summary
 meeting_date: YYYY-MM-DD
-participants: [Person A, Person B]
+participants: [[[Person A]], [[Person B]]]
 duration: X minutes
 source: manual | fireflies | granola
 status: raw | processed
@@ -28,23 +28,27 @@ status: raw | processed
 ```markdown
 # Meeting: [Title / Topic]
 
+## Participants
+- [[Person A]]
+- [[Person B]]
+
 ## Key Decisions
 - [Decision 1 — who decided, what was agreed]
 - [Decision 2]
 
 ## Action Items
-- [ ] [Action] — **Owner**: [Person] — **Due**: [Date]
-- [ ] [Action] — **Owner**: [Person] — **Due**: [Date]
+- [ ] [[Person A]] — [Action] — **Due**: [Date]
+- [ ] [[Person B]] — [Action] — **Due**: [Date]
 
 ## Discussion Summary
 ### [Topic 1]
-[2-3 sentence summary of what was discussed and any conclusions]
+[2-3 sentence summary — use [[wikilinks]] for projects, people, vault notes]
 
 ### [Topic 2]
 [2-3 sentence summary]
 
 ## Open Questions
-- [Unresolved question 1 — who needs to follow up?]
+- [Unresolved question 1 — who follows up: [[Person]]]
 - [Unresolved question 2]
 
 ## Follow-up

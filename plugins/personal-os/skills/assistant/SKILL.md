@@ -19,7 +19,7 @@ Match the user's intent to the right section:
 |---|---|
 | "resume", "start session", "pick up where I left off" | [Resume Session](#resume-session) |
 | "save", "compress", "end session", "wrap up session" | [Compress / Save Session](#compress--save-session) |
-| "remember this", "preserve", "save permanently" | [Preserve Learnings](#preserve-learnings) |
+| "remember this", "preserve", "save permanently" | [Preserve Knowledge](#preserve-knowledge) |
 | "morning", "evening", "daily review", "weekly review" | [Daily Review](#daily-review) |
 | "task", "to-do", "create task", "check tasks" | [Task Management](#task-management) |
 | "output style", "writing style", "switch style" | [Output Styles](#output-styles) |
@@ -72,7 +72,6 @@ Context/business.md           -- Company context (optional)
 Context/team.md               -- Team members (optional)
 Context/brand.md              -- Voice and tone (optional)
 Projects/*/README.md          -- Active project contexts
-Intelligence/learnings.md     -- Key insights and patterns
 Intelligence/meetings/        -- Meeting transcripts and insights
 Intelligence/competitors/     -- Competitive intelligence
 Intelligence/decisions/       -- Decision records
@@ -90,7 +89,7 @@ Reconstruct full context so the user picks up where they left off.
 
 ### Steps
 
-1. **Load core memory** -- Read `Context/me.md`, glob `Projects/*/README.md`, read `Intelligence/learnings.md`. Prefer `obsidian read` if CLI is available; otherwise read files directly.
+1. **Load core memory** -- Read `Context/me.md`, glob `Projects/*/README.md`. If `Context/strategy.md` exists, scan it. Prefer `obsidian read` if CLI is available; otherwise read files directly.
 2. **Load recent daily notes** -- Default: last 3 from `Daily/` (sorted by filename date). With a number arg: last N notes. With a keyword arg: last 3 + `obsidian search query="keyword"` across all daily notes. Read Quick Reference sections first (low token cost); dig deeper only if needed.
 3. **Check active tasks** -- Try in order:
    - `obsidian tasks` (if CLI available)
@@ -101,10 +100,10 @@ Reconstruct full context so the user picks up where they left off.
    ```
    Welcome back, [name].
 
-   **Last session** (date): [Brief summary]
-   **In Progress**: [Active tasks]
-   **Pending**: [Items left over]
-   **Upcoming**: [Deadlines, milestones]
+   **Last session** (date): [Brief summary — link [[projects]] mentioned]
+   **In Progress**: [[Project-A]] — [task], [[Project-B]] — [task]
+   **Pending**: [[Project-Name]] — [items left over]
+   **Upcoming**: [[Project-Name]] — [deadlines, milestones]
 
    What would you like to focus on today?
    ```
@@ -130,37 +129,36 @@ Save everything valuable from the current session so future sessions can pick up
    ## Session Log: HH:MM -- [Topic Summary]
 
    ### Quick Reference
-   **Topics:** [comma-separated]
-   **Projects:** [[Project-Name]]
+   **Topics:** [comma-separated — use [[wikilinks]] for projects and people]
+   **Projects:** [[Project-Name]], [[Project-Name]]
    **Outcome:** [what was accomplished]
    **Duration:** [approximate]
 
    > [!important] Decisions Made
-   > - [Decision -- reasoning]
+   > - [[Project-Name]] — [Decision -- reasoning]
 
    > [!tip] Key Learnings
-   > - [Learning]
+   > - [Learning — link [[related notes]] when applicable]
 
    > [!info] Solutions & Fixes
-   > - [Problem -> Solution]
+   > - [[Project-Name]] — [Problem -> Solution]
 
    ### Files Modified
    - [file path -- what changed]
 
    > [!todo] Pending Tasks
-   > - [ ] [Task]
+   > - [ ] [[Project-Name]] — [Task]
 
    ### Raw Session Summary
-   [Condensed summary -- enough context to reconstruct what happened]
+   [Condensed summary — use [[wikilinks]] for every project, person, and vault note mentioned]
    ```
-   Only include YAML frontmatter if creating a new file. Keep Quick Reference to 5-6 lines max (it's designed for fast AI scanning on resume). Use `[[wikilinks]]` for project references.
+   Only include YAML frontmatter if creating a new file. Keep Quick Reference to 5-6 lines max (it's designed for fast AI scanning on resume). **Every project, person, and vault note reference MUST use `[[wikilinks]]`** — this is what builds the graph.
 3. **Update memory files**:
-   - Learnings -> append to `Intelligence/learnings.md`
    - User preferences -> update `Context/me.md`
    - Project updates -> route to the right file in `Projects/{name}/` (see [Project Intelligence](#project-intelligence))
    - Strategy changes -> update `Context/strategy.md`
    - Pending tasks -> create via TaskNotes API
-4. **Auto-archive** -- If `Intelligence/learnings.md` exceeds 150 lines, archive older entries to `Intelligence/archive/learnings-archive-YYYY-MM.md`. Always keep the 20 most recent entries. Never archive active projects or core preferences.
+4. **Auto-archive** -- If `Context/me.md` exceeds 100 lines, archive older entries to `Intelligence/archive/me-archive-YYYY-MM.md`. Never archive core identity or active preferences.
 5. **Report** -- Tell the user what was saved and where. "You're safe to close. I'll remember everything next time."
 
 ### Guidelines
@@ -169,23 +167,25 @@ Save everything valuable from the current session so future sessions can pick up
 
 ---
 
-## Preserve Learnings
+## Preserve Knowledge
 
 Save durable knowledge that persists indefinitely (unlike compress, which saves session context).
 
 ### Steps
 
 1. **Save immediately** -- Don't ask what to remember. When the user shares something worth preserving, just save it to the right file.
-2. **Write to the right file**:
+2. **Route to the right file** -- there is no catch-all. Everything has a home:
    | Type | File |
    |------|------|
    | User preferences, style, habits | `Context/me.md` |
    | Project info | Route to the right file in `Projects/{name}/` (see [Project Intelligence](#project-intelligence)) |
-   | General insights, patterns | `Intelligence/learnings.md` |
-   | Business context | `Context/business.md` |
+   | Business insight | `Context/business.md` |
    | Strategy and goals | `Context/strategy.md` |
+   | Competitive insight | `Intelligence/competitors/{name}.md` |
+   | Market insight | `Intelligence/market/{topic}.md` |
+   | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
    | Rules for assistant behavior | Root `claude.md` (Rules section) |
-3. **Auto-archive check** -- Same thresholds: `Intelligence/learnings.md` > 150 lines, `Context/me.md` > 100 lines. Archive to `Intelligence/archive/`.
+3. **Auto-archive check** -- If `Context/me.md` exceeds 100 lines, archive older entries to `Intelligence/archive/`. Never archive core identity or active preferences.
 4. **Report** -- After saving, tell the user what was saved and where.
 
 ### Teaching Loop
@@ -193,9 +193,9 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 When the user corrects you, automatically add a rule to `claude.md` under the Rules section. Don't ask — just do it and confirm what was added.
 
 ### Guidelines
-- Prefix learnings with date: `- [YYYY-MM-DD] Learning text`
 - Check for duplicates before adding
 - Be precise about file paths in reports
+- If info doesn't clearly fit a category, pick the closest match — don't create a new dumping ground
 
 ---
 
@@ -226,7 +226,7 @@ Templates live in `references/template-morning.md`, `references/template-evening
 2. Compare task progress vs morning intentions
 3. Ask: accomplishments, one thing learned, top priority for tomorrow
 4. Save to `Daily/YYYY-MM-DD Evening.md` with frontmatter (`subtype: evening`, `productivity: 1-10`)
-5. Mark completed tasks as done via API; write new learnings to `Intelligence/learnings.md`
+5. Mark completed tasks as done via API; route any new insights to the right file (see [Preserve Knowledge](#preserve-knowledge))
 
 ### Weekly Review
 
@@ -242,7 +242,7 @@ Templates live in `references/template-morning.md`, `references/template-evening
 ### Guidelines
 - Be conversational, not robotic -- this is a personal check-in
 - If TaskNotes API is unavailable, continue without task data
-- After every review: update tasks, update daily note, add learnings to `Intelligence/learnings.md`
+- After every review: update tasks, update daily note, route insights to the right files
 
 ---
 
@@ -441,13 +441,13 @@ Defuddle strips clutter and returns clean markdown — much more token-efficient
 
 ## General Guidelines
 
-- **Memory protocol**: Before responding, load `Context/me.md`, `Projects/*/README.md`, and `Intelligence/learnings.md`. After responding, update relevant vault files with new learnings or status changes.
+- **Memory protocol**: Before responding, load `Context/me.md` and `Projects/*/README.md`. After responding, route any new knowledge to the right vault file (see Preserve Knowledge routing table).
 - **Obsidian CLI first**: Always try `obsidian` CLI commands before falling back to direct file access or HTTP APIs.
-- **OFM syntax**: Use `[[wikilinks]]` not `[markdown](links)` for internal notes. Use callouts for visual structure. Use `==highlights==` for emphasis. Use `%%comments%%` for internal notes.
+- **Wikilinks everywhere**: Every mention of a project, person, or vault note in ANY file MUST be a `[[wikilink]]`. This is what builds the Obsidian graph. Not just internal links — every reference: tasks, daily notes, session logs, meeting notes, decisions, context files. If it's a name that exists (or could exist) as a vault note, wrap it in `[[]]`.
 - **Teaching loop**: When corrected, automatically save the correction as a permanent rule in `claude.md`. Don't ask — just save and report.
 - **File paths**: All paths are relative to the Obsidian vault root (the working directory).
 - **Daily notes**: `Daily/YYYY-MM-DD.md` is the most-read memory file -- always keep it current.
-- **Auto-archive thresholds**: `Intelligence/learnings.md` > 150 lines, `Context/me.md` > 100 lines. Archive to `Intelligence/archive/[filename]-archive-YYYY-MM.md`. Never archive active projects, core preferences, or the 20 most recent learnings.
+- **Auto-archive threshold**: `Context/me.md` > 100 lines. Archive older entries to `Intelligence/archive/me-archive-YYYY-MM.md`. Never archive core identity or active preferences.
 - **Task system**: Try Obsidian CLI → TaskNotes API (`http://127.0.0.1:8080`) → skip. If unavailable, note it and continue without task data.
 
 ## Auto-Save Rule
@@ -458,6 +458,7 @@ Defuddle strips clutter and returns clean markdown — much more token-efficient
 
 Do NOT:
 - Ask "should I save this?" or "would you like me to remember that?" — just save it
+- Write project names, people, or note references as plain text — ALWAYS use `[[wikilinks]]`
 - Use `[markdown](links)` for internal vault notes — always use `[[wikilinks]]`
 - Put a `# Title` heading that duplicates the filename — Obsidian shows the filename as title
 - Create orphan notes — always link new notes from at least one existing note

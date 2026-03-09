@@ -8,13 +8,14 @@ productivity:
 # Evening Reflection — YYYY-MM-DD
 
 ## Accomplished
-<!-- What got done today -->
+<!-- What got done today — link projects: [[Project-Name]] -->
+- [[Project-Name]] — [what was done]
 
 ## Learned
-<!-- Key insight or learning from today -->
+<!-- Key insight — link to relevant [[projects]] or [[people]] if applicable -->
 
 ## Tomorrow's Priority
-<!-- Top focus for the next day -->
+<!-- Top focus — link to [[Project-Name]] -->
 
 ## Gratitude
 <!-- One thing to be grateful for (optional) -->

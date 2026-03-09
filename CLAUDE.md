@@ -140,7 +140,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 claude.md               — Brain file (operating instructions)
 Context/                — Who you are: me.md, business.md, strategy.md, team.md, brand.md
 Projects/               — What you're working on: intelligently structured per project
-Intelligence/           — What you know: meetings/, competitors/, decisions/, learnings.md
+Intelligence/           — What you know: meetings/, competitors/, market/, decisions/
 Daily/                  — What happened: YYYY-MM-DD.md journals
 Skills/                 — Custom user-created skills: {skill}/skill.md
 ```
