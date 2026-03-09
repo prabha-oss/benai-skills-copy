@@ -159,18 +159,37 @@ for dept_name, dept_config in departments.items():
         print(f"  {dept_name}: {agent_count} agents synced")
 
     # --- hooks/ ---
-    hook_list = dept_config.get("hooks", [])
-    if hook_list:
+    hooks_config = dept_config.get("hooks", {})
+    if hooks_config and isinstance(hooks_config, dict):
         hooks_dir = os.path.join(dept_dir, "hooks")
         os.makedirs(hooks_dir, exist_ok=True)
         hook_count = 0
-        for hook_id in hook_list:
-            src = os.path.join(hooks_src, f"{hook_id}.sh")
-            if os.path.isfile(src):
-                shutil.copy2(src, os.path.join(hooks_dir, f"{hook_id}.sh"))
-                hook_count += 1
-            else:
-                print(f"  Warning: hooks/{hook_id}.sh not found, skipping")
+        # Build plugin.json hooks structure and copy files
+        plugin_hooks = {}
+        for event_name, event_hooks in hooks_config.items():
+            hook_entries = []
+            for h in event_hooks:
+                src = os.path.join(hooks_src, h["file"])
+                if os.path.isfile(src):
+                    shutil.copy2(src, os.path.join(hooks_dir, h["file"]))
+                    hook_count += 1
+                    entry = {
+                        "type": "command",
+                        "command": "${CLAUDE_PLUGIN_ROOT}/hooks/" + h["file"],
+                    }
+                    if "timeout" in h:
+                        entry["timeout"] = h["timeout"]
+                    hook_entries.append(entry)
+                else:
+                    print(f"  Warning: hooks/{h['file']} not found, skipping")
+            if hook_entries:
+                plugin_hooks[event_name] = [{"matcher": "", "hooks": hook_entries}]
+        # Write hooks into plugin.json
+        if plugin_hooks:
+            plugin_data["hooks"] = plugin_hooks
+            with open(os.path.join(plugin_json_dir, "plugin.json"), "w") as f:
+                json.dump(plugin_data, f, indent=2)
+                f.write("\n")
         print(f"  {dept_name}: {hook_count} hooks synced")
 
 PYEOF

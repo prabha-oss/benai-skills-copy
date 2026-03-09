@@ -378,7 +378,15 @@
     },
     "personal-os": {
       "commands": ["personal-os"],
-      "hooks": ["load-context", "memory-reminder", "verify-memory-stop"],
+      "hooks": {
+        "UserPromptSubmit": [
+          { "file": "load-context.sh", "timeout": 10 },
+          { "file": "memory-reminder.sh", "timeout": 5 }
+        ],
+        "Stop": [
+          { "file": "verify-memory-stop.sh", "timeout": 15 }
+        ]
+      },
       "skills": {
         "personal-os": {
           "displayName": "Personal OS Hub",
