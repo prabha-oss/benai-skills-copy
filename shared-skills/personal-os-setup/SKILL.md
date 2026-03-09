@@ -35,7 +35,6 @@ Create all of these directories:
 ```bash
 mkdir -p .claude/hooks
 mkdir -p .claude/output-styles
-mkdir -p .obsidian/plugins/tasknotes
 mkdir -p Inbox
 mkdir -p Thinking
 mkdir -p Projects
@@ -81,7 +80,6 @@ Read each reference file and write it to the corresponding local path. The refer
 | `references/goals-monthly.md` | `./Goals/monthly-goals.md` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
-| `references/obsidian-tasknotes-data-json.md` | `./.obsidian/plugins/tasknotes/data.json` |
 
 For each row: read the reference file, then write its content to the local path.
 
@@ -130,31 +128,13 @@ Insights and patterns captured during usage.
 chmod +x .claude/hooks/*.sh
 ```
 
-### Step A.5: Obsidian Plugin Setup
-
-The Obsidian config files have been pre-created with optimal settings:
-- **app.json**: New files go to `Inbox/`, attachments to `Reference/attachments/`
-- **community-plugins.json**: TaskNotes and Dataview pre-registered
-- **tasknotes/data.json**: HTTP API **pre-enabled on port 8080** (required for task management)
-
-However, Obsidian needs to **download the actual plugin files**. Tell the user:
-
-1. "Open this folder as a vault in Obsidian"
-2. "Go to **Settings → Community Plugins → Turn on community plugins**"
-3. "Click **Browse** and install these two required plugins:"
-   - **TaskNotes** — task management with API (already pre-configured)
-   - **Dataview** — powers queries across your vault
-4. "Enable both plugins after installing"
-5. "Optional but recommended: install **Calendar** for a calendar view"
-
-**Important**: TaskNotes settings are pre-configured (HTTP API on port 8080, task folders, statuses, priorities). The user does NOT need to configure anything — just install and enable.
-
-### Step A.6: Confirm Bootstrap
+### Step A.5: Confirm Bootstrap
 
 Tell the user:
 - "Vault structure created successfully."
 - List the key directories and files created
-- Remind them to install the Obsidian plugins (Step A.5) before using task features
+- Recommend opening this folder as a vault in Obsidian
+- Recommend installing **TaskNotes** (for task management) and **Dataview** (for queries) community plugins if they want task features
 - "Now let's personalize it for you."
 
 Then proceed to Phase B.
