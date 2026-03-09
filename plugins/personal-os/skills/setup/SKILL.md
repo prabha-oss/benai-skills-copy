@@ -46,7 +46,7 @@ mkdir -p Intelligence/market
 mkdir -p Intelligence/decisions
 mkdir -p Intelligence/archive
 mkdir -p Daily
-mkdir -p Skills
+mkdir -p Resources
 ```
 
 ### Step A.2: Write System Files from References
@@ -70,7 +70,7 @@ Read each reference file and write it to the corresponding local path. The refer
 | `references/guide-projects.md` | `./Projects/_guide.md` |
 | `references/guide-daily.md` | `./Daily/_guide.md` |
 | `references/guide-intelligence.md` | `./Intelligence/_guide.md` |
-| `references/guide-skills.md` | `./Skills/_guide.md` |
+| `references/guide-skills.md` | `./Resources/_guide.md` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
 
@@ -92,11 +92,11 @@ chmod +x .claude/hooks/*.sh
 
 Tell the user:
 - "Vault structure created successfully."
-- List the 5 main folders: `Context/`, `Projects/`, `Intelligence/`, `Daily/`, `Skills/`
+- List the 5 main folders: `Context/`, `Projects/`, `Intelligence/`, `Daily/`, `Resources/`
 - Recommend opening this folder as a vault in Obsidian
 - Recommend installing **TaskNotes** community plugin if they want task management features
 - Note that **Bases** (native database views) are built into Obsidian — no plugin needed for queries
-- Mention `Skills/` for creating custom skills later
+- Mention `Resources/` for storing prompts, frameworks, swipe files, and templates
 - "Now let's personalize it for you."
 
 Then proceed to Phase B.

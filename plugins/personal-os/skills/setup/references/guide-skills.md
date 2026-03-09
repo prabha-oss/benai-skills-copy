@@ -1,67 +1,47 @@
 ---
 type: guide
-folder: Skills
+folder: Resources
 ---
 
-# Custom Skills
+# Resources
 
-Create your own reusable skills that your assistant can discover and run.
+Your personal library — swipe files, prompts, frameworks, templates, and reference material you want to keep handy.
 
-## How It Works
+## What Goes Here
 
-1. Create a folder in `Skills/` with your skill name
-2. Add a `skill.md` file with trigger words and steps
-3. Your assistant auto-discovers skills and matches them to your requests
+| Type | Example |
+|------|---------|
+| Prompts | Reusable prompts for writing, analysis, or brainstorming |
+| Frameworks | Decision frameworks, planning templates, mental models |
+| Swipe files | Great examples of copy, emails, landing pages, scripts |
+| Templates | Repeatable formats for documents, reports, presentations |
+| Reference | Style guides, checklists, quick-reference sheets |
 
-## Skill Template
+## How to Organize
 
-```markdown
----
-name: skill-name
-trigger: ["keyword1", "keyword2", "phrase"]
----
-# Skill Name
-
-## What This Does
-[1-2 sentences]
-
-## Steps
-1. [Step 1 — what to read, check, or do]
-2. [Step 2]
-3. [Step 3]
-
-## Output
-[What the result looks like]
-```
-
-## Example: Morning Brief
+Keep it flat or lightly nested — whatever feels natural:
 
 ```
-Skills/morning-brief/skill.md
+Resources/
+├── prompts/
+│   ├── blog-outline-prompt.md
+│   └── cold-email-prompt.md
+├── frameworks/
+│   ├── eisenhower-matrix.md
+│   └── jobs-to-be-done.md
+├── swipe/
+│   ├── great-subject-lines.md
+│   └── landing-page-examples.md
+└── checklists/
+    └── launch-checklist.md
 ```
 
-```markdown
----
-name: morning-brief
-trigger: ["morning brief", "morning", "standup"]
----
-# Morning Brief
-
-## What This Does
-Quick morning overview of priorities, tasks, and schedule.
-
-## Steps
-1. Read `Context/strategy.md` — current monthly focus
-2. Check open tasks via TaskNotes or Obsidian CLI
-3. Check today's meetings in `Intelligence/meetings/`
-4. Scan recent daily notes for carry-over items
-
-## Output
-Concise briefing: top priorities, open tasks, today's meetings, blockers.
-```
+Or just drop files directly in `Resources/` if you don't have many yet.
 
 ## Tips
-- Keep skills focused — one skill, one job
-- Use `trigger` keywords that feel natural to how you'd ask for it
-- Reference vault paths in steps so the assistant knows where to look
-- Skills can reference other skills (e.g., "run morning-brief then create tasks")
+
+- Keep resources standalone — each file should be useful on its own
+- Use `[[wikilinks]]` to reference resources from project notes or daily notes
+- Add `tags:` in frontmatter so resources surface in Bases queries
+- Don't overthink organization — a flat folder with good filenames beats an elaborate hierarchy
+- This is YOUR library, not a filing system — store what you actually use
