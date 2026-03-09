@@ -36,7 +36,6 @@ Create all of these directories:
 mkdir -p .claude/hooks
 mkdir -p .claude/output-styles
 mkdir -p .obsidian/plugins/tasknotes
-mkdir -p .obsidian/plugins/dataview
 mkdir -p Inbox
 mkdir -p Thinking
 mkdir -p Projects
@@ -82,10 +81,6 @@ Read each reference file and write it to the corresponding local path. The refer
 | `references/goals-monthly.md` | `./Goals/monthly-goals.md` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
-| `references/obsidian-app-json.md` | `./.obsidian/app.json` |
-| `references/obsidian-community-plugins-json.md` | `./.obsidian/community-plugins.json` |
-| `references/obsidian-core-plugins-json.md` | `./.obsidian/core-plugins.json` |
-| `references/obsidian-appearance-json.md` | `./.obsidian/appearance.json` |
 | `references/obsidian-tasknotes-data-json.md` | `./.obsidian/plugins/tasknotes/data.json` |
 
 For each row: read the reference file, then write its content to the local path.
