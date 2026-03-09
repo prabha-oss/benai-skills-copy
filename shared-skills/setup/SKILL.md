@@ -198,21 +198,45 @@ tags: [profile, identity]
 
 ### Build Step 2: Create Project Folders
 
-From Question 2, create one folder per project mentioned:
+From Question 2, intelligently structure each project based on what the user gave you.
 
-- `Projects/{project-name}/README.md` with:
-  ```markdown
-  ---
-  type: project
-  status: active
-  created: YYYY-MM-DD
-  ---
-  # [Project Name]
+**Analyze the info and decide the right structure:**
+- Simple mention ("working on a podcast") → just a `README.md`
+- Moderate detail (scope, deadlines, people) → `README.md` + relevant subdirs
+- Rich info (briefs, specs, research, multiple workstreams) → full structure with subdirs and files
 
-  [Everything you extracted about this project]
-  ```
+**Create subdirectories only when the content justifies them:**
 
-If the user gave rich project info (briefs, docs), include it all in the README. Don't summarize away details.
+| Content type | Goes to |
+|---|---|
+| Overview, status, deadlines, contacts | `README.md` |
+| Research, competitor analysis, references | `research/{topic}.md` |
+| Specs, requirements, briefs | `specs/{name}.md` or `briefs/{name}.md` |
+| Drafts, scripts, written content | `drafts/{name}.md` |
+| Ideas, brainstorms | `ideas/{name}.md` |
+| Notes, working docs | `notes/{name}.md` |
+
+**README.md is always the index** — it links to subdirectory contents and holds the project overview:
+```markdown
+---
+type: project
+status: active
+created: YYYY-MM-DD
+---
+## Overview
+[What this project is]
+
+## Current Status
+[Where things stand]
+
+## Key Resources
+[Links, tools, contacts]
+
+## Next Steps
+[What needs to happen]
+```
+
+Don't create empty subdirs. Don't cram everything into the README. Distribute content into the right files based on what it actually is.
 
 ### Build Step 3: Create First Daily Note
 

@@ -61,7 +61,7 @@ User-created skills live in `Skills/`. Each skill has a `skill.md` with trigger 
 
 ```
 Context/      — Who you are: identity, business, strategy, team, brand
-Projects/     — What you're working on: active project folders
+Projects/     — What you're working on: intelligently structured per project
 Intelligence/ — What you know: meetings, competitors, decisions, learnings
   ├── meetings/
   │   ├── team-standups/

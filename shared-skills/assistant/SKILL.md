@@ -157,7 +157,7 @@ Save everything valuable from the current session so future sessions can pick up
 3. **Update memory files**:
    - Learnings -> append to `Intelligence/learnings.md`
    - User preferences -> update `Context/me.md`
-   - Project updates -> update `Projects/{name}/README.md`
+   - Project updates -> route to the right file in `Projects/{name}/` (see [Project Intelligence](#project-intelligence))
    - Strategy changes -> update `Context/strategy.md`
    - Pending tasks -> create via TaskNotes API
 4. **Auto-archive** -- If `Intelligence/learnings.md` exceeds 150 lines, archive older entries to `Intelligence/archive/learnings-archive-YYYY-MM.md`. Always keep the 20 most recent entries. Never archive active projects or core preferences.
@@ -180,7 +180,7 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
    | Type | File |
    |------|------|
    | User preferences, style, habits | `Context/me.md` |
-   | Project info, deadlines | `Projects/{name}/README.md` |
+   | Project info | Route to the right file in `Projects/{name}/` (see [Project Intelligence](#project-intelligence)) |
    | General insights, patterns | `Intelligence/learnings.md` |
    | Business context | `Context/business.md` |
    | Strategy and goals | `Context/strategy.md` |
@@ -372,6 +372,60 @@ When the user says "create a skill" or "I want a shortcut for...":
 - Trigger matching is fuzzy — match any keyword in the trigger array
 - Skills can reference any vault path
 - If no skill matches, fall back to normal routing
+
+---
+
+## Project Intelligence
+
+Projects are not flat README-only folders. They are living, structured directories that grow as information accumulates. The assistant manages project structure intelligently.
+
+### Routing Project Info
+
+When the user mentions something about a project, analyze what it is and route it to the right place:
+
+| Content type | Route to |
+|---|---|
+| Status update, overview change, deadline | `Projects/{name}/README.md` |
+| Research finding, competitor analysis | `Projects/{name}/research/{topic}.md` |
+| Spec, requirement, brief | `Projects/{name}/specs/{name}.md` |
+| Draft, script, written content | `Projects/{name}/drafts/{name}.md` |
+| Idea, brainstorm | `Projects/{name}/ideas/{name}.md` |
+| Working notes, scratchpad | `Projects/{name}/notes/{name}.md` |
+| Feedback, review comments | `Projects/{name}/feedback/{name}.md` |
+| Meeting notes specific to project | `Projects/{name}/meetings/{date}-{topic}.md` |
+
+### Creating Subdirs on the Fly
+
+Don't pre-create empty directories. When content arrives that needs a subdir:
+
+1. Check if the subdir exists
+2. If not, create it (`mkdir -p Projects/{name}/research/`)
+3. Write the file
+4. Update `README.md` to reference the new content if appropriate
+
+### Keeping README as the Index
+
+The `README.md` is the entry point — a project overview with links to deeper content. When subdirectories grow:
+
+- Add a brief reference or link in the README (e.g., "See `research/` for competitor analysis")
+- Don't duplicate subdir content in the README
+- Keep README focused: overview, status, next steps, key resources
+
+### Reading Project Context
+
+When loading a project's context (during resume or when the user mentions a project):
+
+1. Always read `Projects/{name}/README.md` first
+2. List subdirectories to understand scope: `ls Projects/{name}/`
+3. Only read subdir files when relevant to the current conversation
+4. Use `grep` to scan across project files when searching for specific info
+
+### Project Lifecycle
+
+- **New project**: Starts as just a `README.md`
+- **Growing project**: Subdirs appear as content types emerge
+- **Completed project**: Move entire folder to `Intelligence/archive/{name}/`
+- **Status changes**: Update `README.md` frontmatter (`status: on-hold`, `status: completed`)
 
 ---
 
