@@ -72,7 +72,7 @@ for dept_name, dept_config in departments.items():
 
     mp = marketplace_plugins.get(dept_name, {})
     plugin_data = {
-        "name": dept_name,
+        "name": mp.get("displayName", dept_name),
         "description": mp.get("description", ""),
         "version": mp.get("version", "1.0.0"),
         "author": mp.get("author", {"name": "BenAI"}),
