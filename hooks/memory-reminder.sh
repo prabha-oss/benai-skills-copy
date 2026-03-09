@@ -1,24 +1,18 @@
 #!/bin/bash
 # memory-reminder.sh
-# Fires on every UserPromptSubmit to remind Claude to update Obsidian vault notes.
-# For UserPromptSubmit, stdout text is injected directly into Claude's context.
-
-set -euo pipefail
+# Fires on every UserPromptSubmit to remind Claude about the vault memory system.
+# Kept minimal to avoid interfering with normal conversation.
 
 cat <<'REMINDER'
 
-[MEMORY PROTOCOL - ACTIVE]
-After completing the user's request, you MUST:
-
-1. REFLECT on what was discussed and what you learned this turn.
-2. UPDATE `Daily/YYYY-MM-DD.md` with current session progress (work status).
-3. If you learned new user preferences, update `Reference/about-me.md`.
-4. If you discovered new project info, update `Projects/{name}/README.md`.
-5. If you gained a reusable insight, add it to `Thinking/learnings.md`.
-6. Keep all notes concise and scannable.
-7. Do NOT skip this step. Memory updates are mandatory.
-
-[END MEMORY PROTOCOL]
+[VAULT MEMORY]
+This project uses an Obsidian vault for persistent memory. When you make meaningful changes or learn something important during this conversation, update the relevant vault files:
+- Daily/{date}.md — session progress
+- Reference/about-me.md — user preferences
+- Projects/{name}/README.md — project info
+- Thinking/learnings.md — reusable insights
+Only update when there's something worth saving. Normal chat doesn't need updates.
+[END VAULT MEMORY]
 
 REMINDER
 
