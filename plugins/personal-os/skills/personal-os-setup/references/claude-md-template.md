@@ -8,11 +8,12 @@ This vault is both an Obsidian knowledge base AND your operating system. Everyth
 
 ### Context System (Your Brain)
 
-Read `.claude/context/CLAUDE.md` for the full context architecture. Key subsystems:
+Your memory and context live in Obsidian folders — the same notes the user sees:
 
-- **Memory** (`.claude/context/memory/`) — Your persistent memory. Learnings, user preferences, active projects, work status. You MUST consult this before responding and update it after every interaction.
-- **Projects** (`.claude/context/projects/`) — Deep context per project. Only load when relevant.
-- **Session Logs** (`.claude/context/session-logs/`) — Saved summaries of past work sessions. Used by `/personal-os-resume` to reconstruct context.
+- **Identity & Preferences** (`Reference/about-me.md`) — Who the user is, how they work, their tools and style. MUST consult before responding.
+- **Insights** (`Thinking/learnings.md`) — Patterns and corrections captured over time.
+- **Projects** (`Projects/`) — Deep context per project. Each project has a `README.md`. Only load when relevant.
+- **Session History** (`Daily/`) — Daily notes track session progress. Used by `/personal-os-resume` to reconstruct context.
 
 ### Output Styles (How You Communicate)
 
@@ -65,7 +66,6 @@ Goals/          — Vision, yearly goals, monthly goals (the cascade)
 ### System Folders (Hidden from Obsidian)
 
 ```
-.claude/context/              — Memory system + project context + session logs
 .claude/output-styles/        — Output style definitions
 .claude/hooks/                — Automation hooks (Claude Code only)
 ```
@@ -115,14 +115,14 @@ When the user corrects you:
 1. Apply the correction immediately
 2. Ask: "Should I add this as a permanent rule so I don't make this mistake again?"
 3. If yes, add the correction to the Rules section below
-4. Also update `.claude/context/memory/learnings.md`
+4. Also update `Thinking/learnings.md`
 
 Every correction becomes a rule. Every repeated explanation becomes documentation. This is how the system learns from the user over time.
 
 ### Rules
 
-1. Always check `.claude/context/memory/` before responding to understand who the user is and what they care about.
-2. After completing any interaction, update relevant memory files (learnings, work_status, etc.).
+1. Always check `Reference/about-me.md` and latest `Daily/` note before responding to understand who the user is and what they care about.
+2. After completing any interaction, update `Daily/` note with session progress.
 3. Use [[wiki links]] in notes you create — weave them into sentences, not as footnotes.
 4. Every note you create should be standalone and composable — like a Lego block.
 5. When creating files, use YAML frontmatter for metadata (type, date, status, tags, project).
@@ -133,7 +133,7 @@ Every correction becomes a rule. Every repeated explanation becomes documentatio
 10. When creating tasks, use the TaskNotes HTTP API (`curl -s -X POST "http://127.0.0.1:8080/api/tasks"`).
 11. When the user corrects you, offer to save the correction as a permanent rule (teaching loop).
 12. Respect `.claudeignore` — never read files or folders listed there.
-13. When memory files exceed 150 lines, auto-archive older content to `.claude/context/memory/archive/`.
+13. Move completed content to `Archive/`.
 14. Include `project:` in frontmatter whenever a note relates to a specific project — this enables "surface everywhere" queries.
 15. During weekly reviews, flag goals in `Goals/` that have no active project.
 

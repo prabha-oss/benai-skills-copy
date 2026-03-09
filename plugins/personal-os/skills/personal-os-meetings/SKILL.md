@@ -119,7 +119,7 @@ If the TaskNotes API is unavailable, list the action items and suggest creating 
 
 ### Step 6: Link to Projects
 
-If the meeting relates to a known project (check `.claude/context/memory/user_projects.md`):
+If the meeting relates to a known project (check `Projects/*/README.md` files):
 - Add `project: [Project Name]` to the frontmatter
 - Add a [[wiki link]] to the project in the meeting note
 - Update the project file with a reference to this meeting

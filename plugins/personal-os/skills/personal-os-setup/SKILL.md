@@ -33,9 +33,6 @@ Create the entire directory structure and write all system files from references
 Create all of these directories:
 
 ```bash
-mkdir -p .claude/context/memory/archive
-mkdir -p .claude/context/projects
-mkdir -p .claude/context/session-logs
 mkdir -p .claude/hooks
 mkdir -p .claude/output-styles
 mkdir -p .obsidian/plugins/tasknotes
@@ -66,9 +63,6 @@ Read each reference file and write it to the corresponding local path. The refer
 | Glob `**/personal-os/hooks/load-context.sh` | `./.claude/hooks/load-context.sh` |
 | Glob `**/personal-os/hooks/memory-reminder.sh` | `./.claude/hooks/memory-reminder.sh` |
 | Glob `**/personal-os/hooks/verify-memory-stop.sh` | `./.claude/hooks/verify-memory-stop.sh` |
-| `references/context-claude-md.md` | `./.claude/context/CLAUDE.md` |
-| `references/memory-claude-md.md` | `./.claude/context/memory/CLAUDE.md` |
-| `references/projects-claude-md.md` | `./.claude/context/projects/CLAUDE.md` |
 | `references/output-styles-claude-md.md` | `./.claude/output-styles/CLAUDE.md` |
 | `references/style-conversation.md` | `./.claude/output-styles/conversation.md` |
 | `references/style-youtube-script.md` | `./.claude/output-styles/youtube-script.md` |
@@ -96,25 +90,19 @@ Read each reference file and write it to the corresponding local path. The refer
 
 For each row: read the reference file, then write its content to the local path.
 
-### Step A.3: Initialize Empty Memory Files
+### Step A.3: Initialize Starter Files
 
 Create these files with minimal starter content:
 
-**`.claude/context/memory/work_status.md`**:
+**`Reference/about-me.md`**:
 ```markdown
-# Work Status
+---
+type: reference
+tags: [profile]
+---
+# About Me
 
-## Current Session
-- **Date**: [today's date]
-- **Focus**: Initial setup
-- **Status**: Vault created, awaiting onboarding
-```
-
-**`.claude/context/memory/user_preferences.md`**:
-```markdown
-# User Preferences
-
-## About
+## Identity
 - Name: [to be filled during onboarding]
 - Role: [to be filled during onboarding]
 
@@ -128,19 +116,15 @@ Create these files with minimal starter content:
 - [to be filled during onboarding]
 ```
 
-**`.claude/context/memory/user_projects.md`**:
+**`Thinking/learnings.md`**:
 ```markdown
-# User Projects
-
-## Active Projects
-[To be filled during onboarding]
-```
-
-**`.claude/context/memory/learnings.md`**:
-```markdown
+---
+type: thinking
+tags: [learnings]
+---
 # Learnings
 
-Insights and patterns captured during usage. Auto-archives when exceeding 150 lines.
+Insights and patterns captured during usage.
 
 ## Entries
 ```
@@ -236,13 +220,17 @@ For each category they said yes to, ask 1-2 follow-up questions:
 
 After the interview, execute ALL of the following:
 
-### Build Step 1: Update Memory Files
+### Build Step 1: Update Identity & Project Files
 
-**`.claude/context/memory/user_preferences.md`**:
+**`Reference/about-me.md`** — update with onboarding answers:
 ```markdown
-# User Preferences
+---
+type: reference
+tags: [profile]
+---
+# About Me
 
-## About
+## Identity
 - Name: [name from interview]
 - Role: [role from interview]
 - Industry: [industry from interview]
@@ -258,12 +246,15 @@ After the interview, execute ALL of the following:
 - [list of tools they use]
 ```
 
-**`.claude/context/memory/user_projects.md`**:
+**`Projects/{project-name}/README.md`** — create one per active project:
 ```markdown
-# User Projects
+---
+type: project
+status: active
+created: YYYY-MM-DD
+---
+# [Project Name]
 
-## Active Projects
-### [Project Name]
 - Description: [what it is]
 - Status: [active/planning/etc.]
 - Deadline: [if mentioned]
@@ -322,12 +313,17 @@ If the user mentioned goals or vision:
 - Update `Goals/yearly-goals.md` with any yearly goals mentioned
 - Update `Goals/monthly-goals.md` with current month's goals
 
-### Build Step 8: Update Work Status
+### Build Step 8: Create First Daily Note
 
-Update `.claude/context/memory/work_status.md`:
+Create `Daily/YYYY-MM-DD.md` (using today's date):
 ```markdown
-## Current Session
-- **Date**: [today]
+---
+type: daily-note
+date: YYYY-MM-DD
+---
+# YYYY-MM-DD
+
+## Session
 - **Focus**: Initial vault setup and onboarding
 - **Completed**: Full vault bootstrap + personalized onboarding
 - **Next Steps**: [based on what was discussed]

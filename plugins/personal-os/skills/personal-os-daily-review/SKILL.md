@@ -175,7 +175,7 @@ curl -s -X PUT "http://127.0.0.1:8080/api/tasks/Tasks/task-name.md" \
 
 ### Step 6: Update Memory
 
-Write any new learnings to `.claude/context/memory/learnings.md`.
+Write any new learnings to `Thinking/learnings.md`.
 
 ---
 
@@ -249,7 +249,7 @@ Move completed items to `Archive/` if appropriate.
 
 ### Step 9: Update Memory
 
-Summarize the week in `.claude/context/memory/work_status.md`.
+Summarize the week in today's `Daily/` note.
 
 ---
 
@@ -257,8 +257,8 @@ Summarize the week in `.claude/context/memory/work_status.md`.
 
 After every review type:
 - Update TaskNotes with any new or completed tasks via the API
-- Update `.claude/context/memory/work_status.md` with session summary
-- Add any new learnings to `.claude/context/memory/learnings.md`
+- Update today's `Daily/` note with session summary
+- Add any new learnings to `Thinking/learnings.md`
 - Link to relevant projects using [[wiki links]] in the daily note
 
 ## Guidelines

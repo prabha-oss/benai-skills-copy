@@ -42,7 +42,7 @@ Output styles define how the assistant communicates. Each style is a markdown fi
 2. **Explicit request**: When the user says "write a YouTube script" or "draft an email", load that style
 3. **Context clues**: If working on a meeting transcript, auto-switch to `meeting-summary.md`
 4. **Load before writing**: Read the full style file before producing output in that format
-5. **Stack with memory**: Combine the style with `.claude/context/memory/user_preferences.md` for personalization
+5. **Stack with memory**: Combine the style with `Reference/about-me.md` for personalization
 
 ### Trigger Phrases
 
@@ -109,7 +109,7 @@ Show 1-2 examples of ideal output in this style.
 
 ## Personalization Layer
 
-The user's unique voice and patterns are captured in `.claude/context/memory/user_preferences.md` and applied ON TOP of whichever style is active. This means:
+The user's unique voice and patterns are captured in `Reference/about-me.md` and applied ON TOP of whichever style is active. This means:
 
 - If the user prefers concise communication, all styles will be more concise
 - If the user has a specific vocabulary or tone, it carries across styles

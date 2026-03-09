@@ -21,21 +21,20 @@ You are resuming a work session. Your job is to reconstruct full context so the 
 ### Step 1: Load Core Memory
 
 Read these files in order:
-1. `.claude/context/memory/user_preferences.md` -- Who the user is
-2. `.claude/context/memory/user_projects.md` -- Active projects
-3. `.claude/context/memory/work_status.md` -- What happened recently
-4. `.claude/context/memory/learnings.md` -- Key insights
+1. `Reference/about-me.md` -- Who the user is (preferences, style, habits)
+2. Glob `Projects/*/README.md` -- Active projects and their context
+3. `Thinking/learnings.md` -- Key insights and patterns
 
-### Step 2: Load Recent Session Logs
+### Step 2: Load Recent Daily Notes
 
-Check `.claude/context/session-logs/` for recent session logs.
+Check `Daily/` for recent daily notes (these contain session logs, morning/evening reviews, and work status).
 
-**Default behavior** (no arguments): Load the last 3 session logs.
-**With a number** (e.g., `/personal-os-resume 10`): Load the last N session logs.
-**With a keyword** (e.g., `/personal-os-resume auth`): Load last 3 sessions + search ALL session logs for the keyword.
-**With both** (e.g., `/personal-os-resume 5 meetings`): Load last N sessions + search for keyword.
+**Default behavior** (no arguments): Load the last 3 daily notes (sorted by filename date).
+**With a number** (e.g., `/personal-os-resume 10`): Load the last N daily notes.
+**With a keyword** (e.g., `/personal-os-resume auth`): Load last 3 daily notes + search ALL daily notes for the keyword.
+**With both** (e.g., `/personal-os-resume 5 meetings`): Load last N daily notes + search for keyword.
 
-Session logs have a Quick Reference section at the top -- read that first (fast, low token use). Only dig into the full log if more detail is needed.
+Daily notes may contain session logs with a Quick Reference section -- read that first (fast, low token use). Only dig into the full note if more detail is needed.
 
 ### Step 3: Check Active Tasks
 
@@ -78,9 +77,9 @@ Welcome back, [name].
 
 Keep it brief. Don't dump every memory -- surface what's relevant right now.
 
-### Step 6: Update Work Status
+### Step 6: Update Today's Daily Note
 
-After the briefing, update `.claude/context/memory/work_status.md` to reflect the new session start:
+After the briefing, create or update today's `Daily/YYYY-MM-DD.md` to reflect the new session start:
 
 ```markdown
 ## Current Session
@@ -89,9 +88,11 @@ After the briefing, update `.claude/context/memory/work_status.md` to reflect th
 - **Resumed from**: [last session date and topic]
 ```
 
+If today's daily note already exists, append the session start to it rather than overwriting.
+
 ## Guidelines
 
 - Be concise -- the briefing should feel like a quick standup, not a data dump
 - Prioritize what's actionable: overdue tasks, deadlines this week, unfinished work
 - If memory files are empty (new vault), acknowledge it: "This is your first session. What would you like to work on?"
-- Use the user's name if available from `user_preferences.md`
+- Use the user's name if available from `Reference/about-me.md`
