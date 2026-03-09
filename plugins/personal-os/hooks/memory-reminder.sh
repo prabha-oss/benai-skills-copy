@@ -9,8 +9,9 @@ cat <<'REMINDER'
 This project uses an Obsidian vault for persistent memory. When you make meaningful changes or learn something important during this conversation, update the relevant vault files:
 - Daily/{date}.md — session progress
 - Context/me.md — user preferences
-- Projects/{name}/README.md — project info
-- Intelligence/learnings.md — reusable insights
+- Projects/{name}/ — project info (route to right subdir)
+- Intelligence/decisions/ — decisions with reasoning
+- Intelligence/competitors/ — competitive insights
 Only update when there's something worth saving. Normal chat doesn't need updates.
 [END VAULT MEMORY]
 

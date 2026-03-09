@@ -13,14 +13,14 @@ focus:
 <!-- Mood and energy level (1-10) -->
 
 ## Today's Focus
-<!-- One main priority for the day -->
+<!-- One main priority — link to project: [[Project-Name]] -->
 
 ## Tasks for Today
-<!-- Pulled from TaskNotes or new tasks -->
-- [ ]
+<!-- Pulled from TaskNotes or new tasks — always link projects and people -->
+- [ ] [[Project-Name]] — [task description]
 
 ## Blockers
-<!-- Anything preventing progress -->
+<!-- Anything preventing progress — link related [[projects]] or [[people]] -->
 
 ## Notes
-<!-- Any other thoughts for the day -->
+<!-- Any other thoughts — use [[wikilinks]] for anything referenceable -->

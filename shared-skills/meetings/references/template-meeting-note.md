@@ -11,18 +11,23 @@ status: raw
 
 # Meeting: [Title]
 
+## Participants
+- [[Person A]]
+- [[Person B]]
+
 ## Key Decisions
 - [Decision 1]
 
 ## Action Items
-- [ ] [Action] — **Owner**: [Person] — **Due**: [Date]
+- [ ] [[Person A]] — [Action] — **Due**: [Date]
+- [ ] [[Person B]] — [Action] — **Due**: [Date]
 
 ## Discussion Summary
 ### [Topic 1]
-[Summary]
+[Summary — use [[wikilinks]] for any projects, people, or vault notes mentioned]
 
 ## Open Questions
-- [Question 1]
+- [Question 1 — who follows up: [[Person]]]
 
 ## Follow-up
 - Next meeting: [Date/Time]

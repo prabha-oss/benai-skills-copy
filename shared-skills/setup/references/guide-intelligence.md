@@ -17,10 +17,6 @@ What you know — synthesized knowledge, meeting history, competitive intel, and
 | `decisions/` | Decision records with reasoning (`YYYY-MM-DD-title.md`) |
 | `archive/` | Older entries moved here when thresholds are exceeded |
 
-## Top-Level Files
-
-- `learnings.md` — Durable insights and patterns captured over time
-
 ## Naming Conventions
 
 - **Meetings**: `YYYY-MM-DD Meeting Title.md`
@@ -33,7 +29,7 @@ What you know — synthesized knowledge, meeting history, competitive intel, and
 ```yaml
 ---
 type: intelligence
-subtype: meeting | decision | competitor | market | learning
+subtype: meeting | decision | competitor | market
 date: YYYY-MM-DD
 tags: [relevant-tags]
 ---

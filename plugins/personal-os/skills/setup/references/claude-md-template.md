@@ -22,7 +22,7 @@ Your memory and context live in Obsidian folders — the same notes the user see
 - **Identity & Preferences** (`Context/me.md`) — Who the user is, how they work, their tools and style.
 - **Strategy & Goals** (`Context/strategy.md`) — Vision, yearly goals, monthly focus.
 - **Business Context** (`Context/business.md`) — Company, products, audience (if applicable).
-- **Insights** (`Intelligence/learnings.md`) — Patterns and corrections captured over time.
+- **Decisions** (`Intelligence/decisions/`) — Decision records with reasoning.
 - **Projects** (`Projects/`) — Deep context per project. Each project has a `README.md`. Only load when relevant.
 - **Session History** (`Daily/`) — Daily notes track session progress. Used by `/assistant` to reconstruct context.
 
@@ -62,7 +62,7 @@ User-created skills live in `Skills/`. Each skill has a `skill.md` with trigger 
 ```
 Context/      — Who you are: identity, business, strategy, team, brand
 Projects/     — What you're working on: intelligently structured per project
-Intelligence/ — What you know: meetings, competitors, decisions, learnings
+Intelligence/ — What you know: meetings, competitors, market, decisions
   ├── meetings/
   │   ├── team-standups/
   │   ├── client-calls/
@@ -98,9 +98,9 @@ Every action should trace back to a goal:
 
 ### Obsidian Flavored Markdown
 
-Always use Obsidian-native syntax in vault notes:
+Always use Obsidian-native syntax in vault notes. **Wikilinks build the graph** — every project, person, and note reference must be a wikilink.
 
-- **Wikilinks** (not markdown links): `[[Note Name]]`, `[[Note|Display Text]]`, `[[Note#Heading]]`
+- **Wikilinks** (not markdown links): `[[Note Name]]`, `[[Note|Display Text]]`, `[[Note#Heading]]` — use for EVERY mention of a project, person, or vault note in any file (daily notes, tasks, session logs, meetings, decisions)
 - **Embeds**: `![[Note Name]]`, `![[image.png|300]]`
 - **Callouts** for visual structure:
   ```
@@ -159,7 +159,7 @@ Tag once. Query everywhere. Never manually link.
 When the user corrects you:
 1. Apply the correction immediately
 2. Automatically add it as a permanent rule in the Rules section below
-3. Also update `Intelligence/learnings.md`
+3. Route the insight to the right file (project, context, decision, etc.)
 4. Tell the user what was saved
 
 Every correction becomes a rule. Every repeated explanation becomes documentation. Don't ask — just save and report.
@@ -168,7 +168,7 @@ Every correction becomes a rule. Every repeated explanation becomes documentatio
 
 1. On your FIRST response in a conversation, read `Context/me.md` and the latest `Daily/` note to load context (see Session Startup above).
 2. When meaningful work is done (not casual chat), update or create `Daily/YYYY-MM-DD.md` with session progress. Don't update on every message — only when there's something worth recording.
-3. Use `[[wikilinks]]` in notes — never `[markdown](links)` for internal vault references. Weave them into sentences, not as footnotes.
+3. Use `[[wikilinks]]` for EVERY project, person, and note reference in ANY vault file — daily notes, session logs, tasks, meetings, decisions. This builds the graph. Weave them into sentences, not as footnotes. Never use plain text for something that is (or could be) a vault note.
 4. Every note you create should be standalone and composable — like a Lego block.
 5. When creating files, use YAML frontmatter for metadata (type, date, status, tags, project).
 6. Use callouts (`> [!type] Title`) for visual structure: `important` for decisions, `todo` for action items, `tip` for wins, `warning` for blockers, `question` for open items.
