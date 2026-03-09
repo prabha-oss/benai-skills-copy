@@ -1,6 +1,6 @@
 ---
 name: personal-os-assistant
-description: Personal OS assistant — manages sessions, daily routines, tasks, memory, and output styles. Handles resume, compress, preserve, daily review, task management, and style switching.
+description: Personal OS assistant — manages sessions, daily routines, tasks, memory, and output styles. Handles resume, compress, preserve, daily review, task management, and style switching. Use when user says "resume", "compress", "morning review", "tasks", "output style", or runs /personal-os-assistant.
 ---
 
 # Personal OS Assistant
@@ -26,6 +26,39 @@ Match the user's intent to the right section:
 
 If unclear, show this table and ask what they need.
 
+## Vault Interaction
+
+### Obsidian CLI (Preferred)
+
+When Obsidian is running, use the CLI for vault operations — it triggers Obsidian events and keeps the UI in sync:
+
+```bash
+obsidian read file="Note Name"              # Read a note
+obsidian create name="Note" content="..."   # Create a note
+obsidian append file="Note" content="..."   # Append to a note
+obsidian daily:read                         # Read today's daily note
+obsidian daily:append content="..."         # Append to daily note
+obsidian search query="term" limit=10       # Search vault
+obsidian tasks                              # List tasks
+obsidian property:set file="Note" key="status" value="done"
+```
+
+Check if available: `which obsidian`. If unavailable, fall back to direct file read/write.
+
+For full CLI reference, read `references/obsidian-cli.md`.
+
+### Obsidian Flavored Markdown
+
+All vault notes MUST use OFM syntax. Key rules:
+
+- **Wikilinks**: `[[Note]]`, `[[Note|Display Text]]`, `[[Note#Heading]]` — never markdown links for internal notes
+- **Callouts**: `> [!type] Title` — use for visual structure (tip, warning, important, question, todo, success)
+- **Embeds**: `![[Note]]`, `![[image.png|300]]`
+- **Highlights**: `==text==`
+- **Comments**: `%%hidden%%`
+
+For full reference, read `references/obsidian-formatting.md`.
+
 ## Vault Structure
 
 ```
@@ -49,13 +82,12 @@ Reconstruct full context so the user picks up where they left off.
 
 ### Steps
 
-1. **Load core memory** -- Read `Reference/about-me.md`, glob `Projects/*/README.md`, read `Thinking/learnings.md`
-2. **Load recent daily notes** -- Default: last 3 from `Daily/` (sorted by filename date). With a number arg: last N notes. With a keyword arg: last 3 + search all daily notes for keyword. Read Quick Reference sections first (low token cost); dig deeper only if needed.
-3. **Check active tasks** -- Query TaskNotes API for open/in-progress tasks. Note overdue items. Skip if API unavailable.
-   ```bash
-   curl -s "http://127.0.0.1:8080/api/tasks?status=open"
-   curl -s "http://127.0.0.1:8080/api/tasks?status=in-progress"
-   ```
+1. **Load core memory** -- Read `Reference/about-me.md`, glob `Projects/*/README.md`, read `Thinking/learnings.md`. Prefer `obsidian read` if CLI is available; otherwise read files directly.
+2. **Load recent daily notes** -- Default: last 3 from `Daily/` (sorted by filename date). With a number arg: last N notes. With a keyword arg: last 3 + `obsidian search query="keyword"` across all daily notes. Read Quick Reference sections first (low token cost); dig deeper only if needed.
+3. **Check active tasks** -- Try in order:
+   - `obsidian tasks` (if CLI available)
+   - TaskNotes API: `curl -s "http://127.0.0.1:8080/api/tasks?status=open"`
+   - Skip if neither available
 4. **Check goals** -- If `Goals/` has content, scan for active goals and approaching milestones.
 5. **Present briefing** -- Concise standup format:
    ```
@@ -68,7 +100,7 @@ Reconstruct full context so the user picks up where they left off.
 
    What would you like to focus on today?
    ```
-6. **Update daily note** -- Create/append to `Daily/YYYY-MM-DD.md` with a "Current Session" section noting the resume.
+6. **Update daily note** -- Create/append to `Daily/YYYY-MM-DD.md` with a "Current Session" section. Prefer `obsidian daily:append` if CLI available.
 
 ### Guidelines
 - Keep the briefing short -- like a quick standup, not a data dump
@@ -85,35 +117,35 @@ Save everything valuable from the current session so future sessions can pick up
 ### Steps
 
 1. **Ask what to preserve** -- Present options: key learnings, decisions, solutions/fixes, files modified, pending tasks, errors/workarounds, or "all of the above" (recommended). If the user says "all" or wants speed, save everything.
-2. **Create session log** -- Append to `Daily/YYYY-MM-DD.md`:
+2. **Create session log** -- Append to `Daily/YYYY-MM-DD.md` (prefer `obsidian daily:append` if CLI available):
    ```markdown
    ## Session Log: HH:MM -- [Topic Summary]
 
    ### Quick Reference
    **Topics:** [comma-separated]
-   **Projects:** [related projects]
+   **Projects:** [[Project-Name]]
    **Outcome:** [what was accomplished]
    **Duration:** [approximate]
 
-   ### Decisions Made
-   - [Decision -- reasoning]
+   > [!important] Decisions Made
+   > - [Decision -- reasoning]
 
-   ### Key Learnings
-   - [Learning]
+   > [!tip] Key Learnings
+   > - [Learning]
 
-   ### Solutions & Fixes
-   - [Problem -> Solution]
+   > [!info] Solutions & Fixes
+   > - [Problem -> Solution]
 
    ### Files Modified
    - [file path -- what changed]
 
-   ### Pending Tasks
-   - [ ] [Task]
+   > [!todo] Pending Tasks
+   > - [ ] [Task]
 
    ### Raw Session Summary
    [Condensed summary -- enough context to reconstruct what happened]
    ```
-   Only include YAML frontmatter if creating a new file. Keep Quick Reference to 5-6 lines max (it's designed for fast AI scanning on resume).
+   Only include YAML frontmatter if creating a new file. Keep Quick Reference to 5-6 lines max (it's designed for fast AI scanning on resume). Use `[[wikilinks]]` for project references.
 3. **Update memory files**:
    - Learnings -> append to `Thinking/learnings.md`
    - User preferences -> update `Reference/about-me.md`
@@ -205,15 +237,24 @@ Templates live in `references/template-morning.md`, `references/template-evening
 
 ## Task Management
 
-TaskNotes runs as an Obsidian plugin with an HTTP API on `localhost:8080`. Tasks are stored as markdown files in `TaskNotes/Tasks/`.
+Two interfaces available for task management. Try in order:
 
-### Check API Availability
+### 1. Obsidian CLI (Preferred)
 
 ```bash
-curl -s --max-time 2 "http://127.0.0.1:8080/api/tasks" > /dev/null 2>&1 && echo "API running" || echo "API not available -- is Obsidian open?"
+obsidian tasks                               # List all tasks
+obsidian daily:append content="- [ ] Task"   # Quick task in daily note
 ```
 
-If unavailable: "TaskNotes API isn't responding. Make sure Obsidian is open with the TaskNotes plugin enabled." Do NOT fall back to file-based task creation.
+### 2. TaskNotes HTTP API (Full CRUD)
+
+TaskNotes runs as an Obsidian plugin with an HTTP API on `localhost:8080`. Tasks are stored as markdown files in `TaskNotes/Tasks/`.
+
+```bash
+curl -s --max-time 2 "http://127.0.0.1:8080/api/tasks" > /dev/null 2>&1 && echo "API running" || echo "API not available"
+```
+
+If neither is available: "Task system isn't responding. Make sure Obsidian is open." Do NOT fall back to file-based task creation.
 
 ### API Reference
 
@@ -285,11 +326,33 @@ User voice from `Reference/about-me.md` is applied ON TOP of the active style. S
 
 ---
 
+## Web Content Extraction
+
+When the user shares a URL for context (articles, docs, reference material):
+
+```bash
+defuddle parse <url> --md
+```
+
+Defuddle strips clutter and returns clean markdown — much more token-efficient than raw web fetching. If `defuddle` is not installed, fall back to standard web fetch.
+
 ## General Guidelines
 
 - **Memory protocol**: Before responding, load `Reference/about-me.md`, `Projects/*/README.md`, and `Thinking/learnings.md`. After responding, update relevant vault files with new learnings or status changes.
+- **Obsidian CLI first**: Always try `obsidian` CLI commands before falling back to direct file access or HTTP APIs.
+- **OFM syntax**: Use `[[wikilinks]]` not `[markdown](links)` for internal notes. Use callouts for visual structure. Use `==highlights==` for emphasis. Use `%%comments%%` for internal notes.
 - **Teaching loop**: When corrected, offer to save the correction as a permanent rule in `CLAUDE.md`.
 - **File paths**: All paths are relative to the Obsidian vault root (the working directory).
 - **Daily notes**: `Daily/YYYY-MM-DD.md` is the most-read memory file -- always keep it current.
 - **Auto-archive thresholds**: `Thinking/learnings.md` > 150 lines, `Reference/about-me.md` > 100 lines. Archive to `Archive/[filename]-archive-YYYY-MM.md`. Never archive active projects, core preferences, or the 20 most recent learnings.
-- **TaskNotes API**: Always on `http://127.0.0.1:8080`. If unavailable, note it and continue without task data.
+- **Task system**: Try Obsidian CLI → TaskNotes API (`http://127.0.0.1:8080`) → skip. If unavailable, note it and continue without task data.
+
+## Anti-Patterns
+
+Do NOT:
+- Use `[markdown](links)` for internal vault notes — always use `[[wikilinks]]`
+- Put a `# Title` heading that duplicates the filename — Obsidian shows the filename as title
+- Create orphan notes — always link new notes from at least one existing note
+- Read entire files when scanning many — use `grep` for frontmatter or `obsidian search`
+- Update vault files on casual chat — only when there's something worth recording
+- Create tasks as plain text in notes — use the TaskNotes API or Obsidian CLI so they're queryable
