@@ -6,7 +6,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 ## Available Departments
 
-### Marketing (11 skills)
+### Marketing (12 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | programmatic-seo | `/programmatic-seo` | SEO-optimized pages at scale |
@@ -20,6 +20,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | title-generation | `/title-generation` | Optimized YouTube video titles |
 | gif-creator | `/gif-creator` | GIFs from video clips |
 | excalidraw | `/excalidraw` | Presentations & diagrams |
+| website-launch-kit | `/website-launch-kit` | Custom landing pages through conversation |
 
 **Commands:** `/marketing` (skill overview), `/repurpose` (content repurposing workflow)
 
@@ -45,18 +46,26 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 | n8n | `/n8n` | n8n workflow automation |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
 
-### Creative (3 skills)
+**Commands:** `/operations` (skill overview)
+
+### Creative (5 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | video | `/video` | Video editing (FFmpeg/Remotion) |
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 | infographic | `/infographic` | AI-generated infographics |
+| infographic-old | `/infographic-old` | Infographic generator (legacy) |
+| infographic-v2 | `/infographic-v2` | Infographics with Nano Banana/Gemini AI |
+
+**Commands:** `/creative` (skill overview)
 
 ### Product (2 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | excalidraw | `/excalidraw` | Presentations & diagrams |
 | n8n-prd-generator | `/n8n-prd-generator` | Automation blueprints from calls |
+
+**Commands:** `/product` (skill overview)
 
 ### YouTube (7 skills)
 | Skill | Command | Purpose |
