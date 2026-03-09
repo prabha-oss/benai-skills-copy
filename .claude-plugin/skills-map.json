@@ -388,16 +388,16 @@
         ]
       },
       "skills": {
-        "personal-os-setup": {
-          "displayName": "Personal OS Setup",
+        "setup": {
+          "displayName": "Setup",
           "summary": "Bootstrap vault structure and run personalized onboarding interview"
         },
-        "personal-os-assistant": {
-          "displayName": "Personal OS Assistant",
+        "assistant": {
+          "displayName": "Assistant",
           "summary": "Manage sessions, daily routines, tasks, memory, and output styles"
         },
-        "personal-os-meetings": {
-          "displayName": "Personal OS Meetings",
+        "meetings": {
+          "displayName": "Meetings",
           "summary": "Process meeting transcripts, sync Fireflies, extract action items"
         }
       }

@@ -14,7 +14,7 @@ if [ -z "$CWD" ]; then
   exit 0
 fi
 
-ABOUT_ME="$CWD/Reference/about-me.md"
+ABOUT_ME="$CWD/Context/me.md"
 LATEST_DAILY=""
 
 # Safely find the most recent daily note (no crash if folder is empty/missing)
