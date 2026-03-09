@@ -1,5 +1,0 @@
-[
-  "dataview",
-  "tasknotes",
-  "calendar"
-]
