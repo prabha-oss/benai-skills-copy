@@ -134,7 +134,8 @@ Tell the user:
 - "Vault structure created successfully."
 - List the key directories and files created
 - Recommend opening this folder as a vault in Obsidian
-- Recommend installing **TaskNotes** (for task management) and **Dataview** (for queries) community plugins if they want task features
+- Recommend installing **TaskNotes** community plugin if they want task management features
+- Note that **Bases** (native database views) are built into Obsidian — no plugin needed for queries
 - "Now let's personalize it for you."
 
 Then proceed to Phase B.
@@ -310,10 +311,9 @@ Tell the user:
 - Summary of everything that was created (directories, files, projects, tasks)
 - "Open this folder in Obsidian to see your vault"
 - Remind them about key commands:
-  - `/personal-os-resume` -- Start each session here
-  - `/personal-os-daily-review` -- Morning/evening routines
-  - `/personal-os-compress` -- Save before ending a session
-  - `/personal-os-tasknotes` -- Manage tasks
+  - `/personal-os-assistant` -- Resume sessions, daily reviews, tasks, memory, output styles
+  - `/personal-os-meetings` -- Process meeting transcripts, sync Fireflies
+- Mention: "Your notes use Obsidian Flavored Markdown — wikilinks, callouts, and embeds all render beautifully in Obsidian."
 - "I'll remember everything from this conversation -- my memory updates automatically"
 - Suggest a next action based on what they told you
 

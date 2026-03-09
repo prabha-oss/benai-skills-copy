@@ -1,6 +1,6 @@
 ---
 name: personal-os-meetings
-description: Process meeting transcripts and sync from Fireflies.ai — extract decisions, action items, create summaries, and file in the right folder. Use when user pastes a transcript, mentions meetings, or wants to sync Fireflies.
+description: Process meeting transcripts and sync from Fireflies.ai — extract decisions, action items, create summaries, and file in the right folder. Use when user pastes a transcript, mentions meetings, wants to sync Fireflies, or runs /personal-os-meetings.
 ---
 
 # Meeting Intelligence
@@ -10,6 +10,7 @@ USE WHEN the user:
 - Asks to summarize a meeting or extract action items
 - Asks about past meetings or meeting patterns
 - Mentions Fireflies, asks to sync or pull transcripts
+- Shares a URL to a recorded meeting or transcript
 - Runs `/personal-os-meetings`
 
 ## Pre-flight Check
@@ -62,34 +63,39 @@ status: processed
 ---
 ```
 
-Body structure:
+Body structure (uses Obsidian callouts for visual structure):
 
 ```markdown
 # Meeting: [Title] -- YYYY-MM-DD
 
 ## Participants
-- [List of attendees]
+- [[Person A]]
+- [[Person B]]
 
 ## Summary
 [2-3 sentence overview]
 
-## Key Decisions
-- [Decision 1]
+> [!important] Key Decisions
+> - [Decision 1]
+> - [Decision 2]
 
-## Action Items
-- [ ] [Person] — [Task] (by [date])
+> [!todo] Action Items
+> - [ ] [[Person A]] — [Task] (by [date])
+> - [ ] [[Person B]] — [Task] (by [date])
 
 ## Discussion Notes
 ### [Topic 1]
 [Summary of discussion]
 
-## Open Questions
-- [Unresolved item 1]
+> [!question] Open Questions
+> - [Unresolved item 1]
 
-## Follow-up
-- Next meeting: [date/time if mentioned]
-- Prepare: [items to prepare]
+> [!info] Follow-up
+> - Next meeting: [date/time if mentioned]
+> - Prepare: [items to prepare]
 ```
+
+Use `[[wikilinks]]` for participants and project references — this creates automatic backlinks in Obsidian.
 
 ### Step 5: Create Tasks from Action Items
 
@@ -152,19 +158,28 @@ Free plan limits: no API, no webhooks, 800 min storage, manual export only (DOCX
 
 Users with Claude Pro/Max and Fireflies Business can connect via Claude Settings > Connectors, bypassing MCP setup.
 
-## Querying Past Meetings
+## Web Transcript Extraction
 
-Search the vault by person, topic, or metadata:
+If the user shares a URL to a meeting transcript or recording page:
 
 ```bash
-# Find meetings with a specific person
+defuddle parse <url> --md
+```
+
+Defuddle extracts clean markdown from web pages, stripping clutter. If `defuddle` is not installed, fall back to standard web fetch. Process the extracted content through Steps 1-6 above.
+
+## Querying Past Meetings
+
+Prefer Obsidian CLI when available, fall back to grep:
+
+```bash
+# Obsidian CLI (preferred — uses Obsidian's search index)
+obsidian search query="Person Name" limit=10
+obsidian search query="topic keyword" limit=10
+
+# Fallback: grep
 grep -rl "Person Name" Meetings/
-
-# Find meetings about a topic
 grep -rl "topic keyword" Meetings/
-
-# List recent meetings
-ls -lt Meetings/*/
 ```
 
 Query by frontmatter: `participants`, `project`, `date`, `subtype`, `source`.
@@ -173,9 +188,17 @@ Query by frontmatter: `participants`, `project`, `date`, `subtype`, `source`.
 
 - Always ask for meeting type if not obvious from transcript
 - Extract ALL action items -- don't miss any
-- Use the user's name for action items assigned to them
+- Use `[[wikilinks]]` for participants and projects — creates backlinks automatically
+- Use callouts (`[!important]`, `[!todo]`, `[!question]`) for visual structure
 - For recurring meetings, check previous notes to track patterns
 - Keep summaries concise but complete -- someone absent should understand what happened
 - Always check MCP availability before falling back to manual export
 - Tag all Fireflies-sourced notes with `source: fireflies` in frontmatter
 - When syncing multiple meetings, process one at a time and confirm with user
+
+## Anti-Patterns
+
+- Do NOT use `[markdown](links)` for internal notes — always `[[wikilinks]]`
+- Do NOT list participants as plain text if they have notes in the vault — use `[[Person Name]]`
+- Do NOT skip frontmatter on meeting notes — it enables Bases queries and filtering
+- Do NOT create action items as plain text — use TaskNotes API or Obsidian CLI so they're trackable
