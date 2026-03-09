@@ -1,7 +1,7 @@
 #!/bin/bash
 # load-context.sh
-# Fires on every UserPromptSubmit to inject the context system into Claude's context.
-# This ensures Claude always has awareness of the memory and project systems.
+# Fires on every UserPromptSubmit to inject context from Obsidian vault into Claude's context.
+# This ensures Claude always has awareness of user identity and current session state.
 
 set -euo pipefail
 
@@ -12,35 +12,26 @@ if [ -z "$CWD" ]; then
   CWD="$CLAUDE_PROJECT_DIR"
 fi
 
-CONTEXT_FILE="$CWD/.claude/context/CLAUDE.md"
-MEMORY_STATUS="$CWD/.claude/context/memory/work_status.md"
-MEMORY_PREFS="$CWD/.claude/context/memory/user_preferences.md"
+ABOUT_ME="$CWD/Reference/about-me.md"
+LATEST_DAILY=$(ls -t "$CWD"/Daily/*.md 2>/dev/null | head -1)
 
 # Build context injection
 echo "=== CONTEXT SYSTEM LOADED ==="
 
-# Load context overview
-if [ -f "$CONTEXT_FILE" ]; then
+# Load user identity & preferences
+if [ -f "$ABOUT_ME" ]; then
   echo ""
-  echo "--- Context Overview ---"
-  head -30 "$CONTEXT_FILE"
-  echo "--- End Context Overview ---"
+  echo "--- User Identity & Preferences ---"
+  cat "$ABOUT_ME"
+  echo "--- End User Identity & Preferences ---"
 fi
 
-# Load work status (most recent session info)
-if [ -f "$MEMORY_STATUS" ]; then
+# Load most recent daily note (current session state)
+if [ -n "$LATEST_DAILY" ] && [ -f "$LATEST_DAILY" ]; then
   echo ""
-  echo "--- Current Work Status ---"
-  cat "$MEMORY_STATUS"
-  echo "--- End Work Status ---"
-fi
-
-# Load user preferences (communication style, settings)
-if [ -f "$MEMORY_PREFS" ]; then
-  echo ""
-  echo "--- User Preferences ---"
-  cat "$MEMORY_PREFS"
-  echo "--- End User Preferences ---"
+  echo "--- Current Session State ($(basename "$LATEST_DAILY")) ---"
+  cat "$LATEST_DAILY"
+  echo "--- End Current Session State ---"
 fi
 
 echo ""

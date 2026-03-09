@@ -40,25 +40,25 @@ Or, if the user already stated something (e.g., "remember that I always want..."
 
 | Type of Knowledge | Where to Write |
 |-------------------|---------------|
-| User preferences, style, habits | `.claude/context/memory/user_preferences.md` |
-| Project info, deadlines, details | `.claude/context/memory/user_projects.md` |
-| General insights, patterns | `.claude/context/memory/learnings.md` |
+| User preferences, style, habits | `Reference/about-me.md` |
+| Project info, deadlines, details | `Projects/{name}/README.md` |
+| General insights, patterns | `Thinking/learnings.md` |
 | Rules about how the assistant should behave | Root `CLAUDE.md` (under Rules section) |
 
 ### Step 3: Auto-Archive Check
 
 After writing, check the file size:
 
-- If **`learnings.md`** exceeds 150 lines: Archive older entries to `.claude/context/memory/archive/learnings-archive-YYYY-MM.md`
-- If **`user_preferences.md`** exceeds 100 lines: Consider consolidating
-- If **`user_projects.md`** has completed projects: Move them to an archive section within the file
+- If **`Thinking/learnings.md`** exceeds 150 lines: Archive older entries to `Archive/learnings-archive-YYYY-MM.md`
+- If **`Reference/about-me.md`** exceeds 100 lines: Consider consolidating
+- If a **`Projects/*/README.md`** has completed projects: Move them to `Archive/`
 
-Archive format: `.claude/context/memory/archive/[filename]-archive-YYYY-MM.md`
+Archive location: `Archive/[filename]-archive-YYYY-MM.md`
 
 **Protected content** (never archive):
-- Current active projects in `user_projects.md`
-- Core preferences in `user_preferences.md`
-- The most recent 20 learnings in `learnings.md`
+- Current active projects in `Projects/*/README.md`
+- Core preferences in `Reference/about-me.md`
+- The most recent 20 learnings in `Thinking/learnings.md`
 
 ### Step 4: Confirm
 
@@ -76,6 +76,6 @@ This is how the system learns from you over time -- every correction becomes a p
 ## Guidelines
 
 - Be precise about where things are saved -- always tell the user the exact file path
-- When adding to `learnings.md`, prefix each entry with a date: `- [YYYY-MM-DD] Learning text here`
+- When adding to `Thinking/learnings.md`, prefix each entry with a date: `- [YYYY-MM-DD] Learning text here`
 - When adding rules to `CLAUDE.md`, add them at the bottom of the Rules section with a numbered entry
 - Don't duplicate -- check if the knowledge already exists before adding

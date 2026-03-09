@@ -63,28 +63,26 @@ The Personal OS vault has this structure:
 ```
 CLAUDE.md               -- Root config (your operating instructions)
 .claude/
-  context/
-    memory/             -- Persistent memory (preferences, projects, learnings, status)
-    projects/           -- Deep context per project
-    session-logs/       -- Saved session summaries
   hooks/                -- Automation hooks
   output-styles/        -- Output style definitions
+Reference/
+  about-me.md           -- Who the user is (preferences, style, habits)
+Thinking/
+  learnings.md          -- Key insights and patterns
 Inbox/                  -- Quick capture
-Thinking/               -- Synthesis and ideas
-Projects/               -- Active project folders
+Projects/               -- Active project folders (each has README.md)
 Meetings/               -- Meeting transcripts and insights
-Daily/                  -- Daily journals and check-ins
-Reference/              -- External knowledge
-Archive/                -- Completed content
+Daily/                  -- Daily journals, check-ins, and session logs
 Goals/                  -- Vision, yearly, monthly goals
+Archive/                -- Completed content and old entries
 TaskNotes/Tasks/        -- Task files (managed by TaskNotes plugin)
 ```
 
 ## Memory Protocol
 
-The Personal OS maintains a persistent memory system:
+The Personal OS maintains a persistent memory system stored in Obsidian vault folders:
 
-- **Before responding**: Read relevant memory files from `.claude/context/memory/` to understand context
-- **After responding**: Update memory files with any new learnings or status changes
-- **Session management**: Use `/personal-os-compress` to save sessions, `/personal-os-resume` to restore them
+- **Before responding**: Read `Reference/about-me.md`, `Projects/*/README.md`, and `Thinking/learnings.md` to understand context
+- **After responding**: Update the relevant vault files with any new learnings or status changes
+- **Session management**: Use `/personal-os-compress` to save sessions (appended to `Daily/` notes), `/personal-os-resume` to restore them
 - **Teaching loop**: When corrected, offer to save the correction as a permanent rule
