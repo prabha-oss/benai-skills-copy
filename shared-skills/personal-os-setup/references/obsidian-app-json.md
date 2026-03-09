@@ -1,0 +1,10 @@
+{
+  "interfaceFontSize": 14,
+  "alwaysUpdateLinks": true,
+  "newFileLocation": "folder",
+  "newFileFolderPath": "Inbox",
+  "attachmentFolderPath": "Reference/attachments",
+  "showUnsupportedFiles": false,
+  "defaultViewMode": "preview",
+  "strictLineBreaks": false
+}
