@@ -38,7 +38,7 @@ fi
 
 # Clean and create dist directories
 rm -rf "$DIST"
-mkdir -p "$DIST/extension" "$DIST/desktop"
+mkdir -p "$DIST/extension" "$DIST/desktop" "$DIST/skill-zips"
 
 # Read all plugins from marketplace.json
 PLUGINS_JSON=$(python3 -c "
@@ -134,7 +134,43 @@ echo "$PLUGINS_JSON" | while IFS='|' read -r name source; do
   rm -rf "$staging"
 done
 
+# =============================================================
+# SKILL ZIPS (Individual skills for Cowork / Desktop)
+# Structure: SKILL.md + references/ at zip root
+# =============================================================
+echo ""
+echo "--- Building individual skill zips ---"
+
+SKILL_COUNT=0
+for skill_dir in "$ROOT/shared-skills"/*/; do
+  skill_name=$(basename "$skill_dir")
+
+  # Skip if no SKILL.md
+  [ -f "$skill_dir/SKILL.md" ] || continue
+
+  staging="$TMP/skill-$skill_name"
+  rm -rf "$staging"
+  mkdir -p "$staging"
+
+  # Copy skill contents to root
+  cp -R "$skill_dir"/* "$staging/" 2>/dev/null || true
+
+  # Remove .gitkeep files and empty directories
+  find "$staging" -name ".gitkeep" -delete 2>/dev/null || true
+  find "$staging" -type d -empty -delete 2>/dev/null || true
+
+  # Create zip
+  (cd "$staging" && zip -r "$DIST/skill-zips/$skill_name.zip" . > /dev/null 2>&1)
+  SKILL_COUNT=$((SKILL_COUNT + 1))
+
+  rm -rf "$staging"
+done
+
+SIZE=$(du -sh "$DIST/skill-zips" | cut -f1 | xargs)
+echo "  Created $SKILL_COUNT skill zips ($SIZE total) in skill-zips/"
+
 echo ""
 echo "Done. All zips in $DIST/"
 echo "  extension/   — for Claude Code, Cursor, VS Code"
 echo "  desktop/     — for Claude Desktop (upload local plugin)"
+echo "  skill-zips/  — individual skills for Cowork / Desktop"
