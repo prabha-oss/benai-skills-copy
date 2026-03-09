@@ -125,6 +125,60 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
 
+### Personal OS (3 skills)
+| Skill | Command | Purpose |
+|-------|---------|---------|
+| setup | `/setup` | Bootstrap vault structure + 2-question onboarding |
+| assistant | `/assistant` | Sessions, daily routines, tasks, memory, custom skills, output styles |
+| meetings | `/meetings` | Process transcripts, sync Fireflies, extract action items |
+
+**Commands:** `/personal-os` (skill overview)
+
+#### Vault Structure
+
+```
+claude.md               — Brain file (operating instructions)
+Context/                — Who you are: me.md, business.md, strategy.md, team.md, brand.md
+Projects/               — What you're working on: {project}/README.md
+Intelligence/           — What you know: meetings/, competitors/, decisions/, learnings.md
+Daily/                  — What happened: YYYY-MM-DD.md journals
+Skills/                 — Custom user-created skills: {skill}/skill.md
+```
+
+#### Onboarding
+
+Two questions only:
+1. "Tell me about yourself (and your business)" — accepts text, files, or skip
+2. "What are you currently working on?" — accepts text, files, or skip
+
+No follow-ups. Extracts what it can, builds the vault, reports what was created.
+
+#### Auto-Save Behavior
+
+The assistant never asks permission to save. When meaningful information comes up (learnings, preferences, corrections, project updates, action items), it saves to the right vault file immediately and reports what was saved. Corrections are automatically added as permanent rules in `claude.md`.
+
+#### Context Files (Only Created When Relevant)
+
+| File | Created When |
+|------|-------------|
+| `Context/me.md` | Always (identity, preferences) |
+| `Context/strategy.md` | User mentions goals or vision |
+| `Context/business.md` | User mentions company or products |
+| `Context/team.md` | User mentions team members |
+| `Context/brand.md` | User mentions voice, tone, or brand |
+
+#### Custom Skills (`Skills/`)
+
+Users create reusable skills as `Skills/{name}/skill.md` with trigger words and steps. The assistant auto-discovers them by globbing `Skills/*/skill.md`.
+
+#### Key Integrations
+
+- **Obsidian CLI** — preferred for vault operations when Obsidian is running
+- **TaskNotes API** — HTTP API on localhost:8080 for task CRUD
+- **Fireflies MCP** — meeting transcript sync (Business Plan)
+- **Obsidian Bases** — native database views, no plugins needed
+- **Defuddle** — web content extraction (`defuddle parse <url> --md`)
+
 ## n8n Skill
 
 ### Configuration
