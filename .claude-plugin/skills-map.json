@@ -8,7 +8,8 @@
       "connectors": [
         "webflow",
         "nano-banana",
-        "apify"
+        "apify",
+        "stitch"
       ],
       "skills": {
         "programmatic-seo": {
