@@ -14,5 +14,15 @@
   "apify": {
     "type": "http",
     "url": "https://mcp.apify.com"
+  },
+  "stitch": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "@_davideast/stitch-mcp"
+    ],
+    "env": {
+      "STITCH_API_KEY": ""
+    }
   }
 }

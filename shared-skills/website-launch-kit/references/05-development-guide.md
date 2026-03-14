@@ -4,13 +4,101 @@ This file covers the end-to-end technical workflow: setup, coding, previewing, a
 
 ---
 
+## Part 0: Design Generation with Google Stitch (PRIMARY METHOD)
+
+**Goal:** Generate high-fidelity UI designs before writing any code. Stitch produces better-looking designs than hand-coding from scratch.
+
+### Prerequisites
+
+The `stitch` MCP server must be configured in `.mcp.json` with a valid `STITCH_API_KEY`. Get your API key from https://stitch.withgoogle.com (Settings → API Keys). Free tier: 350 generations/month.
+
+### 0.1 Generate the Full Page Design
+
+Using the approved copy (Phase 6), design extraction (Phase 3), and section plan (Phase 4), craft a detailed Stitch prompt:
+
+```
+Stitch Prompt Template:
+"Create a modern landing page for [business name], a [business type] that [main offering].
+
+Design direction: [vibe words from Phase 3] aesthetic.
+Color palette: Primary [hex], Secondary [hex], Background [hex], Text [hex].
+Typography: [heading font] for headings, [body font] for body text.
+Layout: [centered/full-width/asymmetric] with [tight/normal/generous] spacing.
+Animation feel: [subtle/dynamic].
+
+Sections (in order):
+1. HERO: [headline] / [subtitle] / CTA: [button text]
+2. [SECTION]: [headline] / [body copy summary]
+3. [SECTION]: [headline] / [body copy summary]
+... (include all approved sections with their copy)
+
+Style reference: Similar to [inspiration URL].
+Make it conversion-focused with clear visual hierarchy."
+```
+
+**Call the Stitch MCP tool:**
+```
+stitch.build_site(prompt: "<your prompt above>")
+```
+
+### 0.2 Review Generated Screens
+
+After Stitch generates the design:
+
+1. **Get the visual preview:**
+   ```
+   stitch.get_screen_image(screen_id: "<id>")
+   ```
+   Show the generated design to the user for approval.
+
+2. **Iterate on the design in Stitch** if needed:
+   - Adjust colors, layout, spacing, or copy
+   - Regenerate specific screens
+   - Try different layout variants
+
+3. **Get user approval** before extracting code:
+   ```
+   AskUserQuestion(
+     question: "Here's the generated design. How does it look?",
+     options: [
+       { label: "Love it, let's build it", description: "Extract code and set up the project" },
+       { label: "Needs tweaks", description: "I'll describe what to change" },
+       { label: "Try a different direction", description: "Regenerate with different parameters" }
+     ]
+   )
+   ```
+
+### 0.3 Extract Production Code
+
+Once the user approves the design:
+
+```
+stitch.get_screen_code(screen_id: "<id>")
+```
+
+This returns **React + Tailwind CSS** code that matches the high-fidelity design. Use this as the foundation for the Next.js project instead of hand-coding from scratch.
+
+### 0.4 When Stitch Is Unavailable
+
+If the Stitch MCP server is not configured or the API key is missing, fall back to the manual development workflow in Part 1 below. Ask the user:
+
+```
+AskUserQuestion(
+  question: "Google Stitch can generate a polished design first, but it needs an API key. How would you like to proceed?",
+  options: [
+    { label: "Set up Stitch", description: "I'll get an API key from stitch.withgoogle.com" },
+    { label: "Skip, build manually", description: "Code the design directly with Next.js + Tailwind" }
+  ]
+)
+```
+
+---
+
 ## Part 1: Project Setup
 
-**Goal:** Initialize a high-performance Next.js project.
+**Goal:** Initialize a high-performance Next.js project and integrate Stitch-generated code.
 
 ### 1.1 Initialization Command
-
-Use the `nano-banana` server to create the project.
 
 ```bash
 npx -y create-next-app@latest [project-name] --typescript --tailwind --eslint
@@ -48,7 +136,24 @@ Create `.claude/launch.json` in the project root so the embedded preview panel a
 - `autoPort: true` — if port 3000 is busy, Claude auto-picks a free port
 - `runtimeExecutable` / `runtimeArgs` — adjust if using `yarn dev` or `pnpm dev`
 
-### 1.4 Folder Structure
+### 1.4 Integrate Stitch Code
+
+If Stitch was used (Part 0):
+
+1. **Extract components** from the Stitch-generated code into the project structure
+2. **Map Stitch output to Next.js:**
+   - Stitch HTML/React → `src/components/sections/` (one file per section)
+   - Stitch styles → merge into `globals.css` and Tailwind config
+   - Stitch assets → download and place in `public/`
+3. **Add interactivity** that Stitch doesn't generate:
+   - Framer Motion animations (based on Phase 2 preference)
+   - Form handling and submission logic
+   - Navigation scroll behavior
+   - Mobile menu toggle
+
+If Stitch was NOT used, build components manually following Part 2 below.
+
+### 1.5 Folder Structure
 
 Maintain this clean architecture:
 
@@ -60,7 +165,7 @@ src/
 │   └── globals.css      # CSS variables (from Phase 7)
 ├── components/
 │   ├── ui/              # Primitive components (Button, Card)
-│   ├── sections/        # Page sections (Hero, Features)
+│   ├── sections/        # Page sections (Hero, Features) — from Stitch or hand-built
 │   └── layout/          # Navbar, Footer
 └── lib/
     └── utils.ts         # cn() helper
@@ -70,7 +175,7 @@ src/
 
 ## Part 2: Component Patterns
 
-**Goal:** Build modular, responsive, and animated components.
+**Goal:** Build modular, responsive, and animated components. When Stitch code is available, use it as the base and enhance with these patterns.
 
 ### 2.1 The `cn()` Helper
 
@@ -104,7 +209,7 @@ export function Section({ children, className, id }: SectionProps) {
 
 ### 2.3 Animation Pattern
 
-Use `framer-motion` for scroll reveals.
+Use `framer-motion` for scroll reveals. Add these to Stitch-generated components that lack animation.
 
 ```typescript
 /* Client Component */

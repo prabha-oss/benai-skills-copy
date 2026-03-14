@@ -55,7 +55,7 @@ PHASE 3: Research & Extraction -> Analyze inspiration site
 PHASE 4: Section Planning      -> Propose page structure
 PHASE 5: Copywriting           -> Write content using formulas
 PHASE 6: Copy Review           -> Show 3 options per element
-PHASE 7: Development           -> Build with Next.js + Tailwind
+PHASE 7: Development           -> Design with Google Stitch + Build with Next.js + Tailwind
 PHASE 8: Preview               -> Embedded preview in Claude app
 PHASE 9: Iteration             -> Make edits with element selector
 PHASE 10: Deploy               -> Ship to Vercel
@@ -713,26 +713,28 @@ Show a **full page copy summary** with all approved content before moving to dev
 
 ## PHASE 7: Development
 
-**Goal:** Build the landing page with Next.js + Tailwind CSS.
+**Goal:** Build the landing page using Google Stitch for high-fidelity design + Next.js + Tailwind CSS for production code.
 
-**Reference:** Read these files  - `references/01-intake.md` (Questions)
-  - `references/02-research-strategy.md` (Research & Planning)
-  - `references/03-copy-content.md` (Copywriting & Review)
+**Reference:** Read these files:
+  - `references/05-development-guide.md` (Development & Deployment — **start with Part 0: Stitch**)
   - `references/04-design-assets.md` (Design System & Assets)
-  - `references/05-development-guide.md` (Development & Deployment)
 
-  QUICK START:
-  User: "launch site"
-  Assistant: "I'll help you build a high-converting landing page. First, I need to understand your business. Is this for a product or a service?" (See 01-intake.md)
+### Step 0: Generate Design with Google Stitch (PRIMARY)
+
+**Use the Stitch MCP server to generate a polished, high-fidelity design BEFORE writing any code.**
+
+1. **Craft a Stitch prompt** using approved copy (Phase 6), design extraction (Phase 3), and section plan (Phase 4)
+2. **Call `stitch.build_site()`** with the full page description, colors, typography, and section copy
+3. **Preview the design** with `stitch.get_screen_image()` — show to user for approval
+4. **Iterate in Stitch** if user wants changes (faster than iterating in code)
+5. **Extract production code** with `stitch.get_screen_code()` once approved
+
+**If Stitch is unavailable** (no API key configured), fall back to manual development below. See `references/05-development-guide.md` Part 0.4 for the fallback flow.
 
 ### Step 1: Project Setup
 
 ```bash
 npx create-next-app@latest [project-name] --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
-```
-
-Install dependencies:
-```bash
 npm install clsx tailwind-merge lucide-react framer-motion
 ```
 
@@ -755,17 +757,16 @@ Create `.claude/launch.json` in the project root to enable the embedded preview 
 }
 ```
 
-This allows Claude to start the dev server and render the site in the embedded browser — no need for the user to open a separate browser window.
+### Step 2: Integrate Stitch Code + Design System
 
-### Step 2: Set Up Design System
+If Stitch was used:
+1. **Extract Stitch-generated React/Tailwind components** into `src/components/sections/`
+2. **Merge Stitch styles** into `globals.css` and Tailwind config
+3. **Add interactivity** Stitch doesn't generate: Framer Motion animations, form handling, navigation, mobile menu
 
-Create CSS variables in `globals.css` using colors extracted from the inspiration site (Phase 3). Configure Tailwind with custom theme tokens. Set up fonts from the design brief.
+If manual build, create CSS variables in `globals.css` using Phase 3 colors. See `references/04-design-assets.md`.
 
-Follow the detailed setup in `references/05-development-guide.md` and `references/04-design-assets.md`.
-
-### Step 3: Build Components
-
-Follow `references/05-development-guide.md` for component structure:
+### Step 3: Build/Enhance Components
 
 ```
 src/
@@ -775,36 +776,27 @@ src/
 │   └── globals.css      # CSS variables + Tailwind
 ├── components/
 │   ├── ui/              # Button, Card, Input
-│   ├── sections/        # Hero, Problem, Solution, Process, Testimonials, FAQ, CTA, Footer
+│   ├── sections/        # Hero, Problem, Solution, etc. (from Stitch or hand-built)
 │   └── layout/          # Header, Container, SectionWrapper
 ├── lib/
 │   └── utils.ts         # cn() utility
-└── styles/
-    └── fonts.ts         # Font configuration
 ```
 
 ### Step 4: Visual Assets
 
-Follow `references/04-design-assets.md` for asset decisions:
-
-- **Icons:** Use Lucide React (`lucide-react`). One icon collection per project. Use `npx better-icons search [term]` to find icons.
-- **AI Images:** Use `generate_image` tool for product mockups, hero visuals, and abstract patterns. Never generate human faces or client logos.
-- **By business type:**
-  - Service businesses: Text-focused hero, icons for problems/solutions/process
-  - SaaS/Product: Product mockup in hero (AI-generated), screenshots for features
+Follow `references/04-design-assets.md`:
+- **Icons:** Lucide React. Use `npx better-icons search [term]` to find icons.
+- **AI Images:** Use `generate_image` for product mockups, hero visuals, abstract patterns. Never generate human faces or client logos.
 
 ### Step 5: Implement Animations
 
-Based on user's animation preference (subtle or dynamic) from Phase 2:
-
+Based on user's animation preference from Phase 2:
 - **Subtle:** Scroll reveal with `useInView`, gentle hover transforms
 - **Dynamic:** Staggered entrance animations, parallax, interactive hover effects
 
 Use Framer Motion patterns from `references/04-design-assets.md`.
 
 ### Step 6: Quality Check Before Preview
-
-**Reference:** Read `references/04-design-assets.md` and review code against the UI/UX checklist.
 
 Key checks:
 - Focus states on all interactive elements (`focus-visible:ring-*`)
