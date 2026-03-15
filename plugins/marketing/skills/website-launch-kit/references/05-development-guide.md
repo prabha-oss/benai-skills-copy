@@ -10,7 +10,48 @@ This file covers the end-to-end technical workflow: setup, coding, previewing, a
 
 ### Prerequisites
 
-The `stitch` MCP server must be configured in `.mcp.json` with a valid `STITCH_API_KEY`. Get your API key from https://stitch.withgoogle.com (Settings → API Keys). Free tier: 350 generations/month.
+The `stitch` MCP server must be configured in the **project root** `.mcp.json` (not in a plugin subdirectory — Claude Code only reads root-level MCP configs).
+
+**Option A: Google OAuth (Recommended)**
+
+More reliable — some Stitch endpoints reject API keys. Run the init wizard first:
+
+```bash
+npx @_davideast/stitch-mcp init
+```
+
+This opens a browser for Google login, sets up a GCP project, and enables the Stitch API. Then configure `.mcp.json`:
+
+```json
+{
+  "stitch": {
+    "command": "npx",
+    "args": ["-y", "@_davideast/stitch-mcp"],
+    "env": {
+      "STITCH_USE_SYSTEM_GCLOUD": "1",
+      "GOOGLE_CLOUD_PROJECT": "your-gcp-project-id"
+    }
+  }
+}
+```
+
+**Option B: API Key**
+
+Get your API key from https://stitch.withgoogle.com (Settings → API Keys). Free tier: 350 generations/month.
+
+```json
+{
+  "stitch": {
+    "command": "npx",
+    "args": ["-y", "@_davideast/stitch-mcp"],
+    "env": {
+      "STITCH_API_KEY": "your-api-key"
+    }
+  }
+}
+```
+
+**Note:** API key auth has known reliability issues — OAuth is preferred.
 
 ### 0.1 Generate the Full Page Design
 
@@ -80,13 +121,14 @@ This returns **React + Tailwind CSS** code that matches the high-fidelity design
 
 ### 0.4 When Stitch Is Unavailable
 
-If the Stitch MCP server is not configured or the API key is missing, fall back to the manual development workflow in Part 1 below. Ask the user:
+If the Stitch MCP server is not configured or authentication is missing, fall back to the manual development workflow in Part 1 below. Ask the user:
 
 ```
 AskUserQuestion(
-  question: "Google Stitch can generate a polished design first, but it needs an API key. How would you like to proceed?",
+  question: "Google Stitch can generate a polished design first, but it needs authentication. How would you like to proceed?",
   options: [
-    { label: "Set up Stitch", description: "I'll get an API key from stitch.withgoogle.com" },
+    { label: "Set up Stitch (Google OAuth)", description: "I'll run npx @_davideast/stitch-mcp init to authenticate with Google" },
+    { label: "Set up Stitch (API key)", description: "I'll get an API key from stitch.withgoogle.com" },
     { label: "Skip, build manually", description: "Code the design directly with Next.js + Tailwind" }
   ]
 )
