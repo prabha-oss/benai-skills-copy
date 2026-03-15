@@ -810,82 +810,54 @@ Key checks:
 
 ---
 
-## PHASE 8: Preview (Embedded Preview Mode)
+## PHASE 8: Preview
 
-**Goal:** Launch the site inside the Claude app's embedded preview panel and get user feedback.
+**Goal:** Launch the site in the browser and get user feedback.
 
 **Reference:** Read `references/05-development-guide.md` for preview setup and checklist.
 
 ### Start Preview
 
-Open the preview from the **Preview dropdown** in the session toolbar. Claude will automatically start the dev server using the `.claude/launch.json` config created in Phase 7.
+1. Run `npm run lint -- --fix` to catch issues
+2. Start the dev server in the background: `npm run dev &`
+3. Wait 2-3 seconds for the server to start
+4. Open the browser automatically:
+   - macOS: `open http://localhost:3000`
+   - Linux: `xdg-open http://localhost:3000`
 
-The site renders directly inside the Claude app — no need to switch to an external browser.
-
-### Auto-Verify
-
-Claude automatically verifies the build by:
-- Taking screenshots of each section
-- Inspecting the DOM for errors
-- Clicking interactive elements (buttons, links)
-- Filling out form inputs
-- Identifying and fixing issues it finds
-
-Review the auto-verify results before presenting to the user.
+**Claude Code Desktop users:** The embedded preview panel will auto-start the server from `.claude/launch.json` — skip the manual steps above.
 
 ### Tell the User
 
 ```
-Your site is live in the preview panel!
+Your site is live! I've opened it in your browser at http://localhost:3000
 
-You can see it right here in the app — no need to open a browser.
-
-Try these:
-- Toggle between DESKTOP and MOBILE views using the device toggle
-- Click the ELEMENT SELECTOR to tap any component and tell me what to change
-- Scroll through all sections to see the full page
-
-I've already auto-verified the build — all sections render, forms work, and animations play.
-
-Let me know:
+Take a look and let me know:
 1. What do you like?
 2. What should change?
-3. Tap any element and tell me what's off!
+3. Reference any section by name (e.g., "the hero headline", "the pricing cards") and I'll update it.
+
+The page will hot-reload automatically as I make changes.
 ```
 
-### Preview Checklist (auto-verify handles most)
+### Preview Checklist
 
-- All sections render without errors *(auto-verified)*
-- Typography and fonts display correctly *(auto-verified)*
-- Colors match the design system
-- Animations play on scroll *(auto-verified)*
-- Mobile responsive — toggle device view to check *(auto-verified)*
-- No console errors *(auto-verified)*
-- CTAs have correct links *(auto-verified)*
-- Form inputs are interactive *(auto-verified)*
+- [ ] All sections render without errors
+- [ ] Typography and fonts display correctly
+- [ ] Colors match the design system
+- [ ] Animations play on scroll
+- [ ] Mobile responsive — resize browser or use DevTools device emulation
+- [ ] No console errors (check DevTools)
+- [ ] CTAs have correct links
+- [ ] Form inputs are interactive
 
 ---
 
-## PHASE 9: Iteration (with Preview Mode)
+## PHASE 9: Iteration
 
-**Goal:** Make edits based on user feedback until they're satisfied. Use the embedded preview for instant verification.
+**Goal:** Make edits based on user feedback until they're satisfied.
 
-**Reference:** Read `references/10-iteration-guide.md` for handling different types of edit requests.
-
-### Element Selector Workflow
-
-The most powerful iteration tool: the user taps the **element selector** in the preview panel, clicks any component, and describes what to change.
-
-```
-Flow:
-1. User clicks element selector icon in preview toolbar
-2. User taps the component they want to change (e.g., a headline, button, card)
-3. User describes the change: "Make this bigger" / "Change color" / "Rewrite this text"
-4. Claude edits the code
-5. Hot-reload updates the preview automatically
-6. Claude auto-verifies the change (screenshot + DOM check)
-7. Repeat until satisfied
-```
+**Reference:** Read `references/05-development-guide.md` for handling different types of edit requests.
 
 ### Handling Feedback
 
@@ -900,7 +872,7 @@ Got it. Making these changes:
 
 For #3: [Ask clarifying question]
 
-The preview will update automatically after each change.
+The browser will hot-reload automatically after each change.
 ```
 
 ### Types of Edits
@@ -912,17 +884,16 @@ The preview will update automatically after each change.
 | **Layout changes** | Reorder components, confirm structure |
 | **Section add/remove** | Confirm scope, build or remove |
 | **Animation changes** | Adjust Framer Motion config |
-| **Element-specific** | User taps element in preview, Claude edits targeted component |
 
 ### Small edits: Do immediately
-Text changes, color tweaks, spacing adjustments, single component fixes. Hot-reload shows changes instantly in the preview panel.
+Text changes, color tweaks, spacing adjustments, single component fixes. Hot-reload shows changes instantly in the browser.
 
 ### Larger edits: Confirm first
 New sections, major layout restructure, design system changes, feature additions.
 
 ### Device Testing During Iteration
 
-After each round of changes, toggle the preview between **desktop** and **mobile** views to catch responsive issues early. Don't wait until the final review.
+After each round of changes, resize the browser window or use browser DevTools device emulation to catch responsive issues early. Don't wait until the final review.
 
 ### Final Review
 
@@ -936,8 +907,8 @@ DESIGN: [summary of look and feel]
 KEY CHANGES MADE: [list of iterations]
 
 Before we deploy:
-1. I'll toggle through mobile and desktop one more time
-2. Auto-verify all interactive elements
+1. Check both desktop and mobile layouts one more time
+2. Verify all interactive elements work (forms, buttons, links)
 3. Confirm the form/CTA works end to end
 
 Is this ready to deploy, or any final tweaks?
@@ -988,9 +959,9 @@ Next steps:
 Want to set up a custom domain or analytics?
 ```
 
-### Post-Deploy Preview Check
+### Post-Deploy Check
 
-Use the preview panel to load the production URL and verify:
+Open the production URL in the browser and verify:
 - All sections render correctly in production
 - Images load (no broken paths)
 - Forms submit to the correct endpoint
@@ -1008,7 +979,7 @@ Use the preview panel to load the production URL and verify:
 6. **Customize everything** -- No generic templates, every design is unique
 7. **3 options for copy** -- Give choices, let them pick
 8. **Validate each phase** -- Get approval before proceeding to next phase
-9. **Quality check before preview** -- Review against `references/13-web-design-guidelines.md`
+9. **Quality check before preview** -- Lint, build, and verify before showing
 10. **Iterate until perfect** -- Small edits immediately, larger edits after confirmation
 
 ---

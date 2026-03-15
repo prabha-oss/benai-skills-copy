@@ -232,74 +232,66 @@ export function FadeIn({ children }: { children: React.ReactNode }) {
 
 ---
 
-## Part 3: Preview Mode (Embedded Browser)
+## Part 3: Preview Mode
 
-**Goal:** Verify the site in the Claude app's embedded preview panel before presenting to the user.
+**Goal:** Verify the site in a browser before presenting to the user.
 
 ### 3.1 Starting the Preview
 
 1.  **Lint first:** `npm run lint -- --fix`
-2.  **Open preview:** Click the **Preview dropdown** in the session toolbar, or let Claude auto-start the server from `.claude/launch.json`
-3.  The site renders in the embedded browser — no external browser needed
+2.  **Start the dev server** in the background: `npm run dev &`
+3.  **Wait for the server** to be ready (2-3 seconds)
+4.  **Open the browser automatically:**
+    - macOS: `open http://localhost:3000`
+    - Linux: `xdg-open http://localhost:3000`
 
-### 3.2 Auto-Verify
+**Claude Code Desktop users:** If running in the Desktop app, the embedded preview panel will auto-start the server from `.claude/launch.json` instead — no manual steps needed.
 
-Claude automatically verifies the build:
+### 3.2 Auto-Verify (Desktop Only)
+
+When running in Claude Code Desktop, Claude automatically verifies the build:
 - Takes screenshots of each visible section
 - Inspects the DOM for errors and console warnings
 - Clicks interactive elements (buttons, links, nav items)
 - Fills out form inputs to test validation
 - Reports any issues found
 
-### 3.3 Preview Panel Features
+**In CLI mode:** Claude cannot auto-verify visually. Instead, run `npm run build` to catch compile errors and check the browser manually.
 
-| Feature | What it does |
-|---------|--------------|
-| **Device toggle** | Switch between desktop and mobile views |
-| **Element selector** | Click any component to reference it in chat |
-| **Session persistence** | Cookies/local storage survive server restarts |
-| **Auto-verify** | Claude tests the page after every code change |
+### 3.3 Visual QA Checklist
 
-### 3.4 Visual QA Checklist
-
-Most items are covered by auto-verify. Manually confirm:
 - [ ] **Colors:** Match the design system from Phase 3
 - [ ] **Brand feel:** Matches the inspiration site vibe
 - [ ] **Copy:** Matches approved copy from Phase 6
-- [ ] **Responsiveness:** Toggle device view — check mobile layout
+- [ ] **Responsiveness:** Resize the browser window to check mobile layout
+- [ ] **No console errors:** Check browser DevTools console
+- [ ] **Forms work:** Fill out and submit test data
+- [ ] **Links/CTAs:** Click all buttons and navigation items
 
 ---
 
-## Part 4: Iteration Loop (with Preview Mode)
+## Part 4: Iteration Loop
 
-**Goal:** Refine based on user feedback using the embedded preview.
+**Goal:** Refine based on user feedback.
 
 ### 4.1 The Loop
 
-1.  **Present preview:** The site is already visible in the preview panel
-2.  **Gather feedback:** User describes changes or uses the **element selector** to tap a component
-3.  **Implement fixes:** Edit code → save → hot-reload updates the preview automatically
-4.  **Auto-verify:** Claude checks the change (screenshot + DOM inspection)
+1.  **Present preview:** The site is open in the browser (auto-opened or via preview panel)
+2.  **Gather feedback:** User describes changes — reference specific sections by name (e.g., "the hero headline", "the pricing card")
+3.  **Implement fixes:** Edit code → save → hot-reload updates the browser automatically
+4.  **Verify:** Check the browser to confirm the change looks correct
 5.  **Repeat:** Until approved
 
-### 4.2 Element Selector Workflow
-
-The fastest way to iterate:
-1. User clicks the **element selector** icon in the preview toolbar
-2. Taps the specific component (headline, button, card, etc.)
-3. Describes the change in chat
-4. Claude edits → hot-reload → auto-verify → done
-
-### 4.3 Handling "Vague" Feedback
+### 4.2 Handling "Vague" Feedback
 
 - *User:* "Make it pop more."
 - *Dev Action:* Increase contrast, add shadows, or speed up animations.
 - *User:* "It feels too crowded."
 - *Dev Action:* Increase `py-` padding and `gap-` classes.
 
-### 4.4 Device Testing
+### 4.3 Device Testing
 
-After each round of changes, toggle the preview between desktop and mobile views. Don't wait for the final review to catch responsive issues.
+After each round of changes, resize the browser window or use browser DevTools device emulation to catch responsive issues. Don't wait for the final review.
 
 ---
 
