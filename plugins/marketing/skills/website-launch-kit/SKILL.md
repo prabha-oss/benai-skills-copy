@@ -552,35 +552,53 @@ browser_subagent(
 )
 ```
 
-### Step 2: Create Design Brief
+### Step 2: Generate Design System (UI/UX Pro Max)
 
-Extract and present these elements:
+Using the business type and keywords from Phase 1 intake, generate a data-driven design system. This runs automatically — no user input needed.
 
-```
-DESIGN EXTRACTION: [URL]
-
-COLORS:
-- Primary: [hex] - used for [what]
-- Secondary: [hex] - used for [what]
-- Background: [hex]
-- Text: [hex]
-
-TYPOGRAPHY:
-- Headings: [font, weight, style]
-- Body: [font, weight, style]
-
-LAYOUT:
-- Structure: [centered/full-width/asymmetric]
-- Spacing: [tight/normal/generous]
-
-HERO:
-- Style: [text-heavy/image-focused/split]
-- Animation: [none/subtle/dramatic]
-
-VIBE: [3 descriptive words]
+```bash
+python3 scripts/search.py "<business_type> <industry> <keywords>" --design-system -p "<Business Name>" --persist
 ```
 
-### Step 3: Check for Existing Assets
+**Build the query from intake answers:**
+- Q1 (Business Type) + Q2 (Service/Product Type) → industry keywords
+- Q4 (Main Offering) → product description keywords
+- Phase 2 animation preference → style keywords (e.g., "modern minimal" or "bold dynamic")
+
+**Example:**
+```bash
+python3 scripts/search.py "SaaS consulting B2B service professional" --design-system -p "Acme Consulting" --persist
+```
+
+This returns a complete design system: landing page pattern, UI style, color palette (with hex codes), typography pairing (with Google Fonts URL), effects, and anti-patterns to avoid.
+
+The `--persist` flag saves the design system to `design-system/MASTER.md` for use in Phase 7.
+
+### Step 3: Create Combined Design Brief
+
+Merge the inspiration site analysis (Step 1) with the UI/UX Pro Max recommendations (Step 2). Present a unified brief:
+
+```
+DESIGN BRIEF: [Business Name]
+
+INSPIRATION ANALYSIS: [URL]
+- Layout: [what you observed]
+- Vibe: [3 descriptive words]
+
+UI/UX PRO MAX RECOMMENDATIONS:
+- Pattern: [recommended landing page pattern]
+- Style: [recommended UI style]
+- Colors: Primary [hex], Secondary [hex], CTA [hex], Background [hex], Text [hex]
+- Typography: [heading font] / [body font] — Google Fonts: [URL]
+- Effects: [recommended animations/effects]
+- Avoid: [anti-patterns]
+
+COMBINED DIRECTION:
+- [How the inspiration site and data-driven recommendations align or differ]
+- [Which elements to take from each source]
+```
+
+### Step 4: Check for Existing Assets
 
 Ask the user:
 ```
@@ -604,9 +622,19 @@ Get confirmation on the design direction before proceeding.
 
 **Reference:** Read `references/02-research-strategy.md` for section types, templates by business type, and content mapping from intake questions.
 
-### Step 1: Select Section Template
+### Step 1: Get Landing Pattern Recommendation
 
-Based on business type from intake, choose the appropriate section order template from the reference file:
+Use the UI/UX Pro Max landing pattern data from Phase 3's design system output. The design system already recommended a landing page pattern (e.g., "Hero + Features + CTA", "Social Proof-Focused", "Storytelling-Driven").
+
+If you need more detail on the recommended pattern, run a targeted search:
+
+```bash
+python3 scripts/search.py "<pattern_name>" --domain landing
+```
+
+This returns the exact section order, CTA placement strategy, color strategy per section, and conversion optimization tips.
+
+**Fallback templates** (if design system didn't match a clear pattern):
 
 - **Service businesses:** Hero -> Problem -> Solution -> Process -> Social Proof -> FAQ -> CTA -> Footer
 - **SaaS/Software:** Hero -> Social Proof (logos) -> Features -> How It Works -> Testimonials -> Pricing -> FAQ -> CTA -> Footer
@@ -759,12 +787,18 @@ Create `.claude/launch.json` in the project root to enable the embedded preview 
 
 ### Step 2: Integrate Stitch Code + Design System
 
+**Read the persisted design system** from `design-system/MASTER.md` (created in Phase 3, Step 2). Use it to configure:
+- **Tailwind config** — map the recommended colors (Primary, Secondary, CTA, Background, Text hex values) to Tailwind theme colors
+- **Google Fonts** — import the recommended font pairing using the Google Fonts URL from the design system
+- **CSS variables** — set up design tokens in `globals.css` matching the design system's color palette
+- **Animation strategy** — follow the recommended effects (e.g., scroll animations, hover transitions, parallax) and respect the anti-patterns to avoid
+
 If Stitch was used:
 1. **Extract Stitch-generated React/Tailwind components** into `src/components/sections/`
-2. **Merge Stitch styles** into `globals.css` and Tailwind config
+2. **Merge Stitch styles** with the UI/UX Pro Max design system tokens
 3. **Add interactivity** Stitch doesn't generate: Framer Motion animations, form handling, navigation, mobile menu
 
-If manual build, create CSS variables in `globals.css` using Phase 3 colors. See `references/04-design-assets.md`.
+If manual build, use the design system's hex values and typography to create CSS variables in `globals.css`. See `references/04-design-assets.md`.
 
 ### Step 3: Build/Enhance Components
 
@@ -994,5 +1028,34 @@ All reference files are located in `shared-skills/website-launch-kit/references/
 | `02-research-strategy.md` | Phases 2-4 | Research guide, design extraction, section blueprints |
 | `03-copy-content.md` | Phases 5-6 | Copywriting formulas, tone guide, review format |
 | `04-design-assets.md` | Phase 7 | Design system, visual assets, UI guidelines |
-| `05-development-guide.md` | Phases 7-10 | Code patterns, preview mode setup, iteration with element selector, deployment |
+| `05-development-guide.md` | Phases 7-10 | Code patterns, preview mode, deployment |
 | `06-clone-mode.md` | Clone Path | Alternative workflow for perfectly cloning an existing URL |
+
+## UI/UX Pro Max (Design Intelligence)
+
+Integrated search engine for data-driven design decisions. Located in `scripts/` and `data/`.
+
+| Component | Purpose |
+|-----------|---------|
+| `scripts/search.py` | CLI entry point — `--design-system` for full recommendations, `--domain` for targeted searches |
+| `scripts/core.py` | BM25 search engine over CSV databases |
+| `scripts/design_system.py` | Aggregates multi-domain searches + applies reasoning rules |
+| `data/products.csv` | 161 product types with style/color/pattern recommendations |
+| `data/landing.csv` | Landing page patterns with section orders and CTA strategies |
+| `data/colors.csv` | Color palettes by product type (full semantic token set) |
+| `data/typography.csv` | Font pairings with Google Fonts URLs and Tailwind config |
+| `data/styles.csv` | 67 UI styles with effects, accessibility, and implementation checklists |
+| `data/ui-reasoning.csv` | Reasoning rules that match product types to optimal design choices |
+
+**Usage:**
+```bash
+# Full design system (used in Phase 3)
+python3 scripts/search.py "<business_type> <keywords>" --design-system -p "<Name>" --persist
+
+# Targeted domain search (used in Phase 4)
+python3 scripts/search.py "<query>" --domain landing
+python3 scripts/search.py "<query>" --domain color
+python3 scripts/search.py "<query>" --domain typography
+```
+
+**Requires:** Python 3.x (no external dependencies)
