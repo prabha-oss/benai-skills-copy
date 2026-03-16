@@ -1,6 +1,6 @@
 ---
 name: assistant
-description: General OS assistant — manages sessions, daily routines, tasks, memory, resources, and output styles. Mode-aware (general, business, personal). Handles resume, compress, preserve, daily review, task management, resources, and style switching. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", or runs /assistant.
+description: General OS assistant — manages sessions, daily routines, tasks, memory, resources, output styles, and meeting intelligence. Mode-aware (general, business, personal). Handles resume, compress, preserve, daily review, task management, resources, style switching, and meeting transcript processing. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", "meeting", "transcript", or runs /assistant.
 ---
 
 # General OS Assistant
@@ -34,6 +34,7 @@ Match the user's intent to the right section:
 | "task", "to-do", "create task", "check tasks" | [Task Management](#task-management) |
 | "output style", "writing style", "switch style" | [Output Styles](#output-styles) |
 | "save this prompt", "swipe file", "framework", "template", "resources" | [Resources](#resources) |
+| "meeting", "transcript", "action items", "Fireflies", "sync meetings" | [Meeting Intelligence](#meeting-intelligence) |
 
 If unclear, show this table and ask what they need.
 
@@ -568,6 +569,163 @@ defuddle parse <url> --md
 ```
 
 Defuddle strips clutter and returns clean markdown — much more token-efficient than raw web fetching. If `defuddle` is not installed, fall back to standard web fetch.
+
+## Meeting Intelligence
+
+Process meeting transcripts, extract decisions and action items, sync from Fireflies, and file meeting notes in the right folder.
+
+USE WHEN the user:
+- Pastes a meeting transcript or drops a transcript file
+- Asks to summarize a meeting or extract action items
+- Asks about past meetings or meeting patterns
+- Mentions Fireflies, asks to sync or pull transcripts
+- Shares a URL to a recorded meeting or transcript
+
+### Step 1: Identify Meeting Type
+
+Ask or infer from context. Available types depend on mode:
+
+**General mode:**
+
+| Meeting Type | Save to | Focus |
+|---|---|---|
+| Team standup | `Intelligence/meetings/team-standups/` | What each person did, doing today, blockers. Keep brief. |
+| Client call | `Intelligence/meetings/client-calls/` | Client requests, decisions, next steps. Check folder for history. |
+| One-on-one | `Intelligence/meetings/one-on-ones/` | Development, feedback, goals. More personal tone. |
+| General | `Intelligence/meetings/general/` | Full meeting summary structure. |
+| Custom type | `Intelligence/meetings/[custom-folder]/` | As appropriate. |
+
+**Business mode:**
+
+| Meeting Type | Save to | Focus |
+|---|---|---|
+| Team standup | `Intelligence/meetings/team-standups/` | What each person did, doing today, blockers. Keep brief. |
+| Client call | `Intelligence/meetings/client-calls/` | Client requests, decisions, next steps. Check folder for history. |
+| One-on-one | `Intelligence/meetings/one-on-ones/` | Development, feedback, goals. More personal tone. |
+| Board review | `Intelligence/meetings/board-reviews/` | Board decisions, investor updates, governance. Formal tone. |
+| All-hands | `Intelligence/meetings/all-hands/` | Company-wide announcements, Q&A, culture. Summarize key messages. |
+| Cross-team | `Intelligence/meetings/cross-team/` | Cross-department coordination, dependencies, shared priorities. |
+| General | `Intelligence/meetings/general/` | Full meeting summary structure. |
+| Custom type | `Intelligence/meetings/[custom-folder]/` | As appropriate. |
+
+**Personal mode:**
+
+| Meeting Type | Save to | Focus |
+|---|---|---|
+| General | `Intelligence/meetings/general/` | Full meeting summary structure. |
+| Personal | `Intelligence/meetings/personal/` | Coffee chats, advisor calls, doctor visits, personal meetings. Casual tone. |
+| Custom type | `Intelligence/meetings/[custom-folder]/` | As appropriate. |
+
+### Step 2: Load Output Style
+
+Read `.claude/output-styles/meeting-summary.md` and follow its format exactly. If the file doesn't exist, use the template at `references/template-meeting-note.md`. Read the template before creating any meeting note.
+
+### Step 3: Extract from Transcript
+
+1. **Key decisions** — What was agreed upon?
+2. **Action items** — Who is doing what, by when?
+3. **Discussion summary** — Brief recap of each topic
+4. **Open questions** — What was left unresolved?
+5. **Follow-up** — Next meeting, items to prepare
+
+### Step 4: Create the Meeting Note
+
+Save as `Intelligence/meetings/[type]/YYYY-MM-DD Meeting Title.md` with frontmatter:
+
+```yaml
+---
+type: meeting
+subtype: team-standup | client-call | one-on-one | board-review | all-hands | cross-team | general | personal
+date: YYYY-MM-DD
+time: HH:MM
+participants: [[[Person A]], [[Person B]]]
+duration: X minutes
+source: manual | fireflies
+status: processed
+---
+```
+
+Body structure (uses Obsidian callouts for visual structure):
+
+```markdown
+# Meeting: [Title] — YYYY-MM-DD
+
+## Participants
+- [[Person A]]
+- [[Person B]]
+
+## Summary
+[2-3 sentence overview]
+
+> [!important] Key Decisions
+> - [Decision 1]
+> - [Decision 2]
+
+> [!todo] Action Items
+> - [ ] [[Person A]] — [Task] (by [date])
+> - [ ] [[Person B]] — [Task] (by [date])
+
+## Discussion Notes
+### [Topic 1]
+[Summary of discussion]
+
+> [!question] Open Questions
+> - [Unresolved item 1]
+
+> [!info] Follow-up
+> - Next meeting: [date/time if mentioned]
+> - Prepare: [items to prepare]
+```
+
+Use `[[wikilinks]]` for participants and project references — this creates automatic backlinks in Obsidian.
+
+**Business mode additions:**
+- For board reviews: add `> [!warning] Governance Items` callout for board-level decisions
+- For all-hands: add `> [!info] Company Announcements` callout
+- For cross-team: add `> [!todo] Department Dependencies` callout with cross-team action items
+- Link to relevant `[[Departments]]` when applicable
+
+### Step 5: Create Tasks from Action Items
+
+Automatically create a task for each action item using the TaskNotes API (see [Task Management](#task-management)). Tag with `["meeting"]`. If the API is unavailable, skip silently — action items are already in the meeting note.
+
+### Step 6: Link to Projects
+
+If the meeting relates to a known project (check `Projects/*/README.md`):
+- Add `project: [Project Name]` to frontmatter
+- Add a [[wiki link]] to the project in the meeting note
+
+Business mode: also check `Departments/*/README.md` and add `department:` to frontmatter if applicable.
+
+### Fireflies Sync
+
+**MCP Server (Business Plan):** Check `.claude/settings.json` for a `fireflies` entry under `mcpServers`. If configured, use `fireflies_list_transcripts` and `fireflies_get_transcript` to sync unprocessed transcripts. Process each through Steps 1-6.
+
+**Manual Export (Free Plan):** Have user export from app.fireflies.ai (Download > JSON or DOCX), paste content or drop file. Process through Steps 1-6.
+
+**Claude Connector:** Users with Claude Pro/Max and Fireflies Business can connect via Claude Settings > Connectors.
+
+### Querying Past Meetings
+
+```bash
+# Obsidian CLI (preferred)
+obsidian search query="Person Name" limit=10
+
+# Fallback: grep
+grep -rl "Person Name" Intelligence/meetings/
+```
+
+Query by frontmatter: `participants`, `project`, `department`, `date`, `subtype`, `source`.
+
+### Meeting Guidelines
+- Always ask for meeting type if not obvious from transcript
+- In personal mode, default to "general" or "personal" — don't offer business meeting types
+- Extract ALL action items — don't miss any
+- Use `[[wikilinks]]` for participants and projects
+- Use callouts for visual structure
+- Tag all Fireflies-sourced notes with `source: fireflies` in frontmatter
+
+---
 
 ## General Guidelines
 

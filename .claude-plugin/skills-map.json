@@ -380,7 +380,6 @@
       }
     },
     "general-os": {
-      "commands": ["general-os"],
       "hooks": {
         "UserPromptSubmit": [
           { "file": "load-context.sh", "timeout": 10 },
@@ -393,15 +392,11 @@
       "skills": {
         "setup": {
           "displayName": "Setup",
-          "summary": "Bootstrap vault structure and run personalized onboarding interview"
+          "summary": "Bootstrap vault structure with mode selection and personalized onboarding"
         },
         "assistant": {
           "displayName": "Assistant",
-          "summary": "Manage sessions, daily routines, tasks, memory, and output styles"
-        },
-        "meetings": {
-          "displayName": "Meetings",
-          "summary": "Process meeting transcripts, sync Fireflies, extract action items"
+          "summary": "Sessions, daily routines, tasks, memory, output styles, and meeting intelligence"
         }
       }
     }
