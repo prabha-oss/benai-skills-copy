@@ -53,7 +53,6 @@ Create the directory structure and write all system files for the selected mode.
 
 ```bash
 mkdir -p .claude/hooks
-mkdir -p .claude/output-styles
 mkdir -p Context
 mkdir -p Projects
 mkdir -p Daily
@@ -126,25 +125,6 @@ Read each reference file and write it to the corresponding local path. The refer
 | General | `references/claude-md-template.md` | `./claude.md` |
 | Business | `references/claude-md-template-business.md` | `./claude.md` |
 | Personal | `references/claude-md-template-personal.md` | `./claude.md` |
-
-**All modes** — shared output styles:
-
-| Reference File | Creates at Local Path |
-|---|---|
-| `references/output-styles-claude-md.md` | `./.claude/output-styles/CLAUDE.md` |
-| `references/style-conversation.md` | `./.claude/output-styles/conversation.md` |
-| `references/style-youtube-script.md` | `./.claude/output-styles/youtube-script.md` |
-| `references/style-blog-post.md` | `./.claude/output-styles/blog-post.md` |
-| `references/style-email.md` | `./.claude/output-styles/email.md` |
-| `references/style-quick-reply.md` | `./.claude/output-styles/quick-reply.md` |
-| `references/style-meeting-summary.md` | `./.claude/output-styles/meeting-summary.md` |
-
-**Business mode only** — additional output styles:
-
-| Reference File | Creates at Local Path |
-|---|---|
-| `references/style-sop.md` | `./.claude/output-styles/sop.md` |
-| `references/style-report.md` | `./.claude/output-styles/report.md` |
 
 **Mode-specific folder guides:**
 

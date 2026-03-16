@@ -430,35 +430,39 @@ Base URL: `http://127.0.0.1:8080/api`
 
 ## Output Styles
 
-Output styles define how the assistant communicates. Each style is a markdown file in `.claude/output-styles/`.
+Output styles define how the assistant communicates. Styles are bundled as reference files within this skill (`references/style-*.md`). Users can override or add custom styles in `.claude/output-styles/`.
 
 ### Available Styles
 
 **All modes:**
 
-| Style | File | Use When |
-|-------|------|----------|
-| Conversation | `conversation.md` | Default — chat, brainstorming, Q&A |
-| YouTube Script | `youtube-script.md` | Video scripts |
-| Blog Post | `blog-post.md` | Long-form articles |
-| Quick Reply | `quick-reply.md` | DMs, short messages |
-| Email | `email.md` | Professional emails |
-| Meeting Summary | `meeting-summary.md` | Meeting transcripts |
+| Style | Reference File | Use When |
+|-------|---------------|----------|
+| Conversation | `references/style-conversation.md` | Default — chat, brainstorming, Q&A |
+| YouTube Script | `references/style-youtube-script.md` | Video scripts |
+| Blog Post | `references/style-blog-post.md` | Long-form articles |
+| Quick Reply | `references/style-quick-reply.md` | DMs, short messages |
+| Email | `references/style-email.md` | Professional emails |
+| Meeting Summary | `references/style-meeting-summary.md` | Meeting transcripts |
 
 **Business mode only:**
 
-| Style | File | Use When |
-|-------|------|----------|
-| SOP | `sop.md` | Standard operating procedures |
-| Report | `report.md` | Business reports for stakeholders |
+| Style | Reference File | Use When |
+|-------|---------------|----------|
+| SOP | `references/style-sop.md` | Standard operating procedures |
+| Report | `references/style-report.md` | Business reports for stakeholders |
+
+### Loading a Style
+
+1. **Check vault first**: If `.claude/output-styles/{style-name}.md` exists in the vault, use that (user override)
+2. **Fall back to reference**: Otherwise, read `references/style-{style-name}.md` from this skill's references
+3. **Default**: Always use `conversation` style unless told otherwise
 
 ### Switching
 
-- **Default**: Always use `conversation.md` unless told otherwise
-- **Explicit**: "write a YouTube script" → load `youtube-script.md`
-- **Context clues**: Working on meeting transcript → auto-switch to `meeting-summary.md`
-- **"Go back to normal"** → revert to `conversation.md`
-- Always read the full style file before producing styled output
+- **Explicit**: "write a YouTube script" → load `youtube-script` style
+- **Context clues**: Working on meeting transcript → auto-switch to `meeting-summary`
+- **"Go back to normal"** → revert to `conversation`
 
 ### Creating Custom Styles
 
@@ -472,8 +476,7 @@ User voice from the primary context file is applied ON TOP of the active style. 
 
 ### Guidelines
 - Always read the style file before producing styled output — don't rely on memory
-- If a style file doesn't exist, tell the user and offer to create it
-- When listing styles, check which files actually exist in `.claude/output-styles/`
+- Check `.claude/output-styles/` first for user overrides, then fall back to bundled references
 
 ---
 

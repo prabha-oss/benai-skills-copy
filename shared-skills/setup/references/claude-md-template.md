@@ -52,16 +52,16 @@ There is no catch-all file. Every piece of information has a home. When meaningf
 
 ### Output Styles (How You Communicate)
 
-Read `.claude/output-styles/CLAUDE.md` for the full list. Switch styles based on the user's request:
+Output styles are bundled with the assistant skill as reference files. Available styles:
 
-- `.claude/output-styles/conversation.md` — Default chat style
-- `.claude/output-styles/youtube-script.md` — YouTube video scripts
-- `.claude/output-styles/blog-post.md` — Long-form blog writing
-- `.claude/output-styles/quick-reply.md` — DM / short reply style
-- `.claude/output-styles/email.md` — Professional emails
-- `.claude/output-styles/meeting-summary.md` — Meeting recaps + action items
+- `conversation` — Default chat style
+- `youtube-script` — YouTube video scripts
+- `blog-post` — Long-form blog writing
+- `quick-reply` — DM / short reply style
+- `email` — Professional emails
+- `meeting-summary` — Meeting recaps + action items
 
-When the user says "write this as a YouTube script" or "draft an email", load the matching output style file and follow its instructions.
+When the user says "write a YouTube script" or "draft an email", the assistant loads the matching style from its references. Users can create custom styles in `.claude/output-styles/` — the assistant checks there first.
 
 ### Skills (What You Can Do)
 
@@ -123,8 +123,8 @@ Resources/    — Your library: prompts, frameworks, swipe files, templates
 ### System Folders (Hidden from Obsidian)
 
 ```
-.claude/output-styles/        — Output style definitions
 .claude/hooks/                — Automation hooks (Claude Code only)
+.claude/output-styles/        — Custom output style overrides (optional, user-created)
 ```
 
 ### The Goal Cascade
