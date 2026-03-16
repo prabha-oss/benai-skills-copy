@@ -134,14 +134,11 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
 
-### General OS (3 skills)
+### General OS (2 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | setup | `/setup` | Bootstrap vault structure + mode selection + onboarding |
-| assistant | `/assistant` | Sessions, daily routines, tasks, memory, resources, output styles |
-| meetings | `/meetings` | Process transcripts, sync Fireflies, extract action items |
-
-**Commands:** `/general-os` (skill overview)
+| assistant | `/assistant` | Sessions, daily routines, tasks, memory, resources, output styles, meeting intelligence |
 
 #### Mode Selection
 

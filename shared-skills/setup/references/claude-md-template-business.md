@@ -81,8 +81,7 @@ When the user says "write this as a YouTube script" or "draft an email", load th
 Skills are installed as benai-skills plugins. Each skill defines when and how to use it:
 
 - **setup** — Interactive onboarding: builds the vault structure based on user's needs
-- **assistant** — Sessions, daily routines, tasks, memory, output styles — the main skill you use daily
-- **meetings** — Process meeting transcripts, sync Fireflies, extract action items
+- **assistant** — Sessions, daily routines, tasks, memory, output styles, meeting intelligence — the main skill you use daily
 
 ### Resources (`Resources/`)
 
@@ -113,8 +112,7 @@ Projects are not flat README-only folders. They are living, structured directori
 ### Commands
 
 - `/setup` — Run the interactive onboarding to personalize this vault
-- `/assistant` — Resume/compress sessions, daily reviews, tasks, memory, output styles
-- `/meetings` — Process transcripts, sync Fireflies, extract action items
+- `/assistant` — Resume/compress sessions, daily reviews, tasks, memory, output styles, meeting intelligence
 
 ### Vault Structure
 
