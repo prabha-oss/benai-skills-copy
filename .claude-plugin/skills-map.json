@@ -171,6 +171,9 @@
       "commands": [
         "youtube"
       ],
+      "connectors": [
+        "apify"
+      ],
       "skills": {
         "youtube-brief": {
           "displayName": "YouTube Brief",
@@ -376,8 +379,8 @@
         }
       }
     },
-    "personal-os": {
-      "commands": ["personal-os"],
+    "general-os": {
+      "commands": ["general-os"],
       "hooks": {
         "UserPromptSubmit": [
           { "file": "load-context.sh", "timeout": 10 },

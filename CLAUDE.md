@@ -134,19 +134,33 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
 
-### Personal OS (3 skills)
+### General OS (3 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
-| setup | `/setup` | Bootstrap vault structure + 2-question onboarding |
+| setup | `/setup` | Bootstrap vault structure + mode selection + onboarding |
 | assistant | `/assistant` | Sessions, daily routines, tasks, memory, resources, output styles |
 | meetings | `/meetings` | Process transcripts, sync Fireflies, extract action items |
 
-**Commands:** `/personal-os` (skill overview)
+**Commands:** `/general-os` (skill overview)
 
-#### Vault Structure
+#### Mode Selection
 
+Setup asks one preliminary question:
+
+> "Is this for a **business/organization**, for **yourself**, or **general** (both)?"
+
+Three modes:
+- **General** (default) — current hybrid structure. Best for solo founders, freelancers, consultants.
+- **Business** — organizational structure with departments, processes, stakeholders, onboarding docs.
+- **Personal** — lean, life-focused structure with areas, collections, and no business overhead.
+
+The selected mode is stored in `claude.md` frontmatter as `os-mode: general | business | personal`.
+
+#### Vault Structure (by mode)
+
+**General:**
 ```
-claude.md               — Brain file (operating instructions)
+claude.md               — Brain file (os-mode: general)
 Context/                — Who you are: me.md, business.md, strategy.md, team.md, brand.md
 Projects/               — What you're working on: intelligently structured per project
 Intelligence/           — What you know: meetings/, competitors/, market/, decisions/
@@ -154,11 +168,35 @@ Daily/                  — What happened: YYYY-MM-DD.md journals
 Resources/              — Your library: prompts, frameworks, swipe files, templates
 ```
 
+**Business:**
+```
+claude.md               — Brain file (os-mode: business)
+Context/                — operator.md, organization.md, team.md, strategy.md, brand.md, stakeholders.md
+Projects/               — Active projects
+Departments/            — Per-department READMEs + SOPs
+Intelligence/           — meetings/ (7 types), competitors/, market/, decisions/, processes/
+Daily/                  — Work logs + OKR-focused weekly reviews
+Onboarding/             — Team/client/system onboarding docs
+Resources/              — prompts, frameworks, swipe, templates/
+```
+
+**Personal:**
+```
+claude.md               — Brain file (os-mode: personal)
+Context/                — me.md, goals.md, people.md (max 3 files)
+Projects/               — Active projects (no specs/ or feedback/)
+Areas/                  — Ongoing life areas: health.md, finances.md, etc.
+Intelligence/           — meetings/ (general + personal), decisions/
+Daily/                  — Morning/evening routines + life-balance weekly reviews
+Collections/            — Books, articles, courses, media
+Resources/              — prompts, frameworks, swipe
+```
+
 #### Onboarding
 
-Two questions only:
-1. "Tell me about yourself (and your business)" — accepts text, files, or skip
-2. "What are you currently working on?" — accepts text, files, or skip
+Mode selection + two questions:
+1. Context question (mode-specific: about yourself / your organization / yourself and business)
+2. Projects question (mode-specific: projects / initiatives / things you're focused on)
 
 No follow-ups. Extracts what it can, builds the vault, reports what was created.
 
@@ -166,15 +204,13 @@ No follow-ups. Extracts what it can, builds the vault, reports what was created.
 
 The assistant never asks permission to save. When meaningful information comes up (learnings, preferences, corrections, project updates, action items), it saves to the right vault file immediately and reports what was saved. Corrections are automatically added as permanent rules in `claude.md`.
 
-#### Context Files (Only Created When Relevant)
+#### Context Files
 
-| File | Created When |
-|------|-------------|
-| `Context/me.md` | Always (identity, preferences) |
-| `Context/strategy.md` | User mentions goals or vision |
-| `Context/business.md` | User mentions company or products |
-| `Context/team.md` | User mentions team members |
-| `Context/brand.md` | User mentions voice, tone, or brand |
+| Mode | Files |
+|------|-------|
+| General | `me.md` (always), `business.md`, `team.md`, `strategy.md`, `brand.md` (conditional) |
+| Business | `operator.md`, `organization.md`, `team.md`, `strategy.md` (always), `brand.md`, `stakeholders.md` (conditional) |
+| Personal | `me.md` (always), `goals.md`, `people.md` (conditional) |
 
 #### Project Intelligence
 
@@ -188,7 +224,7 @@ Projects are not flat README-only folders. The assistant intelligently structure
 
 #### Resources (`Resources/`)
 
-Personal library for swipe files, prompts, frameworks, templates, and reference material. Organized flat or lightly nested (e.g., `Resources/prompts/`, `Resources/frameworks/`).
+Personal library for swipe files, prompts, frameworks, templates, and reference material. Organized flat or lightly nested (e.g., `Resources/prompts/`, `Resources/frameworks/`). Business mode adds `Resources/templates/` for org document templates.
 
 #### Key Integrations
 
