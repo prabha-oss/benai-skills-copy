@@ -48,6 +48,7 @@ There is no catch-all file. Every piece of information has a home. When meaningf
 | Market insight | `Intelligence/market/{topic}.md` |
 | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
 | Reusable content (prompts, frameworks, templates) | `Resources/` |
+| Skill-specific content (references, strategy, voice) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 ### Output Styles (How You Communicate)
@@ -73,6 +74,10 @@ Skills are installed as benai-skills plugins. Each skill defines when and how to
 ### Resources (`Resources/`)
 
 Your personal library for swipe files, prompts, frameworks, templates, and reference material. Organize however feels natural — flat or lightly nested (e.g., `Resources/prompts/`, `Resources/frameworks/`, `Resources/swipe/`). Use `[[wikilinks]]` to reference resources from project notes or daily notes.
+
+### Skills (`Skills/`)
+
+User-editable reference material for individual skills. Each skill gets a subfolder (e.g., `Skills/linkedin-writer/`). Files here are your references, strategy, and voice notes — skills read from here at runtime. See `Skills/_guide.md`.
 
 ### Project Intelligence
 
@@ -118,6 +123,7 @@ Intelligence/ — What you know: meetings, competitors, market, decisions
   └── archive/
 Daily/        — What happened: daily journals and check-ins
 Resources/    — Your library: prompts, frameworks, swipe files, templates
+Skills/       — Skill references you control: strategy, voice, reference material
 ```
 
 ### System Folders (Hidden from Obsidian)

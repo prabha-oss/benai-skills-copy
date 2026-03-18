@@ -1,36 +1,19 @@
 {
   "name": "general-os",
   "description": "General OS \u2014 Turn any folder into an AI-powered operating system with persistent memory, task management, meeting intelligence, daily routines, and multiple output styles. Three modes: General (solo founders, freelancers), Business (teams, organizations), and Personal (individuals). Includes session management, a teaching loop that learns from corrections, and goal tracking with Obsidian integration.",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "author": {
     "name": "BenAI"
   },
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/load-context.sh",
-            "timeout": 10
-          },
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/memory-reminder.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/verify-memory-stop.sh",
-            "timeout": 15
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/persist-session.sh",
+            "timeout": 10
           }
         ]
       }
