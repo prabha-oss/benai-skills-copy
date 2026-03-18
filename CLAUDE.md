@@ -150,13 +150,13 @@ Two modes:
 - **Solopreneurs/Professionals** (default) — blends work and personal. Best for solo founders, freelancers, consultants.
 - **Business/Teams** — organizational structure with departments, processes, stakeholders, onboarding docs.
 
-The selected mode is stored in `claude.md` frontmatter as `os-mode: general | business`.
+The selected mode is stored in `claude.md` frontmatter as `os-mode: professional | business`.
 
 #### Vault Structure (by mode)
 
-**Solopreneurs/Professionals** (`os-mode: general`):
+**Solopreneurs/Professionals** (`os-mode: professional`):
 ```
-claude.md               — Brain file (os-mode: general)
+claude.md               — Brain file (os-mode: professional)
 Context/                — Who you are: me.md, business.md, strategy.md, team.md, brand.md
 Projects/               — What you're working on: intelligently structured per project
 Intelligence/           — What you know: meetings/, competitors/, market/, decisions/
