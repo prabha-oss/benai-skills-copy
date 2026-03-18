@@ -162,11 +162,11 @@
       ]
     },
     {
-      "name": "obsidian",
+      "name": "BenAI-Obsidian-plugin",
       "displayName": "Ben AI Obsidian plugin",
-      "source": "./plugins/obsidian",
+      "source": "./plugins/BenAI-Obsidian-plugin",
       "description": "BenAI Obsidian Plugin — Turn any folder into an AI-powered operating system with persistent memory, task management, meeting intelligence, daily routines, and multiple output styles. Two modes: Solopreneurs/Professionals (solo founders, freelancers, consultants) and Business/Teams (teams, organizations). Includes session management, a teaching loop that learns from corrections, and goal tracking with Obsidian integration.",
-      "version": "2.4.9",
+      "version": "2.5.0",
       "author": {
         "name": "BenAI"
       },
