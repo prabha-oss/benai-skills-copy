@@ -171,6 +171,7 @@ claude.md               — Brain file (os-mode: business)
 Context/                — operator.md, organization.md, team.md, strategy.md, brand.md, stakeholders.md
 Projects/               — Active projects
 Departments/            — Per-department READMEs + SOPs
+Teams/                  — Team directories with person profiles
 Intelligence/           — meetings/ (7 types), competitors/, market/, decisions/, processes/
 Daily/                  — Work logs + OKR-focused weekly reviews
 Onboarding/             — Team/client/system onboarding docs
