@@ -93,6 +93,7 @@ mkdir -p Intelligence/decisions
 mkdir -p Intelligence/processes
 mkdir -p Intelligence/archive
 mkdir -p Departments
+mkdir -p Teams
 mkdir -p Onboarding
 mkdir -p Resources/templates
 ```
@@ -130,6 +131,7 @@ Read each reference file and write it to the corresponding local path. The refer
 | Business | `references/guide-intelligence.md` | `./Intelligence/_guide.md` |
 | Business | `references/guide-skills.md` | `./Resources/_guide.md` |
 | Business | `references/guide-departments.md` | `./Departments/_guide.md` |
+| Business | `references/guide-teams.md` | `./Teams/_guide.md` |
 | Business | `references/guide-onboarding.md` | `./Onboarding/_guide.md` |
 | Business | `references/guide-processes.md` | `./Intelligence/processes/_guide.md` |
 | Solopreneurs/Professionals | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
@@ -160,6 +162,23 @@ Then write placeholder files from references:
 - Read `references/context-organization.md` → write to `./Context/organization.md`
 - Read `references/context-team.md` → write to `./Context/team.md`
 - Read `references/context-strategy-business.md` → write to `./Context/strategy.md`
+
+**Business mode — placeholder teams:**
+
+```bash
+mkdir -p Teams/engineering
+mkdir -p Teams/marketing
+mkdir -p Teams/leadership
+```
+
+Then write placeholder files from references:
+- Read `references/teams-placeholder-engineering-readme.md` → write to `./Teams/engineering/README.md`
+- Read `references/teams-placeholder-person.md` → write to `./Teams/engineering/alice-smith.md`
+- Read `references/teams-placeholder-person.md` → write to `./Teams/engineering/bob-jones.md`
+- Read `references/teams-placeholder-engineering-readme.md` → write to `./Teams/marketing/README.md`
+- Read `references/teams-placeholder-person.md` → write to `./Teams/marketing/carol-white.md`
+- Read `references/teams-placeholder-engineering-readme.md` → write to `./Teams/leadership/README.md`
+- Read `references/teams-placeholder-person.md` → write to `./Teams/leadership/dave-chen.md`
 
 ### Step A.4: Make Hooks Executable
 

@@ -51,6 +51,8 @@ There is no catch-all file. Every piece of information has a home. When meaningf
 | Vendor, partner, investor, advisor | `Context/stakeholders.md` |
 | Department info | `Departments/{name}/README.md` |
 | Department SOP | `Departments/{name}/sops/{name}.md` |
+| Team info, goals, rituals | `Teams/{team-name}/README.md` |
+| Person profile, role, working style | `Teams/{team-name}/{person}.md` |
 | Org-wide process | `Intelligence/processes/{name}.md` |
 | Onboarding docs | `Onboarding/{name}.md` |
 | Project info | Route to the right file in `Projects/{name}/` (see Project Intelligence below) |
@@ -134,6 +136,10 @@ Departments/  — Department-level context and SOPs
   └── {dept-name}/
       ├── README.md
       └── sops/
+Teams/        — Team directories with person profiles
+  └── {team-name}/
+      ├── README.md
+      └── {person}.md
 Intelligence/ — What you know: meetings, competitors, market, decisions, processes
   ├── meetings/
   │   ├── team-standups/

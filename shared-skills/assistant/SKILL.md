@@ -108,6 +108,8 @@ Context/brand.md              -- Voice and tone (optional)
 Context/stakeholders.md       -- Vendors, partners, investors (optional)
 Projects/*/README.md          -- Active project contexts
 Departments/*/README.md       -- Department charters, KPIs, SOPs
+Teams/*/README.md             -- Team overviews, members, goals, rituals
+Teams/*/{person}.md           -- Person profiles (role, working style, notes)
 Intelligence/meetings/        -- Meeting transcripts (+ board-reviews, all-hands, cross-team)
 Intelligence/competitors/     -- Competitive intelligence
 Intelligence/processes/       -- Org-wide SOPs, runbooks
@@ -199,7 +201,7 @@ Save everything valuable from the current session so future sessions can pick up
    Only include YAML frontmatter if creating a new file. Keep Quick Reference to 5-6 lines max (it's designed for fast AI scanning on resume). **Every project, person, and vault note reference MUST use `[[wikilinks]]`** — this is what builds the graph.
 3. **Update memory files** — Route to mode-appropriate files:
    - Solopreneurs/Professionals: User preferences → `Context/me.md`, project updates → `Projects/{name}/`, strategy changes → `Context/strategy.md`
-   - Business: Operator preferences → `Context/operator.md`, org updates → `Context/organization.md`, department updates → `Departments/{name}/`, process updates → `Intelligence/processes/`
+   - Business: Operator preferences → `Context/operator.md`, org updates → `Context/organization.md`, department updates → `Departments/{name}/`, team/person info → `Teams/{team-name}/`, process updates → `Intelligence/processes/`
    - All modes: Skill-specific content (references, strategy, style prefs) → `Skills/{skill-name}/`
    - All modes: Pending tasks → create via TaskNotes API
 4. **Auto-archive** — If the primary context file exceeds 100 lines, archive older entries. Never archive core identity or active preferences.
@@ -249,6 +251,8 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 | Vendor/partner/investor info | `Context/stakeholders.md` |
 | Department info, charter, KPIs | `Departments/{name}/README.md` |
 | Department SOP | `Departments/{name}/sops/{name}.md` |
+| Team info, goals, rituals | `Teams/{team-name}/README.md` |
+| Person profile, role, working style | `Teams/{team-name}/{person}.md` |
 | Org-wide process/runbook | `Intelligence/processes/{name}.md` |
 | Project info | Route to the right file in `Projects/{name}/` (see [Project Intelligence](#project-intelligence)) |
 | Competitive insight | `Intelligence/competitors/{name}.md` |
