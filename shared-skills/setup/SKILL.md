@@ -117,7 +117,7 @@ Read each reference file and write it to the corresponding local path. The refer
 | Reference File | Creates at Local Path |
 |---|---|
 | `references/settings-json-template.md` | `./.claude/settings.json` |
-| Glob `**/obsidian/hooks/persist-session.sh` | `./.claude/hooks/persist-session.sh` |
+| Glob `**/BenAI-Obsidian-plugin/hooks/persist-session.sh` | `./.claude/hooks/persist-session.sh` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
 
