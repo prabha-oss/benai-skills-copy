@@ -27,15 +27,14 @@ Before starting, check if `./claude.md` or `./CLAUDE.md` already exists in the c
 
 ## Phase 0: Mode Selection
 
-Ask the user to pick a mode. Present the question with descriptions so they understand the difference:
+Ask the user to pick a mode using AskUserQuestion. Use these EXACT option strings (the full sentence, not just the label):
 
-> **What type of vault do you want?**
->
-> 1. **General (Default)** — Blends work and personal. Best for solo founders, freelancers, consultants.
-> 2. **Business** — Organizational structure with departments, processes, stakeholders, onboarding docs. Best for teams and companies.
-> 3. **Personal** — Lean, life-focused. Areas, collections, habits — no business overhead. Best for personal use only.
+- Question: `What type of vault do you want?`
+- Option 1: `General (Default) — Blends work and personal. Best for solo founders, freelancers, consultants.`
+- Option 2: `Business — Org structure with departments, processes, stakeholders. Best for teams and companies.`
+- Option 3: `Personal — Lean, life-focused. Areas, collections, habits. Best for personal use only.`
 
-**Important**: Each option MUST include its description (the text after the dash) so the user can make an informed choice. Do NOT present bare labels like "General", "Business", "Personal" without the descriptions. The label for General must say "Default", NOT "Recommended".
+**CRITICAL**: The option text shown to the user MUST include the full string above — the label AND the description after the dash. Never pass just "General (Default)" or "Business" or "Personal" as bare labels.
 
 Accept any clear signal: "business", "org", "personal", "myself", "general", "both", "default", etc.
 
