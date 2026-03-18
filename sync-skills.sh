@@ -71,12 +71,15 @@ for dept_name, dept_config in departments.items():
     os.makedirs(plugin_json_dir, exist_ok=True)
 
     mp = marketplace_plugins.get(dept_name, {})
+    display_name = mp.get("displayName")
     plugin_data = {
-        "name": mp.get("displayName", dept_name),
+        "name": dept_name,
         "description": mp.get("description", ""),
         "version": mp.get("version", "1.0.0"),
         "author": mp.get("author", {"name": "BenAI"}),
     }
+    if display_name:
+        plugin_data["displayName"] = display_name
 
     with open(os.path.join(plugin_json_dir, "plugin.json"), "w") as f:
         json.dump(plugin_data, f, indent=2)
