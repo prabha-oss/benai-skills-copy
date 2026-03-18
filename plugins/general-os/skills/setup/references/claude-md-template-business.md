@@ -59,6 +59,7 @@ There is no catch-all file. Every piece of information has a home. When meaningf
 | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
 | Board/investor decision | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
 | Reusable content (prompts, frameworks, templates) | `Resources/` |
+| Skill-specific content (references, strategy, voice) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 ### Output Styles (How You Communicate)
@@ -86,6 +87,10 @@ Skills are installed as benai-skills plugins. Each skill defines when and how to
 ### Resources (`Resources/`)
 
 Your organizational library for frameworks, templates, SOPs, prompts, and reference material. Organize with light nesting (e.g., `Resources/templates/`, `Resources/frameworks/`, `Resources/prompts/`, `Resources/swipe/`). Use `[[wikilinks]]` to reference resources from project notes or daily notes.
+
+### Skills (`Skills/`)
+
+User-editable reference material for individual skills. Each skill gets a subfolder (e.g., `Skills/linkedin-writer/`). Files here are your references, strategy, and voice notes — skills read from here at runtime. See `Skills/_guide.md`.
 
 ### Project Intelligence
 
@@ -146,6 +151,7 @@ Intelligence/ — What you know: meetings, competitors, market, decisions, proce
 Daily/        — What happened: daily work logs and check-ins
 Resources/    — Your library: frameworks, templates, prompts, swipe files
   └── templates/
+Skills/       — Skill references you control: strategy, voice, reference material
 Onboarding/   — Onboarding documentation for roles and processes
 ```
 

@@ -46,6 +46,7 @@ There is no catch-all file. Every piece of information has a home. When meaningf
 | Book, article, course, media | `Collections/{type}.md` |
 | Major decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
 | Reusable content (prompts, frameworks, swipe files) | `Resources/` |
+| Skill-specific content (references, strategy, voice) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 ### Output Styles (How You Communicate)
@@ -71,6 +72,10 @@ Skills are installed as benai-skills plugins. Each skill defines when and how to
 ### Resources (`Resources/`)
 
 Your personal library for swipe files, prompts, and frameworks. Organize however feels natural — flat or lightly nested (e.g., `Resources/prompts/`, `Resources/frameworks/`, `Resources/swipe/`). Use `[[wikilinks]]` to reference resources from project notes or daily notes.
+
+### Skills (`Skills/`)
+
+User-editable reference material for individual skills. Each skill gets a subfolder (e.g., `Skills/linkedin-writer/`). Files here are your references, strategy, and voice notes — skills read from here at runtime. See `Skills/_guide.md`.
 
 ### Project Intelligence
 
@@ -122,6 +127,7 @@ Resources/    — Your library: prompts, frameworks, swipe files
   ├── prompts/
   ├── frameworks/
   └── swipe/
+Skills/       — Skill references you control: strategy, voice, reference material
 Collections/  — Books, articles, courses, media, and other references
 ```
 

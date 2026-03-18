@@ -381,12 +381,8 @@
     },
     "general-os": {
       "hooks": {
-        "UserPromptSubmit": [
-          { "file": "load-context.sh", "timeout": 10 },
-          { "file": "memory-reminder.sh", "timeout": 5 }
-        ],
         "Stop": [
-          { "file": "verify-memory-stop.sh", "timeout": 15 }
+          { "file": "persist-session.sh", "timeout": 10 }
         ]
       },
       "skills": {

@@ -163,6 +163,7 @@ Projects/               — What you're working on: intelligently structured per
 Intelligence/           — What you know: meetings/, competitors/, market/, decisions/
 Daily/                  — What happened: YYYY-MM-DD.md journals
 Resources/              — Your library: prompts, frameworks, swipe files, templates
+Skills/                 — Skill references you control: strategy, voice, reference material
 ```
 
 **Business:**
@@ -175,6 +176,7 @@ Intelligence/           — meetings/ (7 types), competitors/, market/, decision
 Daily/                  — Work logs + OKR-focused weekly reviews
 Onboarding/             — Team/client/system onboarding docs
 Resources/              — prompts, frameworks, swipe, templates/
+Skills/                 — Skill references you control: strategy, voice, reference material
 ```
 
 **Personal:**
@@ -187,6 +189,7 @@ Intelligence/           — meetings/ (general + personal), decisions/
 Daily/                  — Morning/evening routines + life-balance weekly reviews
 Collections/            — Books, articles, courses, media
 Resources/              — prompts, frameworks, swipe
+Skills/                 — Skill references you control: strategy, voice, reference material
 ```
 
 #### Onboarding

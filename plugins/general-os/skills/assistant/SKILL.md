@@ -92,6 +92,7 @@ Intelligence/decisions/       -- Decision records
 Intelligence/archive/         -- Archived content
 Daily/                        -- Daily journals and session logs
 Resources/                    -- Prompts, frameworks, swipe files, templates
+Skills/                       -- Skill-specific references: strategy, voice, reference material (user-editable)
 TaskNotes/Tasks/              -- Task files (managed by TaskNotes plugin)
 ```
 
@@ -116,6 +117,7 @@ Intelligence/archive/         -- Archived content
 Daily/                        -- Work logs and session logs
 Onboarding/                   -- Onboarding documentation
 Resources/                    -- Prompts, frameworks, swipe files, templates
+Skills/                       -- Skill-specific references: strategy, voice, reference material (user-editable)
 TaskNotes/Tasks/              -- Task files (managed by TaskNotes plugin)
 ```
 
@@ -135,6 +137,7 @@ Intelligence/archive/         -- Archived content
 Daily/                        -- Morning/evening routines, session logs
 Collections/                  -- Books, articles, courses, media
 Resources/                    -- Prompts, frameworks, swipe files
+Skills/                       -- Skill-specific references: strategy, voice, reference material (user-editable)
 TaskNotes/Tasks/              -- Task files (managed by TaskNotes plugin)
 ```
 
@@ -222,6 +225,7 @@ Save everything valuable from the current session so future sessions can pick up
    - General: User preferences → `Context/me.md`, project updates → `Projects/{name}/`, strategy changes → `Context/strategy.md`
    - Business: Operator preferences → `Context/operator.md`, org updates → `Context/organization.md`, department updates → `Departments/{name}/`, process updates → `Intelligence/processes/`
    - Personal: Preferences → `Context/me.md`, goal updates → `Context/goals.md`, area updates → `Areas/{area}.md`, collection items → `Collections/{type}.md`
+   - All modes: Skill-specific content (references, strategy, style prefs) → `Skills/{skill-name}/`
    - All modes: Pending tasks → create via TaskNotes API
 4. **Auto-archive** — If the primary context file exceeds 100 lines, archive older entries. Never archive core identity or active preferences.
    - General/Personal: `Context/me.md` → `Intelligence/archive/me-archive-YYYY-MM.md`
@@ -255,6 +259,7 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 | Market insight | `Intelligence/market/{topic}.md` |
 | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
 | Reusable content (prompts, frameworks, templates) | `Resources/` |
+| Skill-specific content (references, strategy for a skill) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 **Business mode routing:**
@@ -277,6 +282,7 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 | Onboarding docs | `Onboarding/{name}.md` |
 | Reusable content | `Resources/` |
 | Org document templates | `Resources/templates/` |
+| Skill-specific content (references, strategy for a skill) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 **Personal mode routing:**
@@ -291,6 +297,7 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 | Book, article, course, media | `Collections/{type}.md` |
 | Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
 | Reusable content | `Resources/` |
+| Skill-specific content (references, strategy for a skill) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
 3. **Auto-archive check** — If the primary context file exceeds 100 lines, archive older entries. Never archive core identity or active preferences.

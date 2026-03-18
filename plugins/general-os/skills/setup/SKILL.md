@@ -27,13 +27,15 @@ Before starting, check if `./claude.md` or `./CLAUDE.md` already exists in the c
 
 ## Phase 0: Mode Selection
 
-Ask the user:
+Ask the user to pick a mode. Present the question with descriptions so they understand the difference:
 
-> **Is this for a business/organization, for yourself, or general (both)?**
+> **What type of vault do you want?**
 >
-> - **General** (default) — Best for solo founders, freelancers, or anyone who blends work and personal. Hybrid structure.
-> - **Business** — Organizational structure with departments, processes, stakeholders, onboarding docs.
-> - **Personal** — Lean, life-focused structure with areas, collections, and no business overhead.
+> 1. **General (Default)** — Blends work and personal. Best for solo founders, freelancers, consultants.
+> 2. **Business** — Organizational structure with departments, processes, stakeholders, onboarding docs. Best for teams and companies.
+> 3. **Personal** — Lean, life-focused. Areas, collections, habits — no business overhead. Best for personal use only.
+
+**Important**: Each option MUST include its description (the text after the dash) so the user can make an informed choice. Do NOT present bare labels like "General", "Business", "Personal" without the descriptions. The label for General must say "Default", NOT "Recommended".
 
 Accept any clear signal: "business", "org", "personal", "myself", "general", "both", "default", etc.
 
@@ -57,6 +59,7 @@ mkdir -p Context
 mkdir -p Projects
 mkdir -p Daily
 mkdir -p Resources
+mkdir -p Skills
 ```
 
 **General mode** adds:
@@ -112,9 +115,7 @@ Read each reference file and write it to the corresponding local path. The refer
 | Reference File | Creates at Local Path |
 |---|---|
 | `references/settings-json-template.md` | `./.claude/settings.json` |
-| Glob `**/general-os/hooks/load-context.sh` | `./.claude/hooks/load-context.sh` |
-| Glob `**/general-os/hooks/memory-reminder.sh` | `./.claude/hooks/memory-reminder.sh` |
-| Glob `**/general-os/hooks/verify-memory-stop.sh` | `./.claude/hooks/verify-memory-stop.sh` |
+| Glob `**/general-os/hooks/persist-session.sh` | `./.claude/hooks/persist-session.sh` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
 
@@ -146,10 +147,26 @@ Read each reference file and write it to the corresponding local path. The refer
 | Personal | `references/guide-skills.md` | `./Resources/_guide.md` |
 | Personal | `references/guide-areas.md` | `./Areas/_guide.md` |
 | Personal | `references/guide-collections.md` | `./Collections/_guide.md` |
+| General | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
+| Business | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
+| Personal | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
 
 For each row applicable to the selected mode: read the reference file, then write its content to the local path.
 
 ### Step A.3: Initialize Starter Context Files
+
+**All modes** — create placeholder skill folders:
+
+```bash
+mkdir -p Skills/linkedin-writer/references
+mkdir -p Skills/newsletter-writer/references
+```
+
+Then write placeholder files from references:
+- Read `references/skills-placeholder-linkedin-notes.md` → write to `./Skills/linkedin-writer/notes.md`
+- Read `references/skills-placeholder-linkedin-example.md` → write to `./Skills/linkedin-writer/references/example-post.md`
+- Read `references/skills-placeholder-newsletter-strategy.md` → write to `./Skills/newsletter-writer/strategy.md`
+- Read `references/skills-placeholder-newsletter-example.md` → write to `./Skills/newsletter-writer/references/example-edition.md`
 
 **General mode:**
 - Read `references/context-me.md` → write to `./Context/me.md`
@@ -173,7 +190,7 @@ chmod +x .claude/hooks/*.sh
 
 Tell the user:
 - "Vault structure created successfully in **[mode]** mode."
-- List the main folders created (varies by mode)
+- List the main folders created (varies by mode), including `Skills/`
 - Recommend opening this folder as a vault in Obsidian
 - Recommend installing **TaskNotes** community plugin if they want task management features
 - Note that **Bases** (native database views) are built into Obsidian — no plugin needed for queries
