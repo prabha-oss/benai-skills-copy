@@ -1,6 +1,6 @@
 ---
 name: assistant
-description: BenAI Obsidian Plugin assistant — manages sessions, daily routines, tasks, memory, resources, output styles, and meeting intelligence. Mode-aware (general, business). Handles resume, compress, preserve, daily review, task management, resources, style switching, and meeting transcript processing. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", "meeting", "transcript", or runs /assistant.
+description: BenAI Obsidian Plugin assistant — manages sessions, daily routines, tasks, memory, resources, output styles, and meeting intelligence. Mode-aware (professional, business). Handles resume, compress, preserve, daily review, task management, resources, style switching, and meeting transcript processing. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", "meeting", "transcript", or runs /assistant.
 ---
 
 # BenAI Obsidian Plugin — Assistant
@@ -16,8 +16,7 @@ description: BenAI Obsidian Plugin assistant — manages sessions, daily routine
 Read the `claude.md` file and check for `os-mode` in the frontmatter or first few lines:
 
 - `os-mode: business` → Business mode
-- `os-mode: personal` → Personal mode
-- `os-mode: general` or not specified → General mode (default)
+- `os-mode: professional` or not specified → Solopreneurs/Professionals mode (default)
 
 The detected mode affects routing, file paths, review templates, and available features throughout this skill.
 
@@ -75,10 +74,10 @@ For full reference, read `references/obsidian-formatting.md`.
 
 The vault structure depends on the detected mode.
 
-### General Mode
+### Solopreneurs/Professionals Mode
 
 ```
-claude.md                       -- Root config (os-mode: general)
+claude.md                       -- Root config (os-mode: professional)
 .claude/output-styles/          -- Output style definitions
 Context/me.md                 -- Who the user is
 Context/strategy.md           -- Vision, goals, monthly focus (optional)
@@ -121,26 +120,6 @@ Skills/                       -- Skill-specific references: strategy, voice, ref
 TaskNotes/Tasks/              -- Task files (managed by TaskNotes plugin)
 ```
 
-### Personal Mode
-
-```
-claude.md                       -- Root config (os-mode: personal)
-.claude/output-styles/          -- Output style definitions
-Context/me.md                 -- Identity, values, hobbies, personality
-Context/goals.md              -- This year, this month, habits (optional)
-Context/people.md             -- Family, friends, mentors (optional)
-Projects/*/README.md          -- Active project contexts
-Areas/                        -- Ongoing life responsibilities (health, finances, etc.)
-Intelligence/meetings/        -- Meeting notes (general + personal)
-Intelligence/decisions/       -- Decision records
-Intelligence/archive/         -- Archived content
-Daily/                        -- Morning/evening routines, session logs
-Collections/                  -- Books, articles, courses, media
-Resources/                    -- Prompts, frameworks, swipe files
-Skills/                       -- Skill-specific references: strategy, voice, reference material (user-editable)
-TaskNotes/Tasks/              -- Task files (managed by TaskNotes plugin)
-```
-
 ---
 
 ## Resume Session
@@ -150,9 +129,8 @@ Reconstruct full context so the user picks up where they left off.
 ### Steps
 
 1. **Load core memory** — Read the primary context file and project READMEs:
-   - General: `Context/me.md`, glob `Projects/*/README.md`, scan `Context/strategy.md` if it exists
+   - Solopreneurs/Professionals: `Context/me.md`, glob `Projects/*/README.md`, scan `Context/strategy.md` if it exists
    - Business: `Context/operator.md`, `Context/organization.md`, glob `Projects/*/README.md`, glob `Departments/*/README.md`, scan `Context/strategy.md`
-   - Personal: `Context/me.md`, glob `Projects/*/README.md`, scan `Context/goals.md` if it exists
    Prefer `obsidian read` if CLI is available; otherwise read files directly.
 2. **Load recent daily notes** — Default: last 3 from `Daily/` (sorted by filename date). With a number arg: last N notes. With a keyword arg: last 3 + `obsidian search query="keyword"` across all daily notes. Read Quick Reference sections first (low token cost); dig deeper only if needed.
 3. **Check active tasks** — Try in order:
@@ -160,8 +138,7 @@ Reconstruct full context so the user picks up where they left off.
    - TaskNotes API: `curl -s "http://127.0.0.1:8080/api/tasks?status=open"`
    - Skip if neither available
 4. **Check goals/strategy** — Mode-specific:
-   - General/Business: If `Context/strategy.md` has content, scan for active goals and approaching milestones
-   - Personal: If `Context/goals.md` has content, scan for current focus and habits
+   - Solopreneurs/Professionals / Business: If `Context/strategy.md` has content, scan for active goals and approaching milestones
 5. **Present briefing** — Concise standup format:
    ```
    Welcome back, [name].
@@ -174,7 +151,6 @@ Reconstruct full context so the user picks up where they left off.
    What would you like to focus on today?
    ```
    Business mode: also include department status and OKR progress if available.
-   Personal mode: also include life area status and habit streak if available.
 6. **Update daily note** — Create/append to `Daily/YYYY-MM-DD.md` with a "Current Session" section. Prefer `obsidian daily:append` if CLI available.
 
 ### Guidelines
@@ -222,13 +198,12 @@ Save everything valuable from the current session so future sessions can pick up
    ```
    Only include YAML frontmatter if creating a new file. Keep Quick Reference to 5-6 lines max (it's designed for fast AI scanning on resume). **Every project, person, and vault note reference MUST use `[[wikilinks]]`** — this is what builds the graph.
 3. **Update memory files** — Route to mode-appropriate files:
-   - General: User preferences → `Context/me.md`, project updates → `Projects/{name}/`, strategy changes → `Context/strategy.md`
+   - Solopreneurs/Professionals: User preferences → `Context/me.md`, project updates → `Projects/{name}/`, strategy changes → `Context/strategy.md`
    - Business: Operator preferences → `Context/operator.md`, org updates → `Context/organization.md`, department updates → `Departments/{name}/`, process updates → `Intelligence/processes/`
-   - Personal: Preferences → `Context/me.md`, goal updates → `Context/goals.md`, area updates → `Areas/{area}.md`, collection items → `Collections/{type}.md`
    - All modes: Skill-specific content (references, strategy, style prefs) → `Skills/{skill-name}/`
    - All modes: Pending tasks → create via TaskNotes API
 4. **Auto-archive** — If the primary context file exceeds 100 lines, archive older entries. Never archive core identity or active preferences.
-   - General/Personal: `Context/me.md` → `Intelligence/archive/me-archive-YYYY-MM.md`
+   - Solopreneurs/Professionals: `Context/me.md` → `Intelligence/archive/me-archive-YYYY-MM.md`
    - Business: `Context/operator.md` → `Intelligence/archive/operator-archive-YYYY-MM.md`
 5. **Report** — Tell the user what was saved and where. "You're safe to close. I'll remember everything next time."
 
@@ -247,7 +222,7 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 1. **Save immediately** — Don't ask what to remember. When the user shares something worth preserving, just save it to the right file.
 2. **Route to the right file** — there is no catch-all. Everything has a home. Routing depends on mode:
 
-**General mode routing:**
+**Solopreneurs/Professionals mode routing:**
 
 | Type | File |
 |------|------|
@@ -285,21 +260,6 @@ Save durable knowledge that persists indefinitely (unlike compress, which saves 
 | Skill-specific content (references, strategy for a skill) | `Skills/{skill-name}/` |
 | Rules for assistant behavior | Root `claude.md` (Rules section) |
 
-**Personal mode routing:**
-
-| Type | File |
-|------|------|
-| Preferences, personality, habits, values | `Context/me.md` |
-| Goals, intentions, milestones | `Context/goals.md` |
-| People info (family, friends, contacts) | `Context/people.md` |
-| Project info | Route to the right file in `Projects/{name}/` (see [Project Intelligence](#project-intelligence)) |
-| Life area update (health, finance, etc.) | `Areas/{area}.md` |
-| Book, article, course, media | `Collections/{type}.md` |
-| Decision with reasoning | `Intelligence/decisions/YYYY-MM-DD-{title}.md` |
-| Reusable content | `Resources/` |
-| Skill-specific content (references, strategy for a skill) | `Skills/{skill-name}/` |
-| Rules for assistant behavior | Root `claude.md` (Rules section) |
-
 3. **Auto-archive check** — If the primary context file exceeds 100 lines, archive older entries. Never archive core identity or active preferences.
 4. **Report** — After saving, tell the user what was saved and where.
 
@@ -326,11 +286,11 @@ Morning check-in, evening reflection, and weekly review routines. Templates diff
 
 ### Template Selection by Mode
 
-| Review | General | Business | Personal |
-|--------|---------|----------|----------|
-| Morning | `references/template-morning.md` | `references/template-morning-business.md` | `references/template-morning-personal.md` |
-| Evening | `references/template-evening.md` | `references/template-evening.md` | `references/template-evening-personal.md` |
-| Weekly | `references/template-weekly.md` | `references/template-weekly-business.md` | `references/template-weekly-personal.md` |
+| Review | Solopreneurs/Professionals | Business |
+|--------|---------|----------|
+| Morning | `references/template-morning.md` | `references/template-morning-business.md` |
+| Evening | `references/template-evening.md` | `references/template-evening.md` |
+| Weekly | `references/template-weekly.md` | `references/template-weekly-business.md` |
 
 Read the appropriate template before generating the review.
 
@@ -341,11 +301,9 @@ Read the appropriate template before generating the review.
 3. Check `Projects/` for approaching deadlines
 4. Mode-specific additions:
    - Business: Check `Departments/` for department status, upcoming meetings
-   - Personal: Check `Areas/` for habit tracking, `Context/goals.md` for current focus
 5. Ask mode-appropriate questions:
-   - General: mood/energy (1-10), main focus, blockers
+   - Solopreneurs/Professionals: mood/energy (1-10), main focus, blockers
    - Business: main focus, key meetings, blockers
-   - Personal: mood/energy (1-10), gratitude, intention, main focus
 6. Save to `Daily/YYYY-MM-DD Morning.md` with appropriate frontmatter
 7. Create 1-3 tasks in TaskNotes based on energy and deadlines. Report what was created.
 
@@ -354,9 +312,8 @@ Read the appropriate template before generating the review.
 1. Read today's morning note
 2. Compare task progress vs morning intentions
 3. Ask mode-appropriate questions:
-   - General: accomplishments, one thing learned, top priority for tomorrow
+   - Solopreneurs/Professionals: accomplishments, one thing learned, top priority for tomorrow
    - Business: accomplishments, decisions made, top priority for tomorrow
-   - Personal: wins, one thing learned, habit check, gratitude, top priority for tomorrow
 4. Save to `Daily/YYYY-MM-DD Evening.md` with appropriate frontmatter
 5. Mark completed tasks as done via API; route any new insights to the right file (see [Preserve Knowledge](#preserve-knowledge))
 
@@ -366,13 +323,11 @@ Read the appropriate template before generating the review.
 2. Scan `Projects/` for movement
 3. Query TaskNotes for done tasks — celebrate wins
 4. Mode-specific checks:
-   - General: Check `Context/strategy.md` — flag goals with no active project
+   - Solopreneurs/Professionals: Check `Context/strategy.md` — flag goals with no active project
    - Business: Check OKR progress, department health, pipeline/revenue metrics
-   - Personal: Check life-area balance, habit streaks, goal progress
 5. Ask mode-appropriate questions:
-   - General: biggest win, what to do differently, focus for next week
+   - Solopreneurs/Professionals: biggest win, what to do differently, focus for next week
    - Business: biggest win, OKR progress, blockers, focus for next week
-   - Personal: biggest win, what to do differently, gratitude, focus for next week
 6. Save to `Daily/YYYY-MM-DD Weekly Review.md` with appropriate frontmatter
 7. Plan top 3 priorities for next week; create tasks in TaskNotes automatically
 8. Archive completed items if appropriate
@@ -479,7 +434,7 @@ Output styles define how the assistant communicates. Styles are bundled as refer
 
 ### Personalization
 
-User voice from the primary context file is applied ON TOP of the active style. Style files define structure; preferences define personality. If `Context/brand.md` exists (General/Business modes), also apply brand guidelines.
+User voice from the primary context file is applied ON TOP of the active style. Style files define structure; preferences define personality. If `Context/brand.md` exists (Solopreneurs/Professionals / Business modes), also apply brand guidelines.
 
 ### Guidelines
 - Always read the style file before producing styled output — don't rely on memory
@@ -532,8 +487,6 @@ When the user mentions something about a project, analyze what it is and route i
 | Working notes, scratchpad | `Projects/{name}/notes/{name}.md` |
 | Feedback, review comments | `Projects/{name}/feedback/{name}.md` |
 | Meeting notes specific to project | `Projects/{name}/meetings/{date}-{topic}.md` |
-
-Note: In **personal mode**, skip `specs/` and `feedback/` — use research, drafts, ideas, notes only.
 
 ### Creating Subdirs on the Fly
 
@@ -595,7 +548,7 @@ USE WHEN the user:
 
 Ask or infer from context. Available types depend on mode:
 
-**General mode:**
+**Solopreneurs/Professionals mode:**
 
 | Meeting Type | Save to | Focus |
 |---|---|---|
@@ -618,14 +571,6 @@ Ask or infer from context. Available types depend on mode:
 | General | `Intelligence/meetings/general/` | Full meeting summary structure. |
 | Custom type | `Intelligence/meetings/[custom-folder]/` | As appropriate. |
 
-**Personal mode:**
-
-| Meeting Type | Save to | Focus |
-|---|---|---|
-| General | `Intelligence/meetings/general/` | Full meeting summary structure. |
-| Personal | `Intelligence/meetings/personal/` | Coffee chats, advisor calls, doctor visits, personal meetings. Casual tone. |
-| Custom type | `Intelligence/meetings/[custom-folder]/` | As appropriate. |
-
 ### Step 2: Load Output Style
 
 Read `.claude/output-styles/meeting-summary.md` and follow its format exactly. If the file doesn't exist, use the template at `references/template-meeting-note.md`. Read the template before creating any meeting note.
@@ -645,7 +590,7 @@ Save as `Intelligence/meetings/[type]/YYYY-MM-DD Meeting Title.md` with frontmat
 ```yaml
 ---
 type: meeting
-subtype: team-standup | client-call | one-on-one | board-review | all-hands | cross-team | general | personal
+subtype: team-standup | client-call | one-on-one | board-review | all-hands | cross-team | general
 date: YYYY-MM-DD
 time: HH:MM
 participants: [[[Person A]], [[Person B]]]
@@ -729,7 +674,6 @@ Query by frontmatter: `participants`, `project`, `department`, `date`, `subtype`
 
 ### Meeting Guidelines
 - Always ask for meeting type if not obvious from transcript
-- In personal mode, default to "general" or "personal" — don't offer business meeting types
 - Extract ALL action items — don't miss any
 - Use `[[wikilinks]]` for participants and projects
 - Use callouts for visual structure
@@ -747,7 +691,7 @@ Query by frontmatter: `participants`, `project`, `department`, `date`, `subtype`
 - **Daily notes**: `Daily/YYYY-MM-DD.md` is the most-read memory file — always keep it current.
 - **Auto-archive threshold**: Primary context file > 100 lines. Archive older entries. Never archive core identity or active preferences.
 - **Task system**: Try Obsidian CLI → TaskNotes API (`http://127.0.0.1:8080`) → skip. If unavailable, note it and continue without task data.
-- **Mode awareness**: Always check the mode before routing info or selecting templates. Don't offer business features in personal mode or vice versa.
+- **Mode awareness**: Always check the mode before routing info or selecting templates. Route to mode-appropriate files and templates.
 
 ## Auto-Save Rule
 
@@ -764,5 +708,4 @@ Do NOT:
 - Read entire files when scanning many — use `grep` for frontmatter or `obsidian search`
 - Update vault files on casual chat — only when there's something worth recording
 - Create tasks as plain text in notes — use the TaskNotes API or Obsidian CLI so they're queryable
-- Offer business-mode features (departments, SOPs, stakeholders) in personal mode
-- Offer personal-mode features (areas, collections, habits) in business mode unless explicitly asked
+- Offer business-mode features (departments, SOPs, stakeholders) in Solopreneurs/Professionals mode without being asked

@@ -36,14 +36,14 @@ Ask the user to pick a mode using AskUserQuestion with these exact `label` and `
 **CRITICAL**: You MUST pass both `label` AND `description` for each option in AskUserQuestion. The `description` field is what explains each mode to the user. Never leave `description` empty.
 
 Mode mapping:
-- Solopreneurs/Professionals → `os-mode: general`
+- Solopreneurs/Professionals → `os-mode: professional`
 - Business/Teams → `os-mode: business`
 
 Accept any clear signal: "solo", "professional", "freelancer", "business", "org", "team", etc.
 
-If the user skips or says "I don't know", use **Solopreneurs/Professionals** (general mode).
+If the user skips or says "I don't know", use **Solopreneurs/Professionals** (professional mode).
 
-Store the selected mode. It will be written to `claude.md` frontmatter as `os-mode: general | business`.
+Store the selected mode. It will be written to `claude.md` frontmatter as `os-mode: professional | business`.
 
 ---
 
@@ -64,7 +64,7 @@ mkdir -p Resources
 mkdir -p Skills
 ```
 
-**General mode** adds:
+**Solopreneurs/Professionals mode** adds:
 
 ```bash
 mkdir -p Intelligence/meetings/team-standups
@@ -97,17 +97,6 @@ mkdir -p Onboarding
 mkdir -p Resources/templates
 ```
 
-**Personal mode** adds:
-
-```bash
-mkdir -p Intelligence/meetings/general
-mkdir -p Intelligence/meetings/personal
-mkdir -p Intelligence/decisions
-mkdir -p Intelligence/archive
-mkdir -p Areas
-mkdir -p Collections
-```
-
 ### Step A.2: Write System Files from References
 
 Read each reference file and write it to the corresponding local path. The reference files contain the complete content for each system file.
@@ -125,18 +114,17 @@ Read each reference file and write it to the corresponding local path. The refer
 
 | Mode | Reference File | Creates at Local Path |
 |---|---|---|
-| General | `references/claude-md-template.md` | `./claude.md` |
+| Solopreneurs/Professionals | `references/claude-md-template.md` | `./claude.md` |
 | Business | `references/claude-md-template-business.md` | `./claude.md` |
-| Personal | `references/claude-md-template-personal.md` | `./claude.md` |
 
 **Mode-specific folder guides:**
 
 | Mode | Reference File | Creates at Local Path |
 |---|---|---|
-| General | `references/guide-projects.md` | `./Projects/_guide.md` |
-| General | `references/guide-daily.md` | `./Daily/_guide.md` |
-| General | `references/guide-intelligence.md` | `./Intelligence/_guide.md` |
-| General | `references/guide-skills.md` | `./Resources/_guide.md` |
+| Solopreneurs/Professionals | `references/guide-projects.md` | `./Projects/_guide.md` |
+| Solopreneurs/Professionals | `references/guide-daily.md` | `./Daily/_guide.md` |
+| Solopreneurs/Professionals | `references/guide-intelligence.md` | `./Intelligence/_guide.md` |
+| Solopreneurs/Professionals | `references/guide-skills.md` | `./Resources/_guide.md` |
 | Business | `references/guide-projects.md` | `./Projects/_guide.md` |
 | Business | `references/guide-daily.md` | `./Daily/_guide.md` |
 | Business | `references/guide-intelligence.md` | `./Intelligence/_guide.md` |
@@ -144,14 +132,8 @@ Read each reference file and write it to the corresponding local path. The refer
 | Business | `references/guide-departments.md` | `./Departments/_guide.md` |
 | Business | `references/guide-onboarding.md` | `./Onboarding/_guide.md` |
 | Business | `references/guide-processes.md` | `./Intelligence/processes/_guide.md` |
-| Personal | `references/guide-projects.md` | `./Projects/_guide.md` |
-| Personal | `references/guide-daily.md` | `./Daily/_guide.md` |
-| Personal | `references/guide-skills.md` | `./Resources/_guide.md` |
-| Personal | `references/guide-areas.md` | `./Areas/_guide.md` |
-| Personal | `references/guide-collections.md` | `./Collections/_guide.md` |
-| General | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
+| Solopreneurs/Professionals | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
 | Business | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
-| Personal | `references/guide-skills-vault.md` | `./Skills/_guide.md` |
 
 For each row applicable to the selected mode: read the reference file, then write its content to the local path.
 
@@ -170,7 +152,7 @@ Then write placeholder files from references:
 - Read `references/skills-placeholder-newsletter-strategy.md` → write to `./Skills/newsletter-writer/strategy.md`
 - Read `references/skills-placeholder-newsletter-example.md` → write to `./Skills/newsletter-writer/references/example-edition.md`
 
-**General mode:**
+**Solopreneurs/Professionals mode:**
 - Read `references/context-me.md` → write to `./Context/me.md`
 
 **Business mode:**
@@ -178,9 +160,6 @@ Then write placeholder files from references:
 - Read `references/context-organization.md` → write to `./Context/organization.md`
 - Read `references/context-team.md` → write to `./Context/team.md`
 - Read `references/context-strategy-business.md` → write to `./Context/strategy.md`
-
-**Personal mode:**
-- Read `references/context-me.md` → write to `./Context/me.md`
 
 ### Step A.4: Make Hooks Executable
 
@@ -209,7 +188,7 @@ Two questions. That's it. The questions differ by mode.
 
 ### Mode-specific Questions
 
-**General mode:**
+**Solopreneurs/Professionals mode:**
 
 Question 1:
 > **Tell me about yourself (and your business, if you have one).**
@@ -226,14 +205,6 @@ Question 1:
 
 Question 2:
 > **What are the active projects or initiatives?** Roadmaps, OKRs, briefs — whatever you have. Or skip.
-
-**Personal mode:**
-
-Question 1:
-> **Tell me about yourself** — who are you, what do you care about, how do you like to work? Or skip.
-
-Question 2:
-> **What are you working on or focused on?** Projects, goals, things on your mind. Or skip.
 
 The user might give you:
 - A short sentence
@@ -255,7 +226,7 @@ After the two questions (or skips), build everything you can from what the user 
 
 Behavior depends on selected mode.
 
-**General mode** — same as before:
+**Solopreneurs/Professionals mode:**
 
 - **`Context/me.md`** — Always created. Fill with identity info from Question 1.
 - **`Context/business.md`** — Only if user mentioned a company/product/business. Read `references/context-business.md` as template.
@@ -271,12 +242,6 @@ Behavior depends on selected mode.
 - **`Context/strategy.md`** — Always created. Fill with any goals, OKRs, targets mentioned. Read `references/context-strategy.md` as template. Focus template on OKRs, department goals, revenue targets.
 - **`Context/brand.md`** — Only if user mentioned voice/tone/brand. Read `references/context-brand.md` as template.
 - **`Context/stakeholders.md`** — Only if user mentioned vendors, partners, investors, board. Read `references/context-stakeholders.md` as template.
-
-**Personal mode:**
-
-- **`Context/me.md`** — Always created. Fill with identity, values, hobbies, personality, learning style from Question 1. Use an expanded version of the template that includes values, hobbies, and personality sections.
-- **`Context/goals.md`** — Only if user mentioned goals/ambitions/plans. Read `references/context-goals.md` as template.
-- **`Context/people.md`** — Only if user mentioned people (family, friends, mentors). Read `references/context-people.md` as template.
 
 ### Build Step 2: Create Project Folders
 
@@ -297,8 +262,6 @@ From Question 2, intelligently structure each project based on what the user gav
 | Drafts, scripts, written content | `drafts/{name}.md` |
 | Ideas, brainstorms | `ideas/{name}.md` |
 | Notes, working docs | `notes/{name}.md` |
-
-Note: In **personal mode**, skip `specs/` and `feedback/` subdirs — keep to research, drafts, ideas, notes.
 
 **README.md is always the index:**
 ```markdown
@@ -330,10 +293,6 @@ Don't create empty subdirs. Don't cram everything into the README. Distribute co
 - If user mentioned processes or SOPs, create them in `Intelligence/processes/`
 - If user mentioned onboarding docs, create them in `Onboarding/`
 
-**Personal mode only:**
-- If user mentioned life areas (health, finances, learning, etc.), create `Areas/{area}.md` files
-- If user mentioned books, courses, or media, create initial `Collections/{type}.md` files
-
 ### Build Step 4: Create First Daily Note
 
 Create `Daily/YYYY-MM-DD.md` (today's date):
@@ -353,7 +312,7 @@ date: YYYY-MM-DD
 ### Build Step 5: Confirm Completion
 
 Tell the user:
-- Quick summary of what was created (which context files, how many projects, any departments/areas/collections)
+- Quick summary of what was created (which context files, how many projects, any departments)
 - "Open this folder in Obsidian to see your vault"
 - Key command: `/assistant` (sessions, daily reviews, tasks, meetings)
 - "You can add more context anytime — just tell me and I'll update the right files."
