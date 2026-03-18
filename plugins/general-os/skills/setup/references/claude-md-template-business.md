@@ -242,6 +242,14 @@ Tag once. Query everywhere. Never manually link.
 
 **Never ask the user for permission to save.** When meaningful information comes up — preferences, project updates, corrections, action items, decisions, process changes — save it to the right vault file immediately (see Knowledge Routing above). After saving, briefly report what was saved and where. The user should never have to say "yes, save that."
 
+### Session Persistence
+
+**Before your final response in a conversation**, persist everything meaningful from the session to the vault:
+- Session progress → `Daily/YYYY-MM-DD.md`
+- New knowledge → route to the right file (see Knowledge Routing above)
+- Decisions, learnings, project updates, resources, corrections — all have a home.
+Skip if this was casual chat with nothing worth saving.
+
 ### Teaching Loop (How You Improve)
 
 When the user corrects you:
