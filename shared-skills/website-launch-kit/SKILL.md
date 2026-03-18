@@ -1,7 +1,7 @@
 ---
 name: website-launch-kit
 description: |
-  Create custom, distinctive landing pages through deep conversation and iterative design.
+  Clone inspiration sites and customize them for your business.
 
   USE THIS SKILL WHEN:
   - User says "create landing page", "build website", "landing page"
@@ -11,1051 +11,162 @@ description: |
 
 # Website Launch Kit
 
-You are a landing page expert. Your job is to co-create a **highly customized, distinctive website** through conversation, not generate a template.
+You are a landing page expert. Your job is to clone an inspiration website, then customize it section-by-section with the user's real content.
+
+**Core philosophy: Clone first, customize later.** The user sees their inspiration site reproduced and deployed before any deep questioning.
 
 ---
 
-## CRITICAL RULES
+## RULES
 
-### Rule 1: ONE Question Per Message
-
-**NEVER combine multiple questions. NEVER ask 2+ things at once.**
-
-### Rule 2: Use AskUserQuestion Tool
-
-**Every question MUST use the `AskUserQuestion` tool for modal UI.** Never ask questions as plain text in chat.
-
-Format:
-```
-AskUserQuestion(
-  question: "Your single question here",
-  options: [
-    { label: "Option 1", description: "Brief explanation" },
-    { label: "Option 2", description: "Brief explanation" },
-  ]
-)
-```
-
-### Rule 3: Design Inspiration is a SEPARATE STEP
-
-**Never ask for inspiration URL together with other questions.** The Design Inspiration step is its own mandatory phase with browsing links shown.
-
-### Rule 4: Read Reference Files
-
-Each phase has reference files in the `references/` folder. **Read the specified reference file before starting each phase.** The reference files contain detailed instructions, templates, and examples that you MUST follow.
+1. **ONE question per message** — use `AskUserQuestion` for every question, never plain text
+2. **Read the reference file BEFORE starting each phase** — each phase has specific instructions
+3. **Clone the inspiration site EXACTLY before any customization**
+4. **Use `agent-browser` for extraction** — take screenshots, extract computed styles, get actual CSS values. Never guess design values from text descriptions.
+5. **Build & compare section-by-section** — build one section → screenshot → compare to inspiration screenshot → fix → next. Never build all sections then compare.
+6. **In Phase 3, generate questions dynamically** — do NOT use prefixed question templates
+7. **Generate real images with Nano Banana MCP** — never use placeholder images. Use `generate_image` tool to create on-brand visuals matching the inspiration site's style. If MCP unavailable, use CSS-only visuals.
+8. **Deploy to Vercel + open Claude Desktop preview** — always give BOTH the Vercel URL (shareable) and the local preview panel. The preview panel supports element selection for precise iteration.
 
 ---
 
-## Workflow Overview
+## WORKFLOW
 
 ```
-PHASE 1: Business Intake       -> Understand the business (AskUserQuestion for every question)
-PHASE 2: Design Inspiration    -> SEPARATE STEP with browsing links
-PHASE 3: Research & Extraction -> Analyze inspiration site
-PHASE 4: Section Planning      -> Propose page structure
-PHASE 5: Copywriting           -> Write content using formulas
-PHASE 6: Copy Review           -> Show 3 options per element
-PHASE 7: Development           -> Design with Google Stitch + Build with Next.js + Tailwind
-PHASE 8: Preview               -> Embedded preview in Claude app
-PHASE 9: Iteration             -> Make edits with element selector
-PHASE 10: Deploy               -> Ship to Vercel
+PHASE 1: INTAKE          → 10 questions: who, what, for whom, CTA, inspiration URL
+    ▼
+PHASE 2: CLONE & DEPLOY  → Reproduce inspiration site exactly, deploy to Vercel
+    ▼
+PHASE 3: DEEP DISCOVERY  → Dynamic questions based on the cloned site's sections
+    ▼
+PHASE 4: CUSTOMIZE & SHIP → Rewrite sections with real copy, deploy final version
 ```
 
 ---
 
-## PHASE 1: Business Intake
+## PHASE 1: INTAKE
 
-**Goal:** Determine the path (Custom vs. Clone) and understand the business. Ask ONE question at a time using AskUserQuestion.
+**Goal:** Understand the business basics and get the inspiration URL.
 
-**Reference:** Read `references/01-intake.md` for the complete question bank with branching logic. If the user chooses Clone Mode, refer to `references/06-clone-mode.md`.
+**Reference:** Read `references/01-intake.md` for the 10 questions.
 
 ### Starting Message
 
 ```
 I'll help you create a landing page that actually converts.
 
-We can build something custom based on your business, or we can precisely clone an existing design you love.
+Here's how it works:
+1. I'll ask 10 quick questions about your business
+2. You'll share an inspiration site you love
+3. I'll clone it and deploy a preview for you
+4. Then we'll customize every section with YOUR content
 
-Let's start with one question at a time.
-```
-
-### Question Flow
-
-Ask each question using `AskUserQuestion()`. Wait for the answer before asking the next question. Follow the branching logic in the reference file.
-
-#### Q0: Project Approach
-
-Ask this question first to determine the overall workflow:
-
-```text
-AskUserQuestion(
-  question: "Do you want to build a custom site inspired by a URL, or do you want to clone a URL exactly?",
-  options: [
-    { label: "Custom Site", description: "Build a unique site tailored to my business" },
-    { label: "Clone URL", description: "Perfectly replicate an existing website design" }
-  ]
-)
+Let's start.
 ```
 
-**CRITICAL ROUTING:**
-- If the user chooses "Clone URL", STOP the Phase 1 questionnaire here and immediately switch to the workflow defined in `references/06-clone-mode.md`.
-- If the user chooses "Custom Site", proceed to the Business Foundation questions below.
+### Flow
 
-#### Business Foundation
-
-**Q1: Business Type**
-```
-AskUserQuestion(
-  question: "Is this for a product or a service?",
-  options: [
-    { label: "Product", description: "SaaS, app, digital or physical product" },
-    { label: "Service", description: "Agency, consulting, freelance, coaching" }
-  ]
-)
-```
-
-**Q2: Service Type** *(only if Service selected)*
-```
-AskUserQuestion(
-  question: "What type of service do you provide?",
-  options: [
-    { label: "Consulting", description: "Strategy and expert advice" },
-    { label: "Agency / Done-for-you", description: "You deliver finished work" },
-    { label: "Coaching / Training", description: "You teach or guide people" },
-    { label: "Freelance / Creative", description: "Design, writing, dev, etc." }
-  ]
-)
-```
-
-**Q2 alt: Product Type** *(only if Product selected)*
-```
-AskUserQuestion(
-  question: "What type of product is this?",
-  options: [
-    { label: "SaaS / Software", description: "Online tool or app" },
-    { label: "Digital Product", description: "Course, template, ebook" },
-    { label: "Physical Product", description: "Tangible item you ship" },
-    { label: "Membership / Community", description: "Recurring access" }
-  ]
-)
-```
-
-**Q3: Business Name**
-```
-AskUserQuestion(
-  question: "What's the name of your business?",
-  options: [
-    { label: "I have a name", description: "Type it in the text field" },
-    { label: "I need help naming it", description: "I'll suggest options later" }
-  ]
-)
-```
-
-**Q4: Main Offering**
-```
-AskUserQuestion(
-  question: "What's the main thing your customers get from you?",
-  options: [
-    { label: "I'll describe it", description: "Type your answer" },
-    { label: "Help me articulate it", description: "I'll ask follow-up questions" }
-  ]
-)
-```
-
-#### Target Audience
-
-**Q5: Ideal Customer**
-```
-AskUserQuestion(
-  question: "Do you have a clear picture of your ideal customer?",
-  options: [
-    { label: "Yes, I know exactly who", description: "I'll describe them" },
-    { label: "Somewhat, but not specific", description: "Help me define them" },
-    { label: "Not really", description: "We'll figure it out together" }
-  ]
-)
-```
-
-**Q6: Customer Role**
-```
-AskUserQuestion(
-  question: "What's your ideal customer's role?",
-  options: [
-    { label: "Founder / CEO", description: "Business owners and decision makers" },
-    { label: "Manager / Director", description: "Mid-level decision makers" },
-    { label: "Individual / Consumer", description: "B2C customers" },
-    { label: "Other", description: "Describe in text field" }
-  ]
-)
-```
-
-**Q7: Company Size**
-```
-AskUserQuestion(
-  question: "What size company do they work at?",
-  options: [
-    { label: "Solo / Freelancer", description: "Just themselves" },
-    { label: "Small team (2-10)", description: "Early stage" },
-    { label: "Growing (11-50)", description: "Scaling up" },
-    { label: "Larger (50+)", description: "Established company" }
-  ]
-)
-```
-
-**Q8: Bad Fit** *(optional)*
-```
-AskUserQuestion(
-  question: "Do you know who you'd turn away?",
-  options: [
-    { label: "Yes, I know who's not a fit", description: "I'll ask you to describe" },
-    { label: "Not really", description: "We'll skip this" }
-  ]
-)
-```
-
-#### The Problem
-
-**Q9: Trigger Moment**
-```
-AskUserQuestion(
-  question: "Do you know what makes customers start looking for your solution?",
-  options: [
-    { label: "Yes, there's a specific moment", description: "I'll describe the trigger" },
-    { label: "It varies", description: "I'll describe a few scenarios" },
-    { label: "Not sure", description: "We'll explore together" }
-  ]
-)
-```
-
-**Q10: Problem #1**
-```
-AskUserQuestion(
-  question: "Can you name the #1 problem your customers want solved?",
-  options: [
-    { label: "Yes, I can describe it", description: "Type it" },
-    { label: "I have a few problems", description: "We'll go through them one by one" },
-    { label: "Need help articulating", description: "I'll ask questions to uncover it" }
-  ]
-)
-```
-
-**Q11: Problem Impact**
-```
-AskUserQuestion(
-  question: "How does this problem affect them most?",
-  options: [
-    { label: "Costs them money", description: "Financial impact" },
-    { label: "Wastes their time", description: "Efficiency impact" },
-    { label: "Causes stress/frustration", description: "Emotional impact" },
-    { label: "All of the above", description: "Multiple impacts" }
-  ]
-)
-```
-
-#### Your Solution
-
-**Q12: Success Outcome**
-```
-AskUserQuestion(
-  question: "What does success look like after working with you?",
-  options: [
-    { label: "I can describe the transformation", description: "Type it" },
-    { label: "Help me articulate it", description: "I'll ask specific questions" }
-  ]
-)
-```
-
-**Q13: Timeline**
-```
-AskUserQuestion(
-  question: "How quickly can customers expect results?",
-  options: [
-    { label: "Within days", description: "Very fast turnaround" },
-    { label: "Within 2-4 weeks", description: "Reasonable timeframe" },
-    { label: "Within 1-3 months", description: "Longer engagement" },
-    { label: "It varies significantly", description: "Depends on scope" }
-  ]
-)
-```
-
-**Q14: Process**
-```
-AskUserQuestion(
-  question: "Do you have a defined process for how you work?",
-  options: [
-    { label: "Yes, I have clear steps", description: "I'll list them" },
-    { label: "Somewhat defined", description: "We can refine it" },
-    { label: "Not really", description: "I can help create one or skip" }
-  ]
-)
-```
-
-#### Why You
-
-**Q15: Competitive Awareness**
-```
-AskUserQuestion(
-  question: "Do you know what customers have tried before finding you?",
-  options: [
-    { label: "Yes, I know their failed attempts", description: "Describe them" },
-    { label: "Not specifically", description: "We'll skip this" }
-  ]
-)
-```
-
-**Q16: Differentiator**
-```
-AskUserQuestion(
-  question: "What's the #1 reason someone should choose you?",
-  options: [
-    { label: "I can explain it", description: "Type your answer" },
-    { label: "Help me figure it out", description: "I'll ask comparison questions" }
-  ]
-)
-```
-
-#### Social Proof
-
-**Q17: Social Proof**
-```
-AskUserQuestion(
-  question: "What kind of proof do you have that this works?",
-  options: [
-    { label: "Testimonials or reviews", description: "I'll ask for 2-3 best ones" },
-    { label: "Results with specific numbers", description: "I'll ask for the stats" },
-    { label: "Client logos or case studies", description: "I'll ask which names" },
-    { label: "None yet", description: "We'll work without this section" }
-  ]
-)
-```
-
-#### Objections
-
-**Q18: Objections**
-```
-AskUserQuestion(
-  question: "Do you know why people hesitate to buy?",
-  options: [
-    { label: "Yes, I hear common objections", description: "I'll ask you to describe them" },
-    { label: "Not specifically", description: "We'll skip the FAQ section" }
-  ]
-)
-```
-
-**Q19: Scope Clarity** *(if they have objections)*
-```
-AskUserQuestion(
-  question: "Is it clear what's included vs not included?",
-  options: [
-    { label: "Yes, I can list both", description: "I'll ask separately" },
-    { label: "Included is clear, exclusions not", description: "I'll help define" },
-    { label: "Needs work", description: "We'll figure it out" }
-  ]
-)
-```
-
-#### Call to Action
-
-**Q20: CTA Action**
-```
-AskUserQuestion(
-  question: "What's the ONE action visitors should take?",
-  options: [
-    { label: "Book a call", description: "Schedule a meeting" },
-    { label: "Sign up", description: "Create an account or free trial" },
-    { label: "Buy directly", description: "Make a purchase" },
-    { label: "Request a quote", description: "Get pricing" }
-  ]
-)
-```
-
-**Q21: Form Fields**
-```
-AskUserQuestion(
-  question: "How much info do you need to collect?",
-  options: [
-    { label: "Just name and email", description: "Minimal friction" },
-    { label: "Add company name", description: "B2B qualification" },
-    { label: "Add phone number", description: "Direct contact" },
-    { label: "Custom fields needed", description: "I'll ask what" }
-  ]
-)
-```
-
-**Q22: Form Destination**
-```
-AskUserQuestion(
-  question: "Where should form submissions go?",
-  options: [
-    { label: "Email me directly", description: "To your inbox" },
-    { label: "My CRM", description: "HubSpot, Salesforce, etc." },
-    { label: "Calendly or booking link", description: "Direct scheduling" },
-    { label: "I'm not sure", description: "We'll figure it out" }
-  ]
-)
-```
-
-**After Q22, proceed to PHASE 2 -- Design Inspiration.**
+1. Ask each of the 10 questions from `01-intake.md`, one at a time via `AskUserQuestion`
+2. After Q10, show the intake summary from the reference file
+3. Get confirmation
+4. Proceed to Phase 2
 
 ---
 
-## PHASE 2: Design Inspiration (MANDATORY SEPARATE STEP)
+## PHASE 2: CLONE & DEPLOY
 
-**THIS IS A STANDALONE STEP. NEVER COMBINE WITH OTHER QUESTIONS.**
+**Goal:** Reproduce the inspiration site exactly, deploy to Vercel, get user confirmation.
 
-### Step 1: Browser Extension
+**Reference:** Read `references/02-clone.md` for the full clone workflow.
+**Quality:** Read `references/05-quality-rules.md` for design guardrails.
 
-Show this EXACT message first (do NOT use AskUserQuestion for this):
+### Steps
 
-```
-Before we find your design inspiration, let's set you up for the best experience.
+1. **Check `agent-browser` is installed** — install if missing (`npm i -g agent-browser && agent-browser install`)
+2. **Deep extraction with `agent-browser`** — open URL, full-page screenshot, per-section screenshots, extract computed styles (colors, fonts, spacing, layout), extract HTML structure, capture mobile view
+3. **Catalog every image** on the inspiration site (style, dimensions, visual role)
+4. **Set up Next.js + shadcn/ui** project with `.claude/launch.json` for preview panel
+5. **Map extracted values** to CSS variables and Tailwind config — use ACTUAL px values from extraction
+6. **Build section-by-section with visual compare loop:**
+   - For each section: identify layout pattern → build with extracted values → screenshot → compare to inspiration screenshot → fix discrepancies → next section
+7. **Generate images** with Nano Banana MCP (`generate_image`) matching the inspiration's visual style
+8. Keep the inspiration's copy temporarily (replaced in Phase 4)
+9. Apply user's brand colors/logo if provided in Q10
+10. **Full-page screenshot comparison** before showing user
+11. Deploy to Vercel → give the shareable preview URL
+12. Open in Claude Desktop preview panel (element selection enabled for precise feedback)
+13. Ask: "Does this match the inspiration site?" — user can click elements directly
+14. Iterate on clone fidelity (use `agent-browser` screenshots to verify fixes)
 
-INSTALL CLAUDE BROWSER EXTENSION
-
-This lets me analyze websites directly when you share them.
-
-Install here:
-https://chromewebstore.google.com/detail/claude/kosogfohbhkplgacdjfidlmbkdbalgbi
-
-Once installed, click the extension icon and sign in with your Claude account.
-
-Let me know when you're ready, or skip if you prefer not to install it.
-```
-
-Wait for user to confirm installation or skip.
-
-### Step 2: Show Browsing Links
-
-After extension step, show this EXACT message:
-
-```
-Now for the fun part -- let's find your design direction!
-
-I need ONE website that captures the vibe you want for your landing page.
-
-Here's where to browse:
-
-FRAMER TEMPLATES
-https://www.framer.com/marketplace/templates/
--> Modern, animated, high-converting designs
-
-AWWWARDS
-https://www.awwwards.com/
--> Award-winning web design from top agencies
-
-ONE PAGE LOVE
-https://onepagelove.com/
--> Curated single-page website inspiration
-
-LAND-BOOK
-https://land-book.com/
--> Organized by industry and style
-
-Browse these sites, find ONE that makes you think "I want my site to feel like THIS", and paste the URL here.
-```
-
-Wait for user to paste a URL.
-
-### Step 3: Design Match
-
-After they share the URL:
-
-```
-AskUserQuestion(
-  question: "How closely should we match this site?",
-  options: [
-    { label: "Close match", description: "Match the feel closely, make it mine" },
-    { label: "Just inspiration", description: "Use general direction, be more unique" }
-  ]
-)
-```
-
-### Step 4: Animation Preference
-
-```
-AskUserQuestion(
-  question: "How much animation do you want?",
-  options: [
-    { label: "Subtle", description: "Smooth scroll reveals, gentle hover effects" },
-    { label: "Dynamic", description: "Bold entrance animations, interactive elements" }
-  ]
-)
-```
-
-### Step 5: Show Intake Summary
-
-Compile everything from Phase 1 and Phase 2 and present:
-
-```
-Here's everything I gathered:
-
-BUSINESS
-- Name: [name]
-- Type: [product/service]
-- Offering: [what they provide]
-
-AUDIENCE
-- Who: [ideal customer]
-- Role: [title]
-- Size: [company size]
-
-PROBLEMS
-1. [problem 1]
-2. [problem 2]
-3. [problem 3]
-
-SOLUTION
-- Outcome: [transformation]
-- Timeline: [how fast]
-- Process: [steps if any]
-
-WHY YOU
-- Differentiator: [why choose them]
-- Proof: [type]
-
-CTA
-- Action: [what visitors do]
-- Form: [fields needed]
-
-DESIGN DIRECTION
-- Inspiration: [URL they shared]
-- Match level: [close/inspiration]
-- Animation: [subtle/dynamic]
-
-Anything to add or correct before I analyze the inspiration site?
-```
-
-Wait for confirmation before proceeding.
+**Important:** Do NOT use the component library during cloning. Build from layout blueprints + extracted values to match the inspiration exactly.
 
 ---
 
-## PHASE 3: Research & Design Extraction
+## PHASE 3: DEEP DISCOVERY
 
-**Goal:** Analyze the inspiration site and extract design elements.
+**Goal:** Ask dynamic questions to understand the business deeply enough to rewrite every section.
 
-**Reference:** Read `references/02-research-strategy.md` for the full research workflow.
+**Reference:** Read `references/03-discovery.md` for question generation rules.
 
-### Step 1: Analyze Inspiration Site
+### Steps
 
-Try WebFetch first to analyze the URL the user shared.
+1. Look at each section of the cloned site
+2. For each section, generate 1-3 questions specific to the user's business type and Phase 1 context
+3. Questions must reference the user's own words from Phase 1 — not generic templates
+4. Ask one question at a time via `AskUserQuestion`
+5. After all questions, show a content summary and get confirmation
 
-If WebFetch is blocked or fails, use browser_subagent as fallback:
-
-**Reference:** Read `references/02-research-strategy.md` for browser fallback instructions.
-
-```
-browser_subagent(
-  Task: "Navigate to [URL]. Take full-page screenshot.
-         Scroll the entire page, screenshot each section.
-         Analyze: colors, typography, layout, spacing, animations, overall vibe.",
-  RecordingName: "inspiration_analysis"
-)
-```
-
-### Step 2: Generate Design System (UI/UX Pro Max)
-
-Using the business type and keywords from Phase 1 intake, generate a data-driven design system. This runs automatically — no user input needed.
-
-```bash
-python3 scripts/search.py "<business_type> <industry> <keywords>" --design-system -p "<Business Name>" --persist
-```
-
-**Build the query from intake answers:**
-- Q1 (Business Type) + Q2 (Service/Product Type) → industry keywords
-- Q4 (Main Offering) → product description keywords
-- Phase 2 animation preference → style keywords (e.g., "modern minimal" or "bold dynamic")
-
-**Example:**
-```bash
-python3 scripts/search.py "SaaS consulting B2B service professional" --design-system -p "Acme Consulting" --persist
-```
-
-This returns a complete design system: landing page pattern, UI style, color palette (with hex codes), typography pairing (with Google Fonts URL), effects, and anti-patterns to avoid.
-
-The `--persist` flag saves the design system to `design-system/MASTER.md` for use in Phase 7.
-
-### Step 3: Create Combined Design Brief
-
-Merge the inspiration site analysis (Step 1) with the UI/UX Pro Max recommendations (Step 2). Present a unified brief:
-
-```
-DESIGN BRIEF: [Business Name]
-
-INSPIRATION ANALYSIS: [URL]
-- Layout: [what you observed]
-- Vibe: [3 descriptive words]
-
-UI/UX PRO MAX RECOMMENDATIONS:
-- Pattern: [recommended landing page pattern]
-- Style: [recommended UI style]
-- Colors: Primary [hex], Secondary [hex], CTA [hex], Background [hex], Text [hex]
-- Typography: [heading font] / [body font] — Google Fonts: [URL]
-- Effects: [recommended animations/effects]
-- Avoid: [anti-patterns]
-
-COMBINED DIRECTION:
-- [How the inspiration site and data-driven recommendations align or differ]
-- [Which elements to take from each source]
-```
-
-### Step 4: Check for Existing Assets
-
-Ask the user:
-```
-AskUserQuestion(
-  question: "Do you have any existing brand assets?",
-  options: [
-    { label: "Logo and brand colors", description: "I'll share them" },
-    { label: "Just a logo", description: "We'll build colors from the inspiration" },
-    { label: "Nothing yet", description: "We'll create everything fresh" }
-  ]
-)
-```
-
-Get confirmation on the design direction before proceeding.
+**Example:** If Q1 = "AI consulting agency" and the hero section needs a headline:
+- Don't ask: "What's your value proposition?"
+- Do ask: "You help [Q4 answer] with AI consulting. What's the single biggest transformation a client experiences after working with you?"
 
 ---
 
-## PHASE 4: Section Planning
+## PHASE 4: CUSTOMIZE & SHIP
 
-**Goal:** Propose the page structure based on business type and intake answers.
+**Goal:** Rewrite every section with real copy, get approval, ship.
 
-**Reference:** Read `references/02-research-strategy.md` for section types, templates by business type, and content mapping from intake questions.
+**Reference:** Read `references/04-customize.md` for copy formulas and the rewriting process.
+**Quality:** Read `references/05-quality-rules.md` for design guardrails.
 
-### Step 1: Get Landing Pattern Recommendation
+### Steps
 
-Use the UI/UX Pro Max landing pattern data from Phase 3's design system output. The design system already recommended a landing page pattern (e.g., "Hero + Features + CTA", "Social Proof-Focused", "Storytelling-Driven").
-
-If you need more detail on the recommended pattern, run a targeted search:
-
-```bash
-python3 scripts/search.py "<pattern_name>" --domain landing
-```
-
-This returns the exact section order, CTA placement strategy, color strategy per section, and conversion optimization tips.
-
-**Fallback templates** (if design system didn't match a clear pattern):
-
-- **Service businesses:** Hero -> Problem -> Solution -> Process -> Social Proof -> FAQ -> CTA -> Footer
-- **SaaS/Software:** Hero -> Social Proof (logos) -> Features -> How It Works -> Testimonials -> Pricing -> FAQ -> CTA -> Footer
-- **Personal Brand:** Hero -> About/Story -> Services -> Process -> Testimonials -> CTA -> Footer
-- **Product Launch:** Hero -> Problem -> Solution -> Features -> Social Proof -> Pricing -> FAQ -> CTA -> Footer
-
-### Step 2: Propose Sections
-
-Present the proposed structure to the user:
-
-```
-Based on your [business type], here's my recommended page structure:
-
-1. [Section] - [what it does]
-2. [Section] - [what it does]
-3. [Section] - [what it does]
-...
-
-Each section will use content from our conversation.
-
-Want to add, remove, or reorder any sections?
-```
-
-Wait for approval or changes before proceeding.
+1. For each section on the cloned site:
+   a. Write 3 headline options using copy formulas (PAS, FAB, Transformation)
+   b. Write body copy using the user's own words from Phase 3
+   c. Present options via `AskUserQuestion`
+   d. Apply approved copy to the live site (hot-reload)
+   e. Get confirmation the section looks good
+2. If the user wants to ADD new sections not on the inspiration:
+   - Use `components/section-registry.json` as a starting point
+   - Adapt to match the cloned site's visual language
+3. After all sections are customized:
+   - Full-page review
+   - Final design tweaks
+   - Re-deploy to Vercel with `npx vercel --prod`
+   - Post-deploy verification
+   - Handover with next steps
 
 ---
 
-## PHASE 5: Copywriting
-
-**Goal:** Write compelling copy for every section using proven formulas.
-
-**Reference:** Read `references/03-copy-content.md` for headline formulas, body copy frameworks (PAS, AIDA, BAB, FAB), CTA patterns, and tone mapping.
-
-### Writing Process
-
-For each section:
-
-1. **Map intake answers** to section content (use the content mapping from `references/02-research-strategy.md`)
-2. **Select the right formula** based on section type (e.g., PAS for problem sections, transformation for hero)
-3. **Match the tone** to the user's brand vibe (see tone mapping table in reference)
-4. **Use the user's own words** from intake -- extract their language for authenticity
-5. **Write H1, subtitle, body copy, and CTA** for each section
-
-### Copy Length Guidelines (from reference)
-
-| Element | Length |
-|---------|--------|
-| H1 headline | 5-10 words |
-| Subtitle | 15-25 words |
-| Section body | 2-4 sentences |
-| CTA button | 2-5 words |
-| Card descriptions | 1-2 sentences |
-
----
-
-## PHASE 6: Copy Review
-
-**Goal:** Present copy options and get user approval section by section.
-
-**Reference:** Read `references/03-copy-content.md` for the review format with 3 options per element.
-
-### Review Process
-
-For each section, present **3 options** for the key elements:
-
-```
-HERO SECTION
-
-Headline Options:
-A) [Option A]
-B) [Option B]
-C) [Option C]
-
-Subtitle Options:
-A) [Option A]
-B) [Option B]
-C) [Option C]
-
-CTA Button Options:
-A) [Option A]
-B) [Option B]
-C) [Option C]
-```
-
-Use AskUserQuestion for each section review:
-```
-AskUserQuestion(
-  question: "Which hero headline do you prefer?",
-  options: [
-    { label: "Option A", description: "[the headline text]" },
-    { label: "Option B", description: "[the headline text]" },
-    { label: "Option C", description: "[the headline text]" }
-  ]
-)
-```
-
-Repeat for each section: Hero, Problem, Solution, Process, Social Proof, FAQ, CTA.
-
-### After All Sections Approved
-
-Show a **full page copy summary** with all approved content before moving to development.
-
----
-
-## PHASE 7: Development
-
-**Goal:** Build the landing page using Google Stitch for high-fidelity design + Next.js + Tailwind CSS for production code.
-
-**Reference:** Read these files:
-  - `references/05-development-guide.md` (Development & Deployment — **start with Part 0: Stitch**)
-  - `references/04-design-assets.md` (Design System & Assets)
-
-### Step 0: Generate Design with Google Stitch (PRIMARY)
-
-**Use the Stitch MCP server to generate a polished, high-fidelity design BEFORE writing any code.**
-
-1. **Craft a Stitch prompt** using approved copy (Phase 6), design extraction (Phase 3), and section plan (Phase 4)
-2. **Call `stitch.build_site()`** with the full page description, colors, typography, and section copy
-3. **Preview the design** with `stitch.get_screen_image()` — show to user for approval
-4. **Iterate in Stitch** if user wants changes (faster than iterating in code)
-5. **Extract production code** with `stitch.get_screen_code()` once approved
-
-**If Stitch is unavailable** (no API key configured), fall back to manual development below. See `references/05-development-guide.md` Part 0.4 for the fallback flow.
-
-### Step 1: Project Setup
-
-```bash
-npx create-next-app@latest [project-name] --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
-npm install clsx tailwind-merge lucide-react framer-motion
-```
-
-### Step 1.5: Configure Preview Mode
-
-Create `.claude/launch.json` in the project root to enable the embedded preview panel:
-
-```json
-{
-  "version": "0.0.1",
-  "configurations": [
-    {
-      "name": "website-preview",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000,
-      "autoPort": true
-    }
-  ]
-}
-```
-
-### Step 2: Integrate Stitch Code + Design System
-
-**Read the persisted design system** from `design-system/MASTER.md` (created in Phase 3, Step 2). Use it to configure:
-- **Tailwind config** — map the recommended colors (Primary, Secondary, CTA, Background, Text hex values) to Tailwind theme colors
-- **Google Fonts** — import the recommended font pairing using the Google Fonts URL from the design system
-- **CSS variables** — set up design tokens in `globals.css` matching the design system's color palette
-- **Animation strategy** — follow the recommended effects (e.g., scroll animations, hover transitions, parallax) and respect the anti-patterns to avoid
-
-If Stitch was used:
-1. **Extract Stitch-generated React/Tailwind components** into `src/components/sections/`
-2. **Merge Stitch styles** with the UI/UX Pro Max design system tokens
-3. **Add interactivity** Stitch doesn't generate: Framer Motion animations, form handling, navigation, mobile menu
-
-If manual build, use the design system's hex values and typography to create CSS variables in `globals.css`. See `references/04-design-assets.md`.
-
-### Step 3: Build/Enhance Components
-
-```
-src/
-├── app/
-│   ├── layout.tsx       # Root layout with fonts, metadata
-│   ├── page.tsx         # Landing page assembling all sections
-│   └── globals.css      # CSS variables + Tailwind
-├── components/
-│   ├── ui/              # Button, Card, Input
-│   ├── sections/        # Hero, Problem, Solution, etc. (from Stitch or hand-built)
-│   └── layout/          # Header, Container, SectionWrapper
-├── lib/
-│   └── utils.ts         # cn() utility
-```
-
-### Step 4: Visual Assets
-
-Follow `references/04-design-assets.md`:
-- **Icons:** Lucide React. Use `npx better-icons search [term]` to find icons.
-- **AI Images:** Use `generate_image` for product mockups, hero visuals, abstract patterns. Never generate human faces or client logos.
-
-### Step 5: Implement Animations
-
-Based on user's animation preference from Phase 2:
-- **Subtle:** Scroll reveal with `useInView`, gentle hover transforms
-- **Dynamic:** Staggered entrance animations, parallax, interactive hover effects
-
-Use Framer Motion patterns from `references/04-design-assets.md`.
-
-### Step 6: Quality Check Before Preview
-
-Key checks:
-- Focus states on all interactive elements (`focus-visible:ring-*`)
-- Form inputs have `autocomplete`, correct `type`, associated labels
-- Honor `prefers-reduced-motion` for animations
-- Animate only `transform`/`opacity` (never `transition: all`)
-- Images have explicit `width`/`height` and `alt` text
-- Above-fold images use `priority`, below-fold use `loading="lazy"`
-- Interactive elements are `<button>` not `<div onClick>`
-- Icon buttons have `aria-label`
-
----
-
-## PHASE 8: Preview
-
-**Goal:** Launch the site in the browser and get user feedback.
-
-**Reference:** Read `references/05-development-guide.md` for preview setup and checklist.
-
-### Start Preview
-
-1. Run `npm run lint -- --fix` to catch issues
-2. Start the dev server in the background: `npm run dev &`
-3. Wait 2-3 seconds for the server to start
-4. Open the browser automatically:
-   - macOS: `open http://localhost:3000`
-   - Linux: `xdg-open http://localhost:3000`
-
-**Claude Code Desktop users:** The embedded preview panel will auto-start the server from `.claude/launch.json` — skip the manual steps above.
-
-### Tell the User
-
-```
-Your site is live! I've opened it in your browser at http://localhost:3000
-
-Take a look and let me know:
-1. What do you like?
-2. What should change?
-3. Reference any section by name (e.g., "the hero headline", "the pricing cards") and I'll update it.
-
-The page will hot-reload automatically as I make changes.
-```
-
-### Preview Checklist
-
-- [ ] All sections render without errors
-- [ ] Typography and fonts display correctly
-- [ ] Colors match the design system
-- [ ] Animations play on scroll
-- [ ] Mobile responsive — resize browser or use DevTools device emulation
-- [ ] No console errors (check DevTools)
-- [ ] CTAs have correct links
-- [ ] Form inputs are interactive
-
----
-
-## PHASE 9: Iteration
-
-**Goal:** Make edits based on user feedback until they're satisfied.
-
-**Reference:** Read `references/05-development-guide.md` for handling different types of edit requests.
-
-### Handling Feedback
-
-When user requests changes:
-
-```
-Got it. Making these changes:
-
-1. [Change 1] - doing now
-2. [Change 2] - doing now
-3. [Change 3] - need clarification
-
-For #3: [Ask clarifying question]
-
-The browser will hot-reload automatically after each change.
-```
-
-### Types of Edits
-
-| Edit Type | Approach |
-|-----------|----------|
-| **Copy edits** | Offer 3 alternatives, update directly |
-| **Styling tweaks** | Adjust CSS/Tailwind classes, show color options |
-| **Layout changes** | Reorder components, confirm structure |
-| **Section add/remove** | Confirm scope, build or remove |
-| **Animation changes** | Adjust Framer Motion config |
-
-### Small edits: Do immediately
-Text changes, color tweaks, spacing adjustments, single component fixes. Hot-reload shows changes instantly in the browser.
-
-### Larger edits: Confirm first
-New sections, major layout restructure, design system changes, feature additions.
-
-### Device Testing During Iteration
-
-After each round of changes, resize the browser window or use browser DevTools device emulation to catch responsive issues early. Don't wait until the final review.
-
-### Final Review
-
-When changes seem complete:
-
-```
-Here's where we are:
-
-SECTIONS: [list all sections]
-DESIGN: [summary of look and feel]
-KEY CHANGES MADE: [list of iterations]
-
-Before we deploy:
-1. Check both desktop and mobile layouts one more time
-2. Verify all interactive elements work (forms, buttons, links)
-3. Confirm the form/CTA works end to end
-
-Is this ready to deploy, or any final tweaks?
-```
-
----
-
-## PHASE 10: Deploy
-
-**Goal:** Deploy the finished site to Vercel.
-
-**Reference:** Read `references/11-deployment.md` for deployment steps, custom domain setup, form handling options, and analytics.
-
-### Pre-Deployment Checklist
-
-- All content finalized
-- Images optimized
-- Forms connected (Formspree, Vercel serverless, or Resend)
-- Meta tags set (title, description, OG image)
-- Favicon in place
-- No console errors
-- Mobile responsive
-- Performance acceptable (Lighthouse 90+)
-
-### Deploy with Vercel CLI
-
-```bash
-npm install -g vercel
-vercel login
-vercel
-```
-
-### Post-Deployment
-
-```
-Your landing page is live!
-
-URL: [production-url]
-
-I'll do a final visual check on the production URL in the preview panel to make sure everything deployed correctly.
-
-Next steps:
-1. Test the live site on desktop and mobile
-2. Submit to Google Search Console
-3. Share on social media
-4. Set up analytics (optional)
-
-Want to set up a custom domain or analytics?
-```
-
-### Post-Deploy Check
-
-Open the production URL in the browser and verify:
-- All sections render correctly in production
-- Images load (no broken paths)
-- Forms submit to the correct endpoint
-- SSL certificate is active (https)
-
----
-
-## Core Principles
-
-1. **ONE question per message** -- Never combine questions
-2. **Use AskUserQuestion tool** -- For every question, always modal UI
-3. **Design inspiration is SEPARATE** -- Always its own phase with browsing links
-4. **Read reference files** -- Each phase has specific references to read first
-5. **Their words become copy** -- Extract language from intake answers
-6. **Customize everything** -- No generic templates, every design is unique
-7. **3 options for copy** -- Give choices, let them pick
-8. **Validate each phase** -- Get approval before proceeding to next phase
-9. **Quality check before preview** -- Lint, build, and verify before showing
-10. **Iterate until perfect** -- Small edits immediately, larger edits after confirmation
-
----
-
-## Reference Files
-
-All reference files are located in `shared-skills/website-launch-kit/references/`.
+## REFERENCE FILES
 
 | File | Phase | Purpose |
 |------|-------|---------|
-| `01-intake.md` | Phase 1 | Detailed intake questions and branching logic |
-| `02-research-strategy.md` | Phases 2-4 | Research guide, design extraction, section blueprints |
-| `03-copy-content.md` | Phases 5-6 | Copywriting formulas, tone guide, review format |
-| `04-design-assets.md` | Phase 7 | Design system, visual assets, UI guidelines |
-| `05-development-guide.md` | Phases 7-10 | Code patterns, preview mode, deployment |
-| `06-clone-mode.md` | Clone Path | Alternative workflow for perfectly cloning an existing URL |
+| `01-intake.md` | Phase 1 | 10 prefixed intake questions |
+| `02-clone.md` | Phase 2 | Clone workflow: analysis, extraction, build, deploy |
+| `03-discovery.md` | Phase 3 | Dynamic question generation rules |
+| `04-customize.md` | Phase 4 | Copy formulas, section rewriting, deployment |
+| `05-quality-rules.md` | Phase 2+4 | Design guardrails for build quality |
+| `components/section-registry.json` | Phase 4 | Used when adding NEW sections only |
 
-## UI/UX Pro Max (Design Intelligence)
+## UI/UX PRO MAX (Design Intelligence)
 
-Integrated search engine for data-driven design decisions. Located in `scripts/` and `data/`.
+Optional data-driven design system generation. Located in `scripts/` and `data/`.
 
-| Component | Purpose |
-|-----------|---------|
-| `scripts/search.py` | CLI entry point — `--design-system` for full recommendations, `--domain` for targeted searches |
-| `scripts/core.py` | BM25 search engine over CSV databases |
-| `scripts/design_system.py` | Aggregates multi-domain searches + applies reasoning rules |
-| `data/products.csv` | 161 product types with style/color/pattern recommendations |
-| `data/landing.csv` | Landing page patterns with section orders and CTA strategies |
-| `data/colors.csv` | Color palettes by product type (full semantic token set) |
-| `data/typography.csv` | Font pairings with Google Fonts URLs and Tailwind config |
-| `data/styles.csv` | 67 UI styles with effects, accessibility, and implementation checklists |
-| `data/ui-reasoning.csv` | Reasoning rules that match product types to optimal design choices |
-
-**Usage:**
 ```bash
-# Full design system (used in Phase 3)
+# Generate a design system from business type keywords
 python3 scripts/search.py "<business_type> <keywords>" --design-system -p "<Name>" --persist
-
-# Targeted domain search (used in Phase 4)
-python3 scripts/search.py "<query>" --domain landing
-python3 scripts/search.py "<query>" --domain color
-python3 scripts/search.py "<query>" --domain typography
 ```
 
-**Requires:** Python 3.x (no external dependencies)
+Use this in Phase 2 to supplement the inspiration site extraction with data-driven color/typography recommendations. The inspiration site ALWAYS takes priority for "close match" (Q9).
