@@ -134,7 +134,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
 
-### General OS (2 skills)
+### BenAI Obsidian Plugin (2 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | setup | `/setup` | Bootstrap vault structure + mode selection + onboarding |
@@ -144,18 +144,17 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 Setup asks one preliminary question:
 
-> "Is this for a **business/organization**, for **yourself**, or **general** (both)?"
+> "What type of vault do you want?"
 
-Three modes:
-- **General** (default) — current hybrid structure. Best for solo founders, freelancers, consultants.
-- **Business** — organizational structure with departments, processes, stakeholders, onboarding docs.
-- **Personal** — lean, life-focused structure with areas, collections, and no business overhead.
+Two modes:
+- **Solopreneurs/Professionals** (default) — blends work and personal. Best for solo founders, freelancers, consultants.
+- **Business/Teams** — organizational structure with departments, processes, stakeholders, onboarding docs.
 
-The selected mode is stored in `claude.md` frontmatter as `os-mode: general | business | personal`.
+The selected mode is stored in `claude.md` frontmatter as `os-mode: general | business`.
 
 #### Vault Structure (by mode)
 
-**General:**
+**Solopreneurs/Professionals** (`os-mode: general`):
 ```
 claude.md               — Brain file (os-mode: general)
 Context/                — Who you are: me.md, business.md, strategy.md, team.md, brand.md
@@ -166,7 +165,7 @@ Resources/              — Your library: prompts, frameworks, swipe files, temp
 Skills/                 — Skill references you control: strategy, voice, reference material
 ```
 
-**Business:**
+**Business/Teams** (`os-mode: business`):
 ```
 claude.md               — Brain file (os-mode: business)
 Context/                — operator.md, organization.md, team.md, strategy.md, brand.md, stakeholders.md
@@ -176,19 +175,6 @@ Intelligence/           — meetings/ (7 types), competitors/, market/, decision
 Daily/                  — Work logs + OKR-focused weekly reviews
 Onboarding/             — Team/client/system onboarding docs
 Resources/              — prompts, frameworks, swipe, templates/
-Skills/                 — Skill references you control: strategy, voice, reference material
-```
-
-**Personal:**
-```
-claude.md               — Brain file (os-mode: personal)
-Context/                — me.md, goals.md, people.md (max 3 files)
-Projects/               — Active projects (no specs/ or feedback/)
-Areas/                  — Ongoing life areas: health.md, finances.md, etc.
-Intelligence/           — meetings/ (general + personal), decisions/
-Daily/                  — Morning/evening routines + life-balance weekly reviews
-Collections/            — Books, articles, courses, media
-Resources/              — prompts, frameworks, swipe
 Skills/                 — Skill references you control: strategy, voice, reference material
 ```
 

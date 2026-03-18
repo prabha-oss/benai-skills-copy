@@ -30,17 +30,20 @@ Before starting, check if `./claude.md` or `./CLAUDE.md` already exists in the c
 Ask the user to pick a mode using AskUserQuestion with these exact `label` and `description` values:
 
 - Question: `What type of vault do you want?`
-- Option 1 label: `General (Default)` — description: `Blends work and personal. Best for solo founders, freelancers, consultants.`
-- Option 2 label: `Business` — description: `Org structure with departments, processes, stakeholders. Best for teams and companies.`
-- Option 3 label: `Personal` — description: `Lean, life-focused. Areas, collections, habits. Best for personal use only.`
+- Option 1 label: `Solopreneurs/Professionals` — description: `Blends work and personal. Best for solo founders, freelancers, consultants.`
+- Option 2 label: `Business/Teams` — description: `Org structure with departments, processes, stakeholders. Best for teams and companies.`
 
 **CRITICAL**: You MUST pass both `label` AND `description` for each option in AskUserQuestion. The `description` field is what explains each mode to the user. Never leave `description` empty.
 
-Accept any clear signal: "business", "org", "personal", "myself", "general", "both", "default", etc.
+Mode mapping:
+- Solopreneurs/Professionals → `os-mode: general`
+- Business/Teams → `os-mode: business`
 
-If the user skips or says "I don't know", use **General** (default).
+Accept any clear signal: "solo", "professional", "freelancer", "business", "org", "team", etc.
 
-Store the selected mode. It will be written to `claude.md` frontmatter as `os-mode: general | business | personal`.
+If the user skips or says "I don't know", use **Solopreneurs/Professionals** (general mode).
+
+Store the selected mode. It will be written to `claude.md` frontmatter as `os-mode: general | business`.
 
 ---
 
