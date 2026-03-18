@@ -1,11 +1,11 @@
 ---
 name: setup
-description: Bootstrap the General OS vault structure and run personalized onboarding. Creates all directories, system files, Obsidian config, memory system, hooks, and output styles, then interviews the user to personalize everything. Three modes — General (default), Business, Personal. Use when user says "set up", "bootstrap", "initialize", "onboarding", or runs /setup.
+description: Bootstrap the BenAI Obsidian Plugin vault structure and run personalized onboarding. Creates all directories, system files, Obsidian config, memory system, hooks, and output styles, then interviews the user to personalize everything. Two modes — Solopreneurs/Professionals (default), Business/Teams. Use when user says "set up", "bootstrap", "initialize", "onboarding", or runs /setup.
 ---
 
-# General OS Setup — Bootstrap + Onboarding
+# BenAI Obsidian Plugin — Setup + Onboarding
 
-USE WHEN the user runs `/setup` or asks to set up their vault, bootstrap the assistant, initialize the system, or configure the General OS.
+USE WHEN the user runs `/setup` or asks to set up their vault, bootstrap the assistant, initialize the system, or configure the BenAI Obsidian Plugin.
 
 This is a three-phase process:
 - **Phase 0**: Mode Selection — Ask which OS variant to create
@@ -117,7 +117,7 @@ Read each reference file and write it to the corresponding local path. The refer
 | Reference File | Creates at Local Path |
 |---|---|
 | `references/settings-json-template.md` | `./.claude/settings.json` |
-| Glob `**/benai-obsidian-plugin/hooks/persist-session.sh` | `./.claude/hooks/persist-session.sh` |
+| Glob `**/benaiObsidianPlugin/hooks/persist-session.sh` | `./.claude/hooks/persist-session.sh` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
 
