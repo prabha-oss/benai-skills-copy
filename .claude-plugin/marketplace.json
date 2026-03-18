@@ -165,7 +165,7 @@
       "name": "general-os",
       "source": "./plugins/general-os",
       "description": "General OS — Turn any folder into an AI-powered operating system with persistent memory, task management, meeting intelligence, daily routines, and multiple output styles. Three modes: General (solo founders, freelancers), Business (teams, organizations), and Personal (individuals). Includes session management, a teaching loop that learns from corrections, and goal tracking with Obsidian integration.",
-      "version": "2.3.1",
+      "version": "2.3.2",
       "author": {
         "name": "BenAI"
       },
