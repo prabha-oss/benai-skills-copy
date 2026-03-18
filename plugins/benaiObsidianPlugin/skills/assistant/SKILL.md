@@ -1,14 +1,14 @@
 ---
 name: assistant
-description: General OS assistant — manages sessions, daily routines, tasks, memory, resources, output styles, and meeting intelligence. Mode-aware (general, business, personal). Handles resume, compress, preserve, daily review, task management, resources, style switching, and meeting transcript processing. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", "meeting", "transcript", or runs /assistant.
+description: BenAI Obsidian Plugin assistant — manages sessions, daily routines, tasks, memory, resources, output styles, and meeting intelligence. Mode-aware (general, business). Handles resume, compress, preserve, daily review, task management, resources, style switching, and meeting transcript processing. Use when user says "resume", "compress", "morning review", "tasks", "resources", "output style", "meeting", "transcript", or runs /assistant.
 ---
 
-# General OS Assistant
+# BenAI Obsidian Plugin — Assistant
 
 ## Pre-flight Check
 
 1. Check if `./claude.md` or `./CLAUDE.md` exists in the current working directory
-2. If missing: tell the user "This vault hasn't been set up yet. Run `/setup` to bootstrap your General OS." — then stop
+2. If missing: tell the user "This vault hasn't been set up yet. Run `/setup` to bootstrap your vault." — then stop
 3. If present: continue
 
 ## Mode Detection

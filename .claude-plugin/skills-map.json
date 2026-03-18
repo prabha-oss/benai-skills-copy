@@ -379,7 +379,7 @@
         }
       }
     },
-    "benai-obsidian-plugin": {
+    "benaiObsidianPlugin": {
       "hooks": {
         "Stop": [
           { "file": "persist-session.sh", "timeout": 10 }
