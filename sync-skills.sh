@@ -58,8 +58,8 @@ with open(skills_map_path) as f:
 with open(marketplace_path) as f:
     marketplace = json.load(f)
 
-# Index marketplace plugins by name
-marketplace_plugins = {p["name"]: p for p in marketplace["plugins"]}
+# Index marketplace plugins by directory name (derived from source path)
+marketplace_plugins = {os.path.basename(p["source"]): p for p in marketplace["plugins"]}
 departments = skills_map["departments"]
 
 for dept_name, dept_config in departments.items():
@@ -71,12 +71,15 @@ for dept_name, dept_config in departments.items():
     os.makedirs(plugin_json_dir, exist_ok=True)
 
     mp = marketplace_plugins.get(dept_name, {})
+    display_name = mp.get("displayName") or mp.get("name")
     plugin_data = {
         "name": dept_name,
         "description": mp.get("description", ""),
         "version": mp.get("version", "1.0.0"),
         "author": mp.get("author", {"name": "BenAI"}),
     }
+    if display_name and display_name != dept_name:
+        plugin_data["displayName"] = display_name
 
     with open(os.path.join(plugin_json_dir, "plugin.json"), "w") as f:
         json.dump(plugin_data, f, indent=2)
