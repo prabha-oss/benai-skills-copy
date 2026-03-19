@@ -14,16 +14,5 @@
   "apify": {
     "type": "http",
     "url": "https://mcp.apify.com"
-  },
-  "stitch": {
-    "command": "npx",
-    "args": [
-      "-y",
-      "@_davideast/stitch-mcp"
-    ],
-    "env": {
-      "STITCH_USE_SYSTEM_GCLOUD": "1",
-      "GOOGLE_CLOUD_PROJECT": ""
-    }
   }
 }
