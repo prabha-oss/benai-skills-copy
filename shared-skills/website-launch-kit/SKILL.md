@@ -24,7 +24,7 @@ You are a landing page expert. Your job is to clone an inspiration website, then
 3. **Clone the inspiration site EXACTLY before any customization**
 4. **Use `agent-browser` for extraction** — take screenshots, extract computed styles, get actual CSS values. Never guess design values from text descriptions.
 5. **Build & compare section-by-section** — build one section → screenshot → compare to inspiration screenshot → fix → next. Never build all sections then compare.
-6. **In Phase 3, generate questions dynamically** — do NOT use prefixed question templates
+6. **In Phase 3, present ONE consolidated discovery form** — list all sections and what info you need in a single `AskUserQuestion`, never ask one question per section
 7. **Generate real images with Nano Banana MCP** — never use placeholder images. Use `generate_image` tool to create on-brand visuals matching the inspiration site's style. If MCP unavailable, use CSS-only visuals.
 8. **Deploy to Vercel + open Claude Desktop preview** — always give BOTH the Vercel URL (shareable) and the local preview panel. The preview panel supports element selection for precise iteration.
 
@@ -37,7 +37,7 @@ PHASE 1: INTAKE          → 10 questions: who, what, for whom, CTA, inspiration
     ▼
 PHASE 2: CLONE & DEPLOY  → Reproduce inspiration site exactly, deploy to Vercel
     ▼
-PHASE 3: DEEP DISCOVERY  → Dynamic questions based on the cloned site's sections
+PHASE 3: DEEP DISCOVERY  → ONE consolidated form covering all sections (not per-section questions)
     ▼
 PHASE 4: CUSTOMIZE & SHIP → Rewrite sections with real copy, deploy final version
 ```
@@ -104,21 +104,19 @@ Let's start.
 
 ## PHASE 3: DEEP DISCOVERY
 
-**Goal:** Ask dynamic questions to understand the business deeply enough to rewrite every section.
+**Goal:** Gather enough business context to rewrite every section — in ONE consolidated message, not individual questions.
 
-**Reference:** Read `references/03-discovery.md` for question generation rules.
+**Reference:** Read `references/03-discovery.md` for the consolidated discovery form.
 
 ### Steps
 
 1. Look at each section of the cloned site
-2. For each section, generate 1-3 questions specific to the user's business type and Phase 1 context
+2. Generate a **single consolidated discovery form** listing every section and what info is needed
 3. Questions must reference the user's own words from Phase 1 — not generic templates
-4. Ask one question at a time via `AskUserQuestion`
-5. After all questions, show a content summary and get confirmation
+4. Present the entire form in **one `AskUserQuestion`** — the user answers everything at once
+5. After their response, show a content summary and get confirmation
 
-**Example:** If Q1 = "AI consulting agency" and the hero section needs a headline:
-- Don't ask: "What's your value proposition?"
-- Do ask: "You help [Q4 answer] with AI consulting. What's the single biggest transformation a client experiences after working with you?"
+**Key rule:** Do NOT ask one question per section. Present ALL section questions together so the user can answer in a single response. This keeps the total interaction to ~12 messages instead of 22+.
 
 ---
 
@@ -155,7 +153,7 @@ Let's start.
 |------|-------|---------|
 | `01-intake.md` | Phase 1 | 10 prefixed intake questions |
 | `02-clone.md` | Phase 2 | Clone workflow: analysis, extraction, build, deploy |
-| `03-discovery.md` | Phase 3 | Dynamic question generation rules |
+| `03-discovery.md` | Phase 3 | Consolidated discovery form (one message, all sections) |
 | `04-customize.md` | Phase 4 | Copy formulas, section rewriting, deployment |
 | `05-quality-rules.md` | Phase 2+4 | Design guardrails for build quality |
 | `components/section-registry.json` | Phase 4 | Used when adding NEW sections only |
