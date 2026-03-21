@@ -94,7 +94,7 @@ AskUserQuestion(
 ### Step 3: Apply to Site
 
 1. Update the section's code with the approved copy
-2. If the section needs new/different images, generate them with `generate_image` (Nano Banana MCP) — match the site's visual style, use brand colors in the prompt, save to `public/images/`
+2. If the section needs new/different images, you MUST call `generate_image` (Nano Banana MCP) — do not skip, do not assume unavailable. Double-specify aspect ratio in prompt text AND `aspectRatio` param. Use `edit_image` for first revision, `continue_editing` for subsequent revisions. Match the site's visual style, use brand colors in the prompt. File flow: `./generated_imgs/` → copy to `public/images/`
 3. The site hot-reloads in the Claude Desktop preview panel automatically
 4. The user can click any element in the preview to reference it for tweaks
 5. Ask: "How does that look? Ready to move to the next section?"
