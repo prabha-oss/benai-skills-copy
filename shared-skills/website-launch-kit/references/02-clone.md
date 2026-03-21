@@ -469,7 +469,7 @@ STEP 6: Move to next section
 - **DO NOT round values** — if the extraction says `padding: 96px`, use `py-24` or `py-[96px]`, not `py-20`.
 - **DO NOT apply quality-rules.md defaults** that contradict extracted values. The inspiration's actual values win. Quality rules are a fallback only when extraction is ambiguous.
 - **DO match hover states and animations** observed during extraction.
-- **DO NOT use placeholder images.** Generate real images with Nano Banana MCP (see Part 5).
+- **DO NOT use placeholder images, CSS gradients, geometric shapes, or SVG patterns as image substitutes.** You MUST call `generate_image` (Nano Banana MCP) for every image. See Part 5.
 
 ---
 
@@ -485,27 +485,58 @@ agent-browser eval "JSON.stringify(Array.from(document.querySelectorAll('img, [s
 
 ### 5.2 Generate with Nano Banana MCP
 
-**Tool:** `generate_image` (from Nano Banana MCP)
+**MANDATORY: You MUST call `generate_image` for every image identified in 5.1.** Do NOT skip this step. Do NOT assume Nano Banana MCP is unavailable without trying. Call the tool — if it works, use the generated images. Only if the tool call returns an error (tool not found, connection refused, etc.) should you fall back.
 
-**Prompt structure:**
+**MCP Server:** `@zhibinyang/nano-banana-mcp` (Gemini AI image generation)
+
+**Available tools:**
+
+| Tool | When to Use |
+|------|-------------|
+| `generate_image` | First-pass creation (prompt + aspectRatio) |
+| `edit_image` | First edit on an existing image (requires file path) |
+| `continue_editing` | All subsequent edits (server tracks last image automatically) |
+| `get_last_image_info` | Metadata retrieval |
+
+**BLOCKED tools (never call):** `configure_gemini_token`, `get_configuration_status`
+
+**Calling `generate_image`:**
+
+Double-specify aspect ratio for reliability — once in the prompt text, once in the parameter:
+
 ```
-[Style reference]: Clean, modern [style matching inspiration] image.
+generate_image(
+  prompt: "[Style reference]: Clean, modern [style matching inspiration] image.
 [Subject]: [What the image shows — match the role from extraction]
 [Colors]: Using brand colors [hex values from extraction].
 [Composition]: [Layout — centered, floating, isometric, etc.]
 [Mood]: [Match the inspiration site's tone.]
 No text. No watermarks. Clean background.
+Output as a [W:H] aspect ratio image at approximately [width] pixels wide",
+  aspectRatio: "[W:H]"
+)
 ```
+
+**Iterating on generated images:**
+- First edit: `edit_image(filePath: "./generated_imgs/generated-[timestamp]-[id].png", prompt: "...")`
+- All subsequent edits: `continue_editing(prompt: "...")` — the server tracks the last image automatically
+
+**File flow:**
+1. MCP saves to `./generated_imgs/generated-[timestamp]-[id].png`
+2. Copy to `public/images/[descriptive-name].png`
+3. Read the file to verify it generated correctly
+4. Reference: `<Image src="/images/hero-bg.png" alt="..." width={} height={} />`
 
 **Rules:**
 1. **Never generate human faces** — use abstract/geometric visuals, product mockups, or illustrations
 2. **Match the inspiration's image style** — gradient meshes → gradient meshes, isometric → isometric
 3. **Use extracted brand colors** in the prompt
-4. **Match aspect ratio** to the placeholder dimensions from extraction
-5. **Save to project:** Copy from `./generated_imgs/` to `public/images/`
-6. **Reference:** `<Image src="/images/hero-bg.png" alt="..." width={} height={} />`
+4. **Match aspect ratio** to the placeholder dimensions from extraction — double-specify in prompt text AND aspectRatio param
+5. **Generate one image at a time** — verify each before moving to the next
 
-**If Nano Banana MCP is not available:** Fall back to CSS-only visuals (gradient backgrounds, geometric shapes with Tailwind, SVG patterns). Never leave broken image placeholders.
+**If `generate_image` fails:** Log the error and tell the user. Do NOT substitute with CSS gradients, geometric shapes, or SVG patterns. Leave a visible `<!-- IMAGE NEEDED: [description] -->` comment in the code so the user knows which images still need generation. If the API key is missing, redirect to Phase 5 (API Key Setup) in SKILL.md.
+
+**If API key was skipped in Phase 0 (Path 3):** Leave `<!-- IMAGE NEEDED: [description] -->` comments for all images. Do not attempt `generate_image` calls.
 
 ---
 
@@ -665,7 +696,7 @@ These are the specific things that make LLM-generated sites look amateur. Check 
 ### Image Anti-Patterns
 | Bad | Fix |
 |---|---|
-| Broken image placeholders | Generate with Nano Banana or use CSS-only fallback |
+| Broken image placeholders | Generate with Nano Banana MCP — never use CSS fallbacks |
 | Wrong aspect ratio (stretched/squished) | Match extracted image dimensions |
 | Images without Next.js `<Image>` component | Always use `next/image` for optimization |
 | No hero visual when inspiration has one | Generate a matching visual, don't leave it text-only |
