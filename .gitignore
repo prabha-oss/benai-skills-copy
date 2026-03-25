@@ -29,3 +29,6 @@ npm-debug.log*
 
 # Node modules (if any future dependencies)
 node_modules/
+
+# Build artifacts
+dist/
