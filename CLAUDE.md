@@ -147,7 +147,7 @@ A marketplace of expert automation plugins for Claude Code, organized by departm
 
 **Agents:** `audit-google`, `audit-meta`, `audit-budget`, `audit-creative`, `audit-compliance`, `audit-tracking`
 
-### BenAI Obsidian Plugin (2 skills)
+### Obsidian (2 skills)
 | Skill | Command | Purpose |
 |-------|---------|---------|
 | setup | `/setup` | Bootstrap vault structure + mode selection + onboarding |
