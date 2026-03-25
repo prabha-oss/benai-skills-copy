@@ -1,0 +1,8 @@
+{
+  "name": "testplugin",
+  "description": "Minimal test plugin to verify Cowork skill loading.",
+  "version": "1.0.0",
+  "author": {
+    "name": "BenAI"
+  }
+}
