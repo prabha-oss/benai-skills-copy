@@ -415,11 +415,6 @@
       }
     },
     "obsidian": {
-      "hooks": {
-        "Stop": [
-          { "file": "persist-session.sh", "timeout": 10 }
-        ]
-      },
       "skills": {
         "setup": {
           "displayName": "Setup",
