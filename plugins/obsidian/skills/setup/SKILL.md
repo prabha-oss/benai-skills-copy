@@ -56,7 +56,7 @@ Create the directory structure and write all system files for the selected mode.
 **All modes** share this base:
 
 ```bash
-mkdir -p .claude/hooks
+mkdir -p .claude
 mkdir -p Context
 mkdir -p Projects
 mkdir -p Daily
@@ -107,7 +107,6 @@ Read each reference file and write it to the corresponding local path. The refer
 | Reference File | Creates at Local Path |
 |---|---|
 | `references/settings-json-template.md` | `./.claude/settings.json` |
-| Glob `**/obsidian/hooks/persist-session.sh` | `./.claude/hooks/persist-session.sh` |
 | `references/claudeignore-template.md` | `./.claudeignore` |
 | `references/gitignore-template.md` | `./.gitignore` |
 
