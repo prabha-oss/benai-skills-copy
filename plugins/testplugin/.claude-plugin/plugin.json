@@ -1,0 +1,8 @@
+{
+  "name": "testplugin",
+  "description": "Test plugin to verify marketplace visibility in Cowork.",
+  "version": "1.0.0",
+  "author": {
+    "name": "BenAI"
+  }
+}
