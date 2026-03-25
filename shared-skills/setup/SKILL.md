@@ -14,7 +14,7 @@ This is a three-phase process:
 
 ## Pre-flight Check
 
-Before starting, check if `./claude.md` or `./CLAUDE.md` already exists in the current working directory.
+Check if `claude.md` or `CLAUDE.md` exists **only** in the current working directory (do NOT search subdirectories or parent directories — check only the exact CWD path).
 
 - **If it exists**: The vault is already set up. Ask the user:
   - "This vault is already set up. Would you like to:"
@@ -27,13 +27,14 @@ Before starting, check if `./claude.md` or `./CLAUDE.md` already exists in the c
 
 ## Phase 0: Mode Selection
 
-Ask the user to pick a mode using AskUserQuestion with these exact `label` and `description` values:
+Ask the user to pick a mode by presenting these two options as a simple text question:
 
-- Question: `What type of vault do you want?`
-- Option 1 label: `Solopreneurs/Professionals` — description: `Blends work and personal. Best for solo founders, freelancers, consultants.`
-- Option 2 label: `Business/Teams` — description: `Org structure with departments, processes, stakeholders. Best for teams and companies.`
+> **What type of vault do you want?**
+>
+> 1. **Solopreneurs/Professionals** — Blends work and personal. Best for solo founders, freelancers, consultants.
+> 2. **Business/Teams** — Org structure with departments, processes, stakeholders. Best for teams and companies.
 
-**CRITICAL**: You MUST pass both `label` AND `description` for each option in AskUserQuestion. The `description` field is what explains each mode to the user. Never leave `description` empty.
+Wait for the user to respond before proceeding. Do NOT use `AskUserQuestion` or any tool — just ask via text output and wait for a reply.
 
 Mode mapping:
 - Solopreneurs/Professionals → `os-mode: professional`
